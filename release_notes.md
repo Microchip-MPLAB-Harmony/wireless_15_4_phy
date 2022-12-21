@@ -1,5 +1,46 @@
 ﻿![Microchip logo](https://raw.githubusercontent.com/wiki/Microchip-MPLAB-Harmony/Microchip-MPLAB-Harmony.github.io/images/microchip_logo.png)
 ![Harmony logo small](https://raw.githubusercontent.com/wiki/Microchip-MPLAB-Harmony/Microchip-MPLAB-Harmony.github.io/images/microchip_mplab_harmony_logo_small.png)
 
-# Microchip MPLAB® Harmony 3 Release Notes
+# Microchip PIC32CX-BZ2 Device Standalone IEEE 802.15.4 Physical Layer Release Notes
+
+## Release v1.0.0
+
+The physical layer contains the transceiver specific functionalities as mentioned as the requirements of IEEE 802.15.4 specification. It gives the interface to the MAC core layer which is independent of the underlying transceiver.
+Besides that, the PHY layer provides the set of APIs which can be used to interface a basic application.
+The following are the funcionalities of PHY layer
+
+-Frame Transmission  (including automatic frame retries)
+-Frame reception  (including automatic acknowledgement handling)
+-PHY PIB storage
+-CSMA module
+-Energy detection
+-Power management
+-Interrupt handling
+-Initialization and Reset
+-Enabling High Datarate Support
+-Enabling Promiscuous Mode
+-Enabling Antenna Diversity
+-Enabling Reduced Power consumption modes
+-Enabling reception of reserved frames
+
+## Known Issues / Limitations
+
+-No issues
+
+## Development Tools
+-MPLAB X v6.00
+-MPLAB® XC32 C/C++ Compiler v4.10
+-MPLAB® X IDE plug-ins: MPLAB® Code Configurator (MCC) v5.1.17 and above
+-Device Pack: PIC32CX-BZ2-DFP (1.0.107)
+
+## Harmony 3 Dependent Packages
+-csp - v3.13.1
+-core - v3.11.1
+-dev_packs - v3.13.1
+-CMSISFreeRTOS - v10.4.6
+-wireless_pic32cxbz_wbz
+
+## Notes
+-None
+
 
