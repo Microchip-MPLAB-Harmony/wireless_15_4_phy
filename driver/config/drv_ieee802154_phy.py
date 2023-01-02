@@ -31,7 +31,6 @@ def instantiateComponent(ieee802154phy):
     # === Interfaces
     # === Radio menu
     execfile(Module.getPath() + "/driver/config/drv_ieee802154_phy_bmm.py")
-    execfile(Module.getPath() + "/driver/config/drv_ieee802154_phy_qmm.py")
     
     # === Header Files
     
@@ -154,7 +153,7 @@ def instantiateComponent(ieee802154phy):
 
     # === Set optimization level
     phyOptLevel = ieee802154phy.createSettingSymbol("PET_LEVEL", None)
-    phyOptLevel.setValue("-Os")
+    phyOptLevel.setValue("-O2")
     phyOptLevel.setCategory("C32")
     phyOptLevel.setKey("optimization-level")
 
@@ -270,6 +269,3 @@ def phyCommentBmmSmallBuffersDepend(sourceSymbol, event):
     phyCommentBmmSmallBuffers.setLabel("Memory occupied: ~%d bytes" %totalMem)
 #end phyCommentBmmSmallBuffersDepend
 
-def phyIntegerQmmQueueCapacityDepend(sourceSymbol, event):
-    phyIntegerQmmQueueCapacity.setVisible(event["value"])
-#end phyIntegerQmmQueueCapacityDepend
