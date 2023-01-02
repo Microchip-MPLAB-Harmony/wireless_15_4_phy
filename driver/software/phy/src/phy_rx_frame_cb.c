@@ -72,7 +72,7 @@
 /* ************************************************************************** */
 /* ************************************************************************** */
 
-void PHY_RxFrameCallback(PHY_FrameInfo_t *rxFrame)
+__attribute__((weak)) void PHY_RxFrameCallback(PHY_FrameInfo_t *rxFrame)
 {
 	/* Keep compiler happy. */
 	rxFrame = rxFrame;

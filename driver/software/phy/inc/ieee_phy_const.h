@@ -37,665 +37,77 @@
  *******************************************************************************/
 //DOM-IGNORE-END
 
-/* Prevent double inclusion */
+
 #ifndef IEEE_PHY_CONST_H
 #define IEEE_PHY_CONST_H
 
-/**
- *
- * \defgroup group_inc Common WL Definitions
- * All General Definitions  used by the Wireless Stack applications are defined
- * in this module.
- *
+// DOM-IGNORE-BEGIN
+#ifdef __cplusplus  // Provide C++ Compatibility
+
+    extern "C" {
+
+#endif
+// DOM-IGNORE-END
+
+
+// *****************************************************************************
+// *****************************************************************************
+// Section: Data Types
+// *****************************************************************************
+// *****************************************************************************
+/* CCA Modes of the transceiver
+ 
+   Summary:
+    CCA Modes  supported by transceiver
+ 
+   Description:
+    Following are the list of configuration parameters which can be read from the 
+    transceiver
+ 
+   Remarks:
+    None
  */
-
-/**
- * \ingroup group_inc
- * \defgroup group_ieee IEEE Constants
- * Includes IEEE Constant Definitions
- * @{
- *
- */
-
-/* === Includes ============================================================= */
-
-/* === Macros =============================================================== */
-
-/**
- * Minimum size of a valid frame other than an Ack frame
- */
-#define MIN_FRAME_LENGTH                (8)
-
-/**
- * Maximum size of the management frame(Association Response frame)
- */
-#define MAX_MGMT_FRAME_LENGTH           (30)
-
-/* === MAC Constants ======================================================== */
-
-/**
- * Maximum size of PHY packet
- * @ingroup apiMacConst
- */
-#define aMaxPHYPacketSize               (127)
-
-/**
- * Maximum turnaround Time of the radio to switch from Rx to Tx or Tx to Rx
- * in symbols
- * @ingroup apiMacConst
- */
-#define aTurnaroundTime                 (12)
-
-/* 7.4.1 MAC Layer Constants */
-/**
- * The maximum size of an MPDU, in octets, that can be followed by a SIFS
- * period.
- * @ingroup apiMacConst
- */
-#define aMaxSIFSFrameSize               (18)
-
-/**
- * The minimum number of octets added by the MAC sublayer to the PSDU.
- * @ingroup apiMacConst
- */
-#define aMinMPDUOverhead                 (9)
-
-/**
- * The number of slots contained in any superframe.
- * @ingroup apiMacConst
- */
-#define aNumSuperframeSlots             (16)
-
-/**
- * The number of symbols forming the basic time period
- * used by the CSMA-CA algorithm.
- * @ingroup apiMacConst
- */
-#define aUnitBackoffPeriod              (20)
-
-
-/**
- * The number of symbols forming a superframe slot
- * when the superframe order is equal to 0.
- * @ingroup apiMacConst
- */
-#define aBaseSlotDuration               (60)
-
-/**
- * The number of symbols forming a superframe when
- * the superframe order is equal to 0.
- * @ingroup apiMacConst
- */
-#define aBaseSuperframeDuration         (aBaseSlotDuration * \
-	aNumSuperframeSlots)
-
-/* PHY PIB Attributes */
-
-/**
- * @ingroup apiPhyPib
- * @{
- */
-
-/* Standard PIB attributes */
-
-/**
- * The RF channel to use for all following transmissions and receptions.
- */
-#define phyCurrentChannel               (0x00)
-
-/**
- * The 5 most significant bits (MSBs) (b27, ..., b31) of phyChannelsSupported
- * shall be reserved and set to 0, and the 27 LSBs (b0, b1, ..., b26) shall
- * indicate the status (1 = available, 0 = unavailable) for each of the 27 valid
- * channels (bk shall indicate the status of channel k).
- */
-#define phyChannelsSupported            (0x01)
-
-/**
- * The 2 MSBs represent the tolerance on the transmit power: 00 = 1 dB
- * 01 = 3 dB 10 = 6 dB The 6 LSBs represent a signed integer in
- * twos-complement format, corresponding to the nominal transmit power of the
- * device in decibels relative to 1 mW. The lowest value of phyTransmitPower
- * shall be interpreted as less than or equal to 32 dBm.
- */
-#define phyTransmitPower                (0x02)
-
-/**
- * The CCA mode
- *  - CCA Mode 1: Energy above threshold. CCA shall report a busy medium
- * upon detecting any energy above the ED threshold.
- *  - CCA Mode 2: Carrier sense only. CCA shall report a busy medium only upon
- * the detection of a signal with the modulation and spreading characteristics
- * of IEEE 802.15.4. This signal may be above or below the ED threshold.
- *  - CCA Mode 3: Carrier sense with energy above threshold. CCA shall report a
- * busy medium only upon the detection of a signal with the modulation and
- * spreading characteristics of IEEE 802.15.4 with energy above the ED
- * threshold. */
-#define phyCCAMode                      (0x03)
-
-/**
- * This is the current PHY channel page. This is used in conjunction with
- * phyCurrentChannel to uniquely identify the channel currently being used.
- */
-#define phyCurrentPage                  (0x04)
-
-/**
- * The maximum number of symbols in a frame:
- * = phySHRDuration + ceiling([aMaxPHYPacketSize + 1] x phySymbolsPerOctet)
- */
-#define phyMaxFrameDuration             (0x05)
-
-/**
- * The duration of the synchronization header (SHR) in symbols for the current
- * PHY.
- */
-#define phySHRDuration                  (0x06)
-
-/**
- * The number of symbols per octet for the current PHY.
- */
-#define phySymbolsPerOctet              (0x07)
-
-/**
- * Number of octets added by the PHY: 4 sync octets + SFD octet.
- */
-#define PHY_OVERHEAD                    (5)
-
-/*@}*//* apiPhyPib */
-
-/* 7.4.2 MAC PIB Attributes */
-
-/**
- * The maximum number of symbols to wait for an acknowledgment frame to arrive
- * following a transmitted data frame. This value is dependent on the currently
- * selected logical channel. For 0 <= phyCurrentChannel <= 10, this
- * value is equal to 120. For 11 <= phyCurrentChannel <= 26, this  value is
- * equal to 54.
- *
- * - @em Type: Integer
- * - @em Range: 54 or 120
- * - @em Default: 54
- */
-#define macAckWaitDuration              (0x40)
-
-
-/**
- * The maximum number of backoffs the CSMA-CA algorithm will
- * attempt before declaring a channel access failure.
- *
- * - @em Type: Integer
- * - @em Range: 0 - 5
- * - @em Default: 4
- */
-#define macMaxCSMABackoffs              (0x4E)
-
-/**
- * Default value for PIB macMaxCSMABackoffs
- */
-#define macMaxCSMABackoffs_def          (4)
-
-/**
- * The minimum value of the backoff exponent in the CSMA-CA algorithm.
- * Note that if this value is set to 0, collision avoidance is disabled
- * during the first iteration of the algorithm. Also note that for the
- * slotted version of the CSMACA algorithm with the battery life extension
- * enabled, the minimum value of the backoff exponent will be the lesser of
- * 2 and the value of macMinBE.
- *
- * - @em Type: Integer
- * - @em Range: 0 - 3
- * - @em Default: 3
- */
-#define macMinBE                        (0x4F)
-
-/**
- * The 16 bit identifier of the PAN on which the device is operating. If this
- * value is 0xffff, the device is not associated.
- *
- * - @em Type: Integer
- * - @em Range: 0x0000 - 0xffff
- * - @em Default: 0xffff
- */
-#define macPANId                        (0x50)
-
-/**
- * Default value for PIB macPANId
- */
-#define macPANId_def                    (0xFFFF)
-
-/**
- * This indicates whether the MAC sublayer is in a promiscuous (receive all)
- * mode. A value of true indicates that the MAC sublayer accepts all frames
- * received from the PHY.
- *
- * - @em Type: Boolean
- * - @em Range: true or false
- * - @em Default: false
- */
-#define macPromiscuousMode              (0x51)
-
-
-
-/**
- * The 16 bit address that the device uses to communicate in the PAN.
- * If the device is a PAN coordinator, this value shall be chosen before a
- * PAN is started. Otherwise, the address is allocated by a coordinator
- * during association. A value of 0xfffe indicates that the device has
- * associated but has not been allocated an address. A value of 0xffff
- * indicates that the device does not have a short address.
- *
- * - @em Type: Integer
- * - @em Range: 0x0000 - 0xffff
- * - @em Default: 0xffff
- */
-#define macShortAddress                 (0x53)
-
-/**
- * Default value for PIB macShortAddress
- */
-#define macShortAddress_def             (0xFFFF)
-
-/**
- * The maximum value of the backoff exponent, BE, in the CSMA-CA algorithm.
- * See 7.5.1.4 for a detailed explanation of the backoff exponent.
- *
- * - @em Type: Integer
- * - @em Range: 3 - 8
- * - @em Default: 5
- */
-#define macMaxBE                        (0x57)
-
-
-/**
- * The maximum number of retries allowed after a transmission failure.
- *
- * - @em Type: Integer
- * - @em Range: 0 - 7
- * - @em Default: 3
- */
-#define macMaxFrameRetries              (0x59)
-
-
-/*
- * PIB attribute without relevant index, i.e. PIB attribute not
- * contained in 802.15.4-2006 table 88.
- */
-#define NO_PIB_INDEX                    (0)
-
-/**
- * The minimum number of symbols forming a LIFS period.
- *
- * - @em Type: Integer
- * - @em Range: See Table 3 in Clause 6 (40 symbols)
- * - @em Default: Dependent on currently selected PHY, indicated by
- * phyCurrentPage
- */
-#define macMinLIFSPeriod                (0x5E)
-
-/**
- * Default value for PIB macMinLIFSPeriod
- */
-#define macMinLIFSPeriod_def            (40)
-
-/**
- * The minimum number of symbols forming a SIFS period.
- *
- * - @em Type: Integer
- * - @em Range: See Table 3 in Clause 6 (12 symbols)
- * - @em Default: Dependent on currently selected PHY, indicated by
- * phyCurrentPage
- */
-#define macMinSIFSPeriod                (0x5F)
-
-/**
- * Default value for PIB macMinSIFSPeriod
- */
-#define macMinSIFSPeriod_def            (12)
-
-
-
-/**
- * Private MAC PIB attribute to control the CSMA algorithm.
- */
-
-/**
- * Private MAC PIB attribute to allow setting the MAC address in test mode.
- * @todo numbering needs to alligned with other special speer attributes
- */
-#define macIeeeAddress                  (0xF0)
-
-
-/* Non-standard values / extensions */
-
-/**
- * PHY_SUCCESS in phyAutoCSMACA when received ACK frame had the pending bit set
- */
-#define PHY_SUCCESS_DATA_PENDING        (0x10)
-
-/**
- * ED scan/sampling duration
- */
-#define ED_SAMPLE_DURATION_SYM          (8)
-
-
-/**
- * Defines the beacon frame type. (Table 65 IEEE 802.15.4 Specification)
- */
-#define FCF_FRAMETYPE_BEACON            (0x00)
-
-/**
- * Define the data frame type. (Table 65 IEEE 802.15.4 Specification)
- */
-#define FCF_FRAMETYPE_DATA              (0x01)
-
-/**
- * Define the ACK frame type. (Table 65 IEEE 802.15.4 Specification)
- */
-#define FCF_FRAMETYPE_ACK               (0x02)
-
-/**
- * Define the command frame type. (Table 65 IEEE 802.15.4 Specification)
- */
-#define FCF_FRAMETYPE_MAC_CMD           (0x03)
-
-/**
- * Define the LLDN frame type. See 802.15.4e-2012
- */
-#define FCF_FRAMETYPE_LLDN              (0x04)
-
-/**
- * Define the multipurpose frame type. See 802.15.4e-2012
- */
-#define FCF_FRAMETYPE_MP                (0x05)
-
-/**
- * A macro to set the frame type.
- */
-#define FCF_SET_FRAMETYPE(x)            (x)
-
-/**
- * The mask for the security enable bit of the FCF.
- */
-#define FCF_SECURITY_ENABLED            (1 << 3)
-
-/**
- * The mask for the frame pending bit of the FCF
- */
-#define FCF_FRAME_PENDING               (1 << 4)
-
-/**
- * The mask for the ACK request bit of the FCF
- */
-#define FCF_ACK_REQUEST                 (1 << 5)
-
-/**
- * The mask for the PAN ID compression bit of the FCF
- */
-#define FCF_PAN_ID_COMPRESSION          (1 << 6)
-
-/**
- * The mask for a IEEE 802.15.4-2003 compatible frame in the
- * frame version subfield
- */
-#define FCF_FRAME_VERSION_2003          (0 << 12)
-
-/**
- * The mask for a IEEE 802.15.4-2006 compatible frame in the
- * frame version subfield
- */
-#define FCF_FRAME_VERSION_2006          (1 << 12)
-
-/**
- * The mask for a IEEE 802.15.4e-2012 compatible frame in the
- * frame version subfield
- */
-#define FCF_FRAME_VERSION_2012          (2 << 12)
-
-/**
- * Shift value for the frame version subfield fcf1
- */
-#define FCF1_FV_SHIFT                   (4)
-
-/**
- * The mask for the frame version subfield fcf1
- */
-#define FCF1_FV_MASK                    (3 << FCF1_FV_SHIFT)
-
-/**
- * The mask for a IEEE 802.15.4-2003 compatible frame in the
- * frame version subfield fcf1
- */
-#define FCF1_FV_2003                    (0)
-
-/**
- * The mask for a IEEE 802.15.4-2006 compatible frame in the
- * frame version subfield fcf1
- */
-#define FCF1_FV_2006                    (1)
-
-/**
- * The mask for a IEEE 802.15.4e-2012 compatible frame in the
- * frame version subfield fcf1
- */
-#define FCF1_FV_2012                    (2)
-
-/**
- * Address Mode: NO ADDRESS
- */
-#define FCF_NO_ADDR                     (0x00)
-
-/**
- * Address Mode: RESERVED
- */
-#define FCF_RESERVED_ADDR               (0x01)
-
-/**
- * Address Mode: SHORT
- */
-#define FCF_SHORT_ADDR                  (0x02)
-
-/**
- * Address Mode: LONG
- */
-#define FCF_LONG_ADDR                   (0x03)
-
-/**
- * Defines the offset of the destination address
- */
-#define FCF_DEST_ADDR_OFFSET            (10)
-
-/**
- * Defines the offset of the source address
- */
-#define FCF_SOURCE_ADDR_OFFSET          (14)
-
-/**
- * Macro to set the source address mode
- */
-#define FCF_SET_SOURCE_ADDR_MODE(x)     ((unsigned int)((x) << \
-	FCF_SOURCE_ADDR_OFFSET))
-
-/**
- * Macro to set the destination address mode
- */
-#define FCF_SET_DEST_ADDR_MODE(x)       ((unsigned int)((x) << \
-	FCF_DEST_ADDR_OFFSET))
-
-/**
- * Defines a mask for the frame type. (Table 65 IEEE 802.15.4 Specification)
- */
-#define FCF_FRAMETYPE_MASK              (0x07)
-
-/**
- * Macro to get the frame type.
- */
-#define FCF_GET_FRAMETYPE(x)            ((x) & FCF_FRAMETYPE_MASK)
-
-
-/**
- * Generic 16 bit broadcast address
- */
-#define BROADCAST                       (0xFFFF)
-
-
-/**
- * Offset of Destination Addressing Mode of octet two of MHR.
- */
-#define FCF_2_DEST_ADDR_OFFSET              (2)
-
-/**
- * Offset of Source Addressing Mode of octet two of MHR.
- */
-#define FCF_2_SOURCE_ADDR_OFFSET            (6)
-
-/* Octet position within PHY_FrameInfo_t->payload array */
-
-/**
- * Octet position of FCF octet one within payload array of PHY_FrameInfo_t.
- */
-#define PL_POS_FCF_1                        (1)
-
-/**
- * Octet position of FCF octet two within payload array of PHY_FrameInfo_t.
- */
-#define PL_POS_FCF_2                        (2)
-
-/**
- * Octet position of Sequence Number octet within payload array of PHY_FrameInfo_t.
- */
-#define PL_POS_SEQ_NUM                      (3)
-
-/**
- * Octet start position of Destination PAN-Id field within payload array of
- * PHY_FrameInfo_t.
- */
-#define PL_POS_DST_PAN_ID_START             (4)
-
-/**
- * Octet start position of Destination Address field within payload array of
- * PHY_FrameInfo_t.
- */
-#define PL_POS_DST_ADDR_START               (6)
-
-/**
- * Size of the length parameter
- */
-#define LENGTH_FIELD_LEN                    (1)
-
-/**
- * Length of the LQI number field
- */
-#define LQI_LEN                             (1)
-
-/**
- * Length of the ED value parameter number field
- */
-#define ED_VAL_LEN                          (1)
-
-/**
- * Length (in octets) of FCF
- */
-#define FCF_LEN                             (2)
-
-/**
- * Length (in octets) of FCS
- */
-#define FCS_LEN                             (2)
-
-/**
- * Length of the sequence number field
- */
-#define SEQ_NUM_LEN                         (1)
-
-/**
- * Length (in octets) of extended address
- */
-#define EXT_ADDR_LEN                        (8)
-
-/**
- * Length (in octets) of short address
- */
-#define SHORT_ADDR_LEN                      (2)
-
-/**
- * Length (in octets) of PAN ID
- */
-#define PAN_ID_LEN                          (2)
-
-/**
- * Length (in octets) of ACK payload
- */
-#define ACK_PAYLOAD_LEN                     (0x03)
-
-
-
-
-/**
- * @brief Converts a phyTransmitPower value to a dBm value
- *
- * @param phyTransmitPower_value phyTransmitPower value
- *
- * @return dBm using signed integer format
- */
-#define CONV_phyTransmitPower_TO_DBM(phyTransmitPower_value) \
-	( \
-		((phyTransmitPower_value & 0x20) == 0x00) ? \
-		((int8_t)(phyTransmitPower_value & 0x3F)) : \
-		((-1) *	\
-		(int8_t)((~((phyTransmitPower_value & \
-		0x1F) - 1)) & 0x1F)) \
-	)
-
-/**
- * @brief Converts a dBm value to a phyTransmitPower value
- *
- * @param dbm_value dBm value
- *
- * @return phyTransmitPower_value using IEEE-defined format
- */
-#define CONV_DBM_TO_phyTransmitPower(dbm_value)	\
-	( \
-		dbm_value < -32 ? \
-		0x20 : \
-		( \
-			dbm_value > 31 ? \
-			0x1F : \
-			( \
-				dbm_value < 0 ?	\
-				(((~(((uint8_t)((-1) * \
-				dbm_value)) - 1)) & 0x1F) | 0x20) : \
-				(uint8_t)dbm_value \
-			) \
-		) \
-	)
-
-/* === Types ================================================================ */
-
 #if !defined(DOXYGEN)
 typedef enum trx_cca_mode_tag {
-	TRX_CCA_MODE0 = 0, /* Carrier sense OR energy above threshold */
-	TRX_CCA_MODE1 = 1, /* Energy above threshold */
-	TRX_CCA_MODE2 = 2, /* Carrier sense only */
-	TRX_CCA_MODE3 = 3 /* Carrier sense AND energy above threshold */
-} 
-
-/**
- * CCA Modes of the transceiver
- */
-trx_cca_mode_t;
+	TRX_CCA_MODE0 = 0, /** Carrier sense OR energy above threshold */
+	TRX_CCA_MODE1 = 1, /** Energy above threshold */
+	TRX_CCA_MODE2 = 2, /** Carrier sense only */
+	TRX_CCA_MODE3 = 3 /** Carrier sense AND energy above threshold */
+} trx_cca_mode_t;
 #endif
-/* ! @} */
 
-/**
- * CCA mode enumeration
+// *****************************************************************************
+/* CCA mode enumeration
+ 
+   Summary:
+    CCA Modes supported by transceiver
+    
+   Description:
+    Following are CCA mode enumeration which can be read from the transceiver
+    
+   Remarks:
+    None 
  */
 typedef enum cca_mode_tag {
 	CCA_MODE_0_CS_OR_ED = 0,
-	CCA_MODE_1_ED = 1, /* To be conform to IEEE 15.4 and TRX register */
+	CCA_MODE_1_ED = 1, /** To be conform to IEEE 15.4 and TRX register */
 	CCA_MODE_2_CS,
 	CCA_MODE_3_CS_ED,
 	CCA_MODE_4_ALOHA
-}  cca_mode_t;
+} cca_mode_t;
+
+// *****************************************************************************
+/* ch_pg enumeration
+ 
+   Summary:
+    ch_pg_t holds ch_pg enumeration which can be read from the transceiver. 
+ 
+   Description:
+    None
+ 
+   Remarks:
+    None 
+ */
 
 typedef enum ch_pg_tag {
 	CH_PG_2003 = 0,
@@ -709,19 +121,1260 @@ typedef enum ch_pg_tag {
 	CH_PG_16 = 16,
 	CH_PG_18 = 18,
 	CH_PG_INVALID = 0xFF
-}  ch_pg_t;
+} ch_pg_t;
 
-/* === Externals ============================================================ */
+// *****************************************************************************
+// *****************************************************************************
+// Section: Macros
+// *****************************************************************************
+// *****************************************************************************
 
-/* === Prototypes =========================================================== */
+// *****************************************************************************
+/* Min Frame Length
+ 
+   Summary:
+    This macro holds the Minimum size of a valid frame other than an Ack frame
+   Description:
+	None
+   Remarks:
+    None 
+ */
+ 
+#define MIN_FRAME_LENGTH                (8)
 
+// *****************************************************************************
+/* Max MGMT Frame Length
+ 
+   Summary:
+    This macro holds the Maximum size of the management frame(Association Response frame)
+   Description:
+	None
+   Remarks:
+    None 
+ */
+ 
+#define MAX_MGMT_FRAME_LENGTH           (30)
+
+// *****************************************************************************
+// *****************************************************************************
+// Section: MAC Constants
+// *****************************************************************************
+// *****************************************************************************
+
+// *****************************************************************************
+/* Max size of PHY packet
+ 
+   Summary:
+    This macro holds the Maximum size of PHY packet
+   Description:
+	None
+   Remarks:
+    None 
+ */
+ 
+#define aMaxPHYPacketSize               (127)
+
+// *****************************************************************************
+/* Maximum turnaround Time
+ 
+   Summary:
+    This macro holds Maximum turnaround Time of the radio to switch from Rx to Tx or 
+    Tx to Rx in symbols
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define aTurnaroundTime                 (12)
+
+// *****************************************************************************
+/* maximum size of an MPDU
+ 
+   Summary:
+    This macro holds The maximum size of an MPDU, in octets, that can be followed by 
+    a SIFS period
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define aMaxSIFSFrameSize               (18)
+
+// *****************************************************************************
+/* 
+
+   Summary:
+    This macro holds The minimum number of octets added by the MAC sublayer to the PSDU
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define aMinMPDUOverhead                 (9)
+
+// *****************************************************************************
+/* 
+
+   Summary:
+    This macro holds The number of slots contained in any superframe
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define aNumSuperframeSlots             (16)
+
+// *****************************************************************************
+/* 
+
+   Summary:
+    This macro holds The number of symbols forming the basic time period used by 
+    the CSMA-CA algorithm
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define aUnitBackoffPeriod              (20)
+
+
+// *****************************************************************************
+/* 
+
+   Summary:
+    This macro holds The number of symbols forming a superframe slot when the superframe 
+    order is equal to 0
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define aBaseSlotDuration               (60)
+
+// *****************************************************************************
+/* 
+
+   Summary:
+    This macro holds The number of symbols forming a superframe when the superframe 
+    order is equal to 0
+   Description:
+	None
+   Remarks:
+    None 
+ */
+ 
+#define aBaseSuperframeDuration         (aBaseSlotDuration * \
+	aNumSuperframeSlots)
+
+// *****************************************************************************
+// *****************************************************************************
+// Section: Standard PHY PIB attributes
+// *****************************************************************************
+// *****************************************************************************
+
+// *****************************************************************************
+/* phyCurrentChannel
+
+   Summary:
+    This macro holds The RF channel to use for all following transmissions and receptions
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define phyCurrentChannel               (0x00)
+
+// *****************************************************************************
+/* phyChannelsSupported
+
+   Summary:
+    This macro holds The 5 most significant bits (MSBs) (b27, ..., b31) of phyChannelsSupported 
+    shall be reserved and set to 0, and the 27 LSBs (b0, b1, ..., b26) shall indicate 
+    the status (1 = available, 0 = unavailable) for each of the 27 valid channels 
+    (bk shall indicate the status of channel k).
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define phyChannelsSupported            (0x01)
+
+// *****************************************************************************
+/* phyTransmitPower
+
+   Summary:
+    This macro holds The 2 MSBs represent the tolerance on the transmit power: 
+    00 = 1 dB 01 = 3 dB 10 = 6 dB The 6 LSBs represent a signed integer in 
+    twos-complement format, corresponding to the nominal transmit power of the 
+    device in decibels relative to 1 mW. The lowest value of phyTransmitPower 
+    shall be interpreted as less than or equal to 32 dBm.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define phyTransmitPower                (0x02)
+
+// *****************************************************************************
+/* phyCCAMode
+
+   Summary:
+    This macro holds The CCA mode 
+    - CCA Mode 1: Energy above threshold. CCA shall report a busy medium 
+    upon detecting any energy above the ED threshold.
+    - CCA Mode 2: Carrier sense only. CCA shall report a busy medium only upon 
+    the detection of a signal with the modulation and spreading characteristics 
+    of IEEE 802.15.4. This signal may be above or below the ED threshold.
+    - CCA Mode 3: Carrier sense with energy above threshold. CCA shall report a 
+    busy medium only upon the detection of a signal with the modulation and 
+    spreading characteristics of IEEE 802.15.4 with energy above the ED threshold.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define phyCCAMode                      (0x03)
+
+// *****************************************************************************
+/* phyCurrentPage
+
+   Summary:
+    This macro holds current PHY channel page. This is used in conjunction with 
+    phyCurrentChannel to uniquely identify the channel currently being used
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define phyCurrentPage                  (0x04)
+
+// *****************************************************************************
+/* phyMaxFrameDuration
+
+   Summary:
+    This macro holds The maximum number of symbols in a frame:
+    = phySHRDuration + ceiling([aMaxPHYPacketSize + 1] x phySymbolsPerOctet)
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define phyMaxFrameDuration             (0x05)
+
+// *****************************************************************************
+/* phySHRDuration
+
+   Summary:
+    This macro holds The duration of the synchronization header (SHR) in symbols 
+    for the current PHY
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define phySHRDuration                  (0x06)
+
+// *****************************************************************************
+/* phySymbolsPerOctet
+
+   Summary:
+    This macro holds The number of symbols per octet for the current PHY
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define phySymbolsPerOctet              (0x07)
+
+// *****************************************************************************
+/* PHY_OVERHEAD
+
+   Summary:
+    This macro holds Number of octets added by the PHY: 4 sync octets + SFD octet
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define PHY_OVERHEAD                    (5)
+
+// *****************************************************************************
+// *****************************************************************************
+// Section: MAC PIB Attributes
+// *****************************************************************************
+// *****************************************************************************
+
+// *****************************************************************************
+/* macAckWaitDuration
+
+   Summary:
+    This macro holds The maximum number of symbols to wait for an acknowledgment frame 
+    to arrive following a transmitted data frame. This value is dependent on the currently 
+    selected logical channel. For 0 <= phyCurrentChannel <= 10, this value is equal to 120. 
+    For 11 <= phyCurrentChannel <= 26, this  value is equal to 54.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define macAckWaitDuration              (0x40)
+
+// *****************************************************************************
+/* macMaxCSMABackoffs
+
+   Summary:
+    This macro holds The maximum number of backoffs the CSMA-CA algorithm will attempt 
+    before declaring a channel access failure.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define macMaxCSMABackoffs              (0x4E)
+
+// *****************************************************************************
+/* macMaxCSMABackoffs_def
+
+   Summary:
+    This macro holds The Default value for PIB macMaxCSMABackoffs
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define macMaxCSMABackoffs_def          (4)
+
+// *****************************************************************************
+/* macMinBE
+
+   Summary:
+    This macro holds The minimum value of the backoff exponent in the CSMA-CA 
+    algorithm.Note that if this value is set to 0, collision avoidance is disabled 
+    during the first iteration of the algorithm. Also note that for the slotted 
+    version of the CSMACA algorithm with the battery life extension enabled, the 
+    minimum value of the backoff exponent will be the lesser of 2 and the value of 
+    macMinBE.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define macMinBE                        (0x4F)
+
+// *****************************************************************************
+/* macPANId
+
+   Summary:
+    This macro holds The 16 bit identifier of the PAN on which the device is operating. 
+    If this value is 0xffff, the device is not associated.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define macPANId                        (0x50)
+
+// *****************************************************************************
+/* macPANId_def
+
+   Summary:
+    This macro holds The Default value for PIB macPANId
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define macPANId_def                    (0xFFFF)
+
+// *****************************************************************************
+/* macPromiscuousMode
+
+   Summary:
+    This indicates whether the MAC sublayer is in a promiscuous (receive all) 
+    mode. A value of true indicates that the MAC sublayer accepts all frames 
+    received from the PHY.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define macPromiscuousMode              (0x51)
+
+// *****************************************************************************
+/* macShortAddress
+
+   Summary:
+    This macro holds The 16 bit address that the device uses to communicate in 
+    the PAN.If the device is a PAN coordinator, this value shall be chosen before 
+    a PAN is started. Otherwise, the address is allocated by a coordinator during 
+    association. A value of 0xfffe indicates that the device has associated but 
+    has not been allocated an address. A value of 0xffff indicates that the device 
+    does not have a short address.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define macShortAddress                 (0x53)
+
+// *****************************************************************************
+/* macShortAddress_def
+
+   Summary:
+    This macro holds Default value for PIB macShortAddress
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define macShortAddress_def             (0xFFFF)
+
+// *****************************************************************************
+/* macMaxBE
+
+   Summary:
+    This macro holds The maximum value of the backoff exponent, BE, in the CSMA-CA algorithm
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define macMaxBE                        (0x57)
+
+// *****************************************************************************
+/* macMaxFrameRetries
+
+   Summary:
+    This macro holds The maximum number of retries allowed after a transmission failure
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define macMaxFrameRetries              (0x59)
+
+// *****************************************************************************
+/* macMaxFrameRetries
+
+   Summary:
+    This macro holds PIB attribute without relevant index, i.e. PIB attribute not 
+    contained in 802.15.4-2006 table 88.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define NO_PIB_INDEX                    (0)
+
+// *****************************************************************************
+/* macMinLIFSPeriod
+
+   Summary:
+    This macro holds The minimum number of symbols forming a LIFS period.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define macMinLIFSPeriod                (0x5E)
+
+// *****************************************************************************
+/* macMinLIFSPeriod_def
+
+   Summary:
+    This macro holds The Default value for PIB macMinLIFSPeriod.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define macMinLIFSPeriod_def            (40)
+
+// *****************************************************************************
+/* macMinSIFSPeriod
+
+   Summary:
+    This macro holds The minimum number of symbols forming a SIFS period.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define macMinSIFSPeriod                (0x5F)
+
+// *****************************************************************************
+/* macMinSIFSPeriod_def
+
+   Summary:
+    This macro holds Default value for PIB macMinSIFSPeriod
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define macMinSIFSPeriod_def            (12)
+
+// *****************************************************************************
+/* macMinSIFSPeriod_def
+
+   Summary:
+    This macro holds Private MAC PIB attribute to allow setting the MAC address 
+    in test mode
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define macIeeeAddress                  (0xF0)
+
+// *****************************************************************************
+// *****************************************************************************
+// Section: Non-standard values / extensions
+// *****************************************************************************
+// *****************************************************************************
+
+// *****************************************************************************
+/* PHY_SUCCESS_DATA_PENDING
+
+   Summary:
+    This macro holds PHY_SUCCESS in phyAutoCSMACA when received ACK frame had the 
+    pending bit set
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define PHY_SUCCESS_DATA_PENDING        (0x10)
+
+// *****************************************************************************
+/* ED_SAMPLE_DURATION_SYM
+
+   Summary:
+    This macro holds ED scan/sampling duration
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define ED_SAMPLE_DURATION_SYM          (8)
+
+// *****************************************************************************
+/* FCF_FRAMETYPE_BEACON
+
+   Summary:
+    This macro holds Defines the beacon frame type.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define FCF_FRAMETYPE_BEACON            (0x00)
+
+// *****************************************************************************
+/* FCF_FRAMETYPE_DATA
+
+   Summary:
+    This macro holds Define the data frame type.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define FCF_FRAMETYPE_DATA              (0x01)
+
+// *****************************************************************************
+/* FCF_FRAMETYPE_ACK
+
+   Summary:
+    This macro holds Define the ACK frame type.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define FCF_FRAMETYPE_ACK               (0x02)
+
+// *****************************************************************************
+/* FCF_FRAMETYPE_ACK
+
+   Summary:
+    This macro holds Define the command frame type.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define FCF_FRAMETYPE_MAC_CMD           (0x03)
+
+// *****************************************************************************
+/* FCF_FRAMETYPE_LLDN
+
+   Summary:
+    This macro holds Define the LLDN frame type.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define FCF_FRAMETYPE_LLDN              (0x04)
+
+// *****************************************************************************
+/* FCF_FRAMETYPE_MP
+
+   Summary:
+    This macro holds Define the multipurpose frame type.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define FCF_FRAMETYPE_MP                (0x05)
+
+// *****************************************************************************
+/* FCF_SET_FRAMETYPE
+
+   Summary:
+    This macro holds to set the frame type.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define FCF_SET_FRAMETYPE(x)            (x)
+
+// *****************************************************************************
+/* FCF_SECURITY_ENABLED
+
+   Summary:
+    This macro holds The mask for the security enable bit of the FCF.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define FCF_SECURITY_ENABLED            (1 << 3)
+
+// *****************************************************************************
+/* FCF_FRAME_PENDING
+
+   Summary:
+    This macro holds The mask for the frame pending bit of the FCF.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+ 
+#define FCF_FRAME_PENDING               (1 << 4)
+
+// *****************************************************************************
+/* FCF_ACK_REQUEST
+
+   Summary:
+    This macro holds The mask for the ACK request bit of the FCF.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define FCF_ACK_REQUEST                 (1 << 5)
+
+// *****************************************************************************
+/* FCF_PAN_ID_COMPRESSION
+
+   Summary:
+    This macro holds The mask for the PAN ID compression bit of the FCF.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define FCF_PAN_ID_COMPRESSION          (1 << 6)
+
+// *****************************************************************************
+/* FCF_FRAME_VERSION_2003
+
+   Summary:
+    This macro holds The mask for a IEEE 802.15.4-2003 compatible frame in the 
+    frame version subfield.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define FCF_FRAME_VERSION_2003          (0 << 12)
+
+// *****************************************************************************
+/* FCF_FRAME_VERSION_2006
+
+   Summary:
+    This macro holds The mask for a IEEE 802.15.4-2006 compatible frame in the 
+    frame version subfield.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define FCF_FRAME_VERSION_2006          (1 << 12)
+
+// *****************************************************************************
+/* FCF_FRAME_VERSION_2012
+
+   Summary:
+    This macro holds The mask for a IEEE 802.15.4-2012 compatible frame in the 
+    frame version subfield.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+ 
+#define FCF_FRAME_VERSION_2012          (2 << 12)
+
+// *****************************************************************************
+/* FCF1_FV_SHIFT
+
+   Summary:
+    This macro holds Shift value for the frame version subfield fcf1
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define FCF1_FV_SHIFT                   (4)
+
+// *****************************************************************************
+/* FCF1_FV_MASK
+
+   Summary:
+    This macro holds The mask for the frame version subfield fcf1
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define FCF1_FV_MASK                    (3 << FCF1_FV_SHIFT)
+
+// *****************************************************************************
+/* FCF1_FV_2003
+
+   Summary:
+    This macro holds The mask for a IEEE 802.15.4-2003 compatible frame in the 
+    frame version subfield fcf1
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define FCF1_FV_2003                    (0)
+
+// *****************************************************************************
+/* FCF1_FV_2006
+
+   Summary:
+    This macro holds The mask for a IEEE 802.15.4-2006 compatible frame in the 
+    frame version subfield fcf1
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define FCF1_FV_2006                    (1)
+
+// *****************************************************************************
+/* FCF1_FV_2012
+
+   Summary:
+    This macro holds The mask for a IEEE 802.15.4-2012 compatible frame in the 
+    frame version subfield fcf1
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define FCF1_FV_2012                    (2)
+
+// *****************************************************************************
+/* FCF_NO_ADDR
+
+   Summary:
+    This macro holds Address Mode: NO ADDRESS
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define FCF_NO_ADDR                     (0x00)
+
+// *****************************************************************************
+/* FCF_RESERVED_ADDR
+
+   Summary:
+    This macro holds Address Mode: RESERVED
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define FCF_RESERVED_ADDR               (0x01)
+
+// *****************************************************************************
+/* FCF_SHORT_ADDR
+
+   Summary:
+    This macro holds Address Mode: SHORT
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define FCF_SHORT_ADDR                  (0x02)
+
+// *****************************************************************************
+/* FCF_LONG_ADDR
+
+   Summary:
+    This macro holds Address Mode: LONG
+   Description:
+	None
+   Remarks:
+    None 
+ */
+ 
+#define FCF_LONG_ADDR                   (0x03)
+
+// *****************************************************************************
+/* FCF_DEST_ADDR_OFFSET
+
+   Summary:
+    This macro holds Defines the offset of the destination address
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define FCF_DEST_ADDR_OFFSET            (10)
+
+// *****************************************************************************
+/* FCF_SOURCE_ADDR_OFFSET
+
+   Summary:
+    This macro holds Defines the offset of the source address
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define FCF_SOURCE_ADDR_OFFSET          (14)
+
+// *****************************************************************************
+/* FCF_SET_SOURCE_ADDR_MODE
+
+   Summary:
+    This macro holds to set the source address mode
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define FCF_SET_SOURCE_ADDR_MODE(x)     ((unsigned int)((x) << \
+	FCF_SOURCE_ADDR_OFFSET))
+
+// *****************************************************************************
+/* FCF_SET_DEST_ADDR_MODE
+
+   Summary:
+    This macro holds to set the destination address mode
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define FCF_SET_DEST_ADDR_MODE(x)       ((unsigned int)((x) << \
+	FCF_DEST_ADDR_OFFSET))
+
+// *****************************************************************************
+/* FCF_FRAMETYPE_MASK
+
+   Summary:
+    This macro holds Defines a mask for the frame type
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define FCF_FRAMETYPE_MASK              (0x07)
+
+// *****************************************************************************
+/* FCF_GET_FRAMETYPE
+
+   Summary:
+    This macro holds to get the frame type
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define FCF_GET_FRAMETYPE(x)            ((x) & FCF_FRAMETYPE_MASK)
+
+// *****************************************************************************
+/* BROADCAST
+
+   Summary:
+    This macro holds Generic 16 bit broadcast address
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define BROADCAST                       (0xFFFF)
+
+// *****************************************************************************
+/* FCF_2_DEST_ADDR_OFFSET
+
+   Summary:
+    This macro holds Offset of Destination Addressing Mode of octet two of MHR.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define FCF_2_DEST_ADDR_OFFSET              (2)
+
+// *****************************************************************************
+/* FCF_2_SOURCE_ADDR_OFFSET
+
+   Summary:
+    This macro holds Offset of Source Addressing Mode of octet two of MHR.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define FCF_2_SOURCE_ADDR_OFFSET            (6)
+
+
+// *****************************************************************************
+// Octet position within PHY_FrameInfo_t->payload array 
+// *****************************************************************************
+
+// *****************************************************************************
+/* PL_POS_FCF_1
+
+   Summary:
+    This macro holds Octet position of FCF octet one within payload array of PHY_FrameInfo_t.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define PL_POS_FCF_1                        (1)
+
+// *****************************************************************************
+/* PL_POS_FCF_2
+
+   Summary:
+    This macro holds Octet position of FCF octet two within payload array of PHY_FrameInfo_t.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define PL_POS_FCF_2                        (2)
+
+// *****************************************************************************
+/* PL_POS_SEQ_NUM
+
+   Summary:
+    This macro holds Octet position of Sequence Number octet within payload array of 
+    PHY_FrameInfo_t.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define PL_POS_SEQ_NUM                      (3)
+
+// *****************************************************************************
+/* PL_POS_DST_PAN_ID_START
+
+   Summary:
+    This macro holds Octet start position of Destination PAN-Id field within payload array of 
+    PHY_FrameInfo_t.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define PL_POS_DST_PAN_ID_START             (4)
+
+// *****************************************************************************
+/* PL_POS_DST_ADDR_START
+
+   Summary:
+    This macro holds Octet start position of Destination Address field within payload array of 
+    PHY_FrameInfo_t.
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define PL_POS_DST_ADDR_START               (6)
+
+// *****************************************************************************
+/* LENGTH_FIELD_LEN
+
+   Summary:
+    This macro holds Size of the length parameter
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define LENGTH_FIELD_LEN                    (1)
+
+// *****************************************************************************
+/* LQI_LEN
+
+   Summary:
+    This macro holds Length of the LQI number field
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define LQI_LEN                             (1)
+
+// *****************************************************************************
+/* ED_VAL_LEN
+
+   Summary:
+    This macro holds Length of the ED value parameter number field
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define ED_VAL_LEN                          (1)
+
+// *****************************************************************************
+/* FCF_LEN
+
+   Summary:
+    This macro holds Length (in octets) of FCF
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define FCF_LEN                             (2)
+
+// *****************************************************************************
+/* FCS_LEN
+
+   Summary:
+    This macro holds Length (in octets) of FCS
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define FCS_LEN                             (2)
+
+// *****************************************************************************
+/* SEQ_NUM_LEN
+
+   Summary:
+    This macro holds Length of the sequence number field
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define SEQ_NUM_LEN                         (1)
+
+// *****************************************************************************
+/* EXT_ADDR_LEN
+
+   Summary:
+    This macro holds Length (in octets) of extended address
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define EXT_ADDR_LEN                        (8)
+
+// *****************************************************************************
+/* SHORT_ADDR_LEN
+
+   Summary:
+    This macro holds Length (in octets) of short address
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define SHORT_ADDR_LEN                      (2)
+
+// *****************************************************************************
+/* PAN_ID_LEN
+
+   Summary:
+    This macro holds Length (in octets) of PAN ID
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define PAN_ID_LEN                          (2)
+
+// *****************************************************************************
+/* ACK_PAYLOAD_LEN
+
+   Summary:
+    This macro holds Length (in octets) of ACK payload
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define ACK_PAYLOAD_LEN                     (0x03)
+
+// *****************************************************************************
+/* CONV_phyTransmitPower_TO_DBM
+
+   Summary:
+    This macro holds Converts a phyTransmitPower value to a dBm value 
+    return dBm using signed integer format
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define CONV_phyTransmitPower_TO_DBM(phyTransmitPower_value) \
+   ( \
+		((phyTransmitPower_value & 0x20) == 0x00) ? \
+		((int8_t)(phyTransmitPower_value & 0x3F)) : \
+		((-1) *	\
+		(int8_t)((~((phyTransmitPower_value & \
+		0x1F) - 1)) & 0x1F)) \
+	)
+
+// *****************************************************************************
+/* CONV_DBM_TO_phyTransmitPower
+
+   Summary:
+    This macro  Converts a dBm value to a phyTransmitPower value 
+    and return phyTransmitPower_value using IEEE-defined format
+   Description:
+	None
+   Remarks:
+    None 
+ */
+
+#define CONV_DBM_TO_phyTransmitPower(dbm_value)  \
+   ( \
+		dbm_value < -32 ? \
+		0x20 : \
+		( \
+			dbm_value > 31 ? \
+			0x1F : \
+			( \
+				dbm_value < 0 ?	\
+				(((~(((uint8_t)((-1) * \
+				dbm_value)) - 1)) & 0x1F) | 0x20) : \
+				(uint8_t)dbm_value \
+			) \
+		) \
+	)
+ 
+
+
+//DOM-IGNORE-BEGIN
 #ifdef __cplusplus
-extern "C" {
+}
 #endif
-
-#ifdef __cplusplus
-} /* extern "C" */
-#endif
+//DOM-IGNORE-END
 
 #endif /* IEEE_CONST_H */
 /* EOF */

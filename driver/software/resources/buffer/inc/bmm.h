@@ -50,19 +50,9 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-/**
- * \defgroup group_resources  Resource Management
- * The Resource Management provides access to resources to the stack or the
- * application.
- *  @{
- */
-
-/**
- * \defgroup group_bmm  Buffer Management
+/*
  * Buffer Management (large and small buffers): provides services for
- * dynamically
- * allocating and freeing memory buffers.
- *  @{
+ * dynamically allocating and freeing memory buffers.
  */
 
 // *****************************************************************************
@@ -70,10 +60,20 @@
 // Section: Macros
 // *****************************************************************************
 // *****************************************************************************
-/**
- * This macro provides the pointer to the corresponding body of the supplied
- * buffer header.
- */
+
+// *****************************************************************************
+/* BMM Buffer Pointer
+
+  Summary:
+    This macro provides the pointer to the corresponding body of the supplied
+    buffer header
+
+  Description:
+    None
+
+  Remarks:
+    None
+*/
 
 #define BMM_BUFFER_POINTER(buf)  ((buf)->body)
 
@@ -83,10 +83,18 @@
 // *****************************************************************************
 // *****************************************************************************
 
-/**
- * @brief Buffer structure holding information of each buffer.
- *
- */
+// *****************************************************************************
+/* Structure Holding the Buffer Details
+
+  Summary:
+    Buffer structure holding information of each buffer
+
+  Description:
+    buffer_t is used as the data type to get the buffer pointer
+
+  Remarks:
+    None
+*/
 
 typedef struct buffer_tag
 {
@@ -113,50 +121,136 @@ typedef struct buffer_tag
 extern "C" {
 #endif
 
-/**
- * @brief Initializes the buffer module.
- *
- * This function initializes the buffer module.
- * This function should be called before using any other functionality
- * of buffer module.
- *
- * @ingroup apiResApi
- */
+// *****************************************************************************    
+/*
+  Function:
+   void bmm_buffer_init(void)
+
+  Summary:
+    Initializes the buffer module
+
+  Description:
+    This function initializes the buffer module.
+    This function should be called before using any other functionality
+    of buffer module
+
+  Precondition:
+    None
+
+  Parameters:
+    None.
+
+  Returns:
+    None.
+
+  Example:
+    <code>
+    bmm_buffer_init();
+    </code>
+
+  Remarks:
+    This routine is called by the PHY Layer during PHY Initialization (PHY_Init).
+	Application can directly allocate the buffer and use it. Number of Buffers should 
+	be defined as per application needs before ausing the buffer
+*/
+
 void bmm_buffer_init(void);
 
-/**
- * @brief Allocates a buffer
- *
- * This function allocates a buffer and returns a pointer to the buffer.
- * The same pointer should be used while freeing the buffer.User should
- * call BMM_BUFFER_POINTER(buf) to get the pointer to buffer user area.
- *
- * @param size size of buffer to be allocated.
- *
- * @return pointer to the buffer allocated,
- *  NULL if buffer not available.
- *
- * @ingroup apiResApi
- */
+// *****************************************************************************    
+/*
+  Function:
+   buffer_t* bmm_buffer_alloc(uint16_t size)
+
+  Summary:
+    Allocates a buffer
+
+  Description:
+    This function allocates a buffer and returns a pointer to the buffer.
+	The same pointer should be used while freeing the buffer.User should
+	call BMM_BUFFER_POINTER(buf) to get the pointer to buffer user area
+
+  Precondition:
+    bmm_buffer_init should have been called before using this function
+
+  Parameters:
+    param - size size of buffer to be allocated.
+ 
+  Returns:
+    return- pointer to the buffer allocated,
+			NULL if buffer not available
+
+  Example:
+    <code>
+		buffer_t *buffer;
+		buffer = bmm_buffer_alloc(LARGE_BUFFER_SIZE);
+		
+		if (buffer == NULL)
+		{
+			//Buffer is unavailable
+		}
+		
+    </code>
+
+  Remarks:
+    This routine is used by the PHY Layer for allocating the buffer for reception.
+	Number of Buffers should be defined as per application needs before the buffer
+	allocation function. If application allocates the buffer and not freeing them,
+	Trx may not able to continuously receive the packet. So care should be taken when
+	defining the Number of Buffers.
+*/
+
 #if defined(ENABLE_LARGE_BUFFER)
-buffer_t *bmm_buffer_alloc(uint16_t size);
+buffer_t* bmm_buffer_alloc(uint16_t size);
 
 #else
-buffer_t *bmm_buffer_alloc(uint8_t size);
+buffer_t* bmm_buffer_alloc(uint8_t size);
 
 #endif
 
-/**
- * @brief Frees up a buffer.
- *
- * This function frees up a buffer. The pointer passed to this function
- * should be the pointer returned during buffer allocation. The result is
- * unpredictable if an incorrect pointer is passed.
- *
- * @param pbuffer Pointer to buffer that has to be freed.
- *
- * @ingroup apiResApi
- */
+// *****************************************************************************    
+/*
+  Function:
+   void bmm_buffer_free(buffer_t *pbuffer)
+
+  Summary:
+    Frees up a buffer
+
+  Description:
+    This function frees up a buffer. The pointer passed to this function
+    should be the pointer returned during buffer allocation. The result is
+    unpredictable if an incorrect pointer is passed.
+
+  Precondition:
+    bmm_buffer_init should have been called before using this function
+
+  Parameters:
+    pbuffer - Pointer to buffer that has to be freed
+ 
+  Returns:
+    None
+
+  Example:
+    <code>
+		buffer_t *buffer;
+		buffer = bmm_buffer_alloc(LARGE_BUFFER_SIZE);
+		
+		if (buffer != NULL)
+		{
+			//Use the buffer
+		}
+		
+		//Buffer Freeing
+		bmm_buffer_free(buffer);		
+    </code>
+
+  Remarks:
+    This routine is used by the PHY Layer for allocating the buffer for reception.
+	Number of Buffers should be defined as per application needs before the buffer
+	allocation function. If application allocates the buffer and not freeing them,
+	Trx may not able to continuously receive the packet. So care should be taken when
+	defining the Number of Buffers.
+*/
+
 void bmm_buffer_free(buffer_t *pbuffer);
 
 #ifdef __cplusplus

@@ -36,173 +36,326 @@
 *******************************************************************************/
 // DOM-IGNORE-END
 
-/* Prevent double inclusion */
 #ifndef PHY_CONSTANTS_H
 #define PHY_CONSTANTS_H
-
-// *****************************************************************************
-// *****************************************************************************
-// Section: Includes
-// *****************************************************************************
-// *****************************************************************************
-
-// *****************************************************************************
-// *****************************************************************************
-// Section: Externals
-// *****************************************************************************
-// *****************************************************************************
-
-// *****************************************************************************
-// *****************************************************************************
-// Section: Types
-// *****************************************************************************
-// *****************************************************************************
 
 // *****************************************************************************
 // *****************************************************************************
 // Section: Macros
 // *****************************************************************************
 // *****************************************************************************
-/** Minimum channel */
+
+// *****************************************************************************
+/* Minimum channel
+ 
+   Summary:
+    This macro defines the Minimum channel number of Transciver
+   Description:
+    None
+   Remarks:
+    None 
+ */
+
 #define MIN_CHANNEL                 (11)
 
-/** Maximum channel */
+// *****************************************************************************
+/* Maximum channel
+ 
+   Summary:
+    This macro defines the Maximum channel number of Transciver
+   Description:
+    None
+   Remarks:
+    None 
+ */
 #define MAX_CHANNEL                 (26)
 
-/** Valid channel masks for scanning */
+// *****************************************************************************
+/* Valid Channel Mask
+ 
+   Summary:
+    This macro defines the Valid Channel Mask used for ED Scanning
+   Description:
+    None
+   Remarks:
+    None 
+ */
 #define VALID_CHANNEL_MASK          (0x07FFF800UL)
 
-/*
- * 4 bits form one symbol since O-QPSK is used
+// *****************************************************************************
+/* Symbols per Octet
+ 
+   Summary:
+    This macro defines the number of symbols per octet
+   Description:
+    4 bits form one symbol since O-QPSK is used.
+   Remarks:
+    None 
  */
-/** Symbols per octet */
+
 #define SYMBOLS_PER_OCTET                   (2)
 
-/** Number of symbols included in the preamble */
+// *****************************************************************************
+/* No of Symbols included in the preamble
+ 
+   Summary:
+    This macro defines the number of symbols includes in the preamble
+   Description:
+    None
+   Remarks:
+    None 
+ */
+
 #define NO_SYMBOLS_PREAMBLE                 (8)
 
-/** Number of symbols included in the SFD field */
+// *****************************************************************************
+/* Number of symbols included in the SFD field
+ 
+   Summary:
+    This macro defines the number of symbols includes in SFD Field
+   Description:
+    None
+   Remarks:
+    None 
+ */
+
 #define NO_SYMBOLS_SFD                      (2)
 
-/**
- * Number of symbols forming the synchronization header (SHR) for the current
- * PHY.
- * This value is the base for the PHY PIB attribute phySHRDuration.
+// *****************************************************************************
+/* Number of symbols forming the synchronization header (SHR) for the current
+   PHY.
+ 
+   Summary:
+    This macro defines the number of symbols forming the synchronization header   
+    (SHR) for the current PHY. This value is the base for the PHY PIB attribute 
+	phySHRDuration.
+   Description:
+    None
+   Remarks:
+    None 
  */
+
 #define NO_OF_SYMBOLS_PREAMBLE_SFD          (NO_SYMBOLS_PREAMBLE + \
 	NO_SYMBOLS_SFD)
 
-/**
- * Maximum number of symbols in a frame for the current PHY.
- * This value is the base for the PHY PIB attribute phyMaxFrameDuration.
+// *****************************************************************************
+/* Maximum number of symbols in a frame for the current PHY.
+ 
+   Summary:
+    This macro defines the Maximum number of symbols in a frame for the current PHY  
+    This value is the base for the PHY PIB attribute phyMaxFrameDuration.
+   Description:
+    None
+   Remarks:
+    None 
  */
+
 #define MAX_FRAME_DURATION \
 	(NO_OF_SYMBOLS_PREAMBLE_SFD + \
 	(aMaxPHYPacketSize + 1) * SYMBOLS_PER_OCTET)
 
-/**
- * The maximum time in symbols for a 32 bit timer
+// *****************************************************************************
+/* Maximum Symbol Time
+ 
+   Summary:
+    The maximum time in symbols for a 32 bit timer
+   Description:
+    None
+   Remarks:
+    None 
  */
+
 #define MAX_SYMBOL_TIME                     (0x0FFFFFFF)
 
-/**
- * Symbol mask for ignoring most significant nibble
+// *****************************************************************************
+/* Symbol Mask
+ 
+   Summary:
+    Symbol mask for ignoring most significant nibble
+   Description:
+    None
+   Remarks:
+    None 
  */
+
 #define SYMBOL_MASK                         (0x0FFFFFFF)
 
-/**
- * Maximum PDT Level 
+// *****************************************************************************
+/* Maximum PDT Level
+ 
+   Summary:
+    Maximum Power Detect Threshold value
+   Description:
+    None
+   Remarks:
+    None 
  */
+
 #define MAX_PDT_LEVEL                       (0x0F)
  
-/**
- * TX Power Tolerance 
+// *****************************************************************************
+/* TX Power Tolerance
+ 
+   Summary:
+    Macro defines the TX Power Tolerance value
+   Description:
+    TRX Parameter: Tolerance of the phyTransmitPower PIB attribute.
+                 This is encoded into the two MSBits of the attribute,
+                 and is effectively read-only.
+   Remarks:
+    None 
  */
+
 #define TX_PWR_TOLERANCE                              (0x80)
 
-/*
- * Default tx power for Ch26 to meet FCC compliance
+// *****************************************************************************
+/* Default Tx Power Channel 26
+ 
+   Summary:
+    Default tx power for Ch26 to meet FCC compliance
+   Description:
+    None
+   Remarks:
+    None 
  */
+
 #define DEFAULT_TX_POWER_CH26             (TX_PWR_TOLERANCE | 0x0d)
 
-/** 
- * Constant ANTENNA_DIVERSITY_ENABLE 
+// *****************************************************************************
+// *****************************************************************************
+// Section: Constants
+// *****************************************************************************
+// *****************************************************************************
+
+// *****************************************************************************
+/* ANTENNA_DIVERSITY_ENABLE
+ 
+   Summary:
+    Macro for enabling Antenna Diversity
+   Remarks:
+    None 
  */
 #define ANTENNA_DIVERSITY_ENABLE            (1)
 
-/** 
- * Constant ANTENNA_DIVERSITY_DISABLE 
+// *****************************************************************************
+/* ANTENNA_DIVERSITY_DISABLE
+ 
+   Summary:
+    Macro for Disabling Antenna Diversity
+   Remarks:
+    None 
  */
 #define ANTENNA_DIVERSITY_DISABLE           (0)
 
-/** 
- * Constant ANTENNA_CTRL_0 
+// *****************************************************************************
+/* ANTENNA_CTRL_0
+ 
+   Summary:
+    Macro for selecting Antenna Control 0
+   Remarks:
+    None 
  */
 #define ANTENNA_CTRL_0                      (0)
 
-/** 
- * Constant ANTENNA_CTRL_1 
+// *****************************************************************************
+/* ANTENNA_CTRL_1
+ 
+   Summary:
+    Macro for selecting Antenna Control 1
+   Remarks:
+    None 
  */
 #define ANTENNA_CTRL_1                      (1)
 
-/** 
- * Constant ANTENNA_CTRL_2 
+// *****************************************************************************
+/* ANTENNA_CTRL_2
+ 
+   Summary:
+    Macro for selecting Antenna Control 2
+   Remarks:
+    None 
  */
 #define ANTENNA_CTRL_2                      (2)
 
-/** 
- * Constant ANTENNA_CTRL_3 
+// *****************************************************************************
+/* ANTENNA_CTRL_3
+ 
+   Summary:
+    Macro for selecting Antenna Control 3
+   Remarks:
+    None 
  */
 #define ANTENNA_CTRL_3                      (3)
 
-/** 
- * Constant PA_EXT_ENABLE 
+// *****************************************************************************
+/* PA_EXT_ENABLE
+ 
+   Summary:
+    Macro for enabling external PA
+   Remarks:
+    None 
  */
 #define PA_EXT_ENABLE                       (1)
 
-/** 
- * Constant PA_EXT_DISABLE 
+// *****************************************************************************
+/* PA_EXT_DISABLE
+ 
+   Summary:
+    Macro for disabling external PA
+   Remarks:
+    None 
  */
 #define PA_EXT_DISABLE                      (0)
 
-/** 
- * Constant PWR_REGISTER_VALUE 
+// *****************************************************************************
+/* PWR_REGISTER_VALUE
+ 
+   Summary:
+    Macro for selecting power configuration mode as Register set
+   Remarks:
+    None 
  */
 #define PWR_REGISTER_VALUE                  (1)
 
-/** 
- * Constant PWR_DBM_VALUE 
+// *****************************************************************************
+/* PWR_DBM_VALUE
+ 
+   Summary:
+    Macro for selecting power configuration mode as Dbm set
+   Remarks:
+    None 
  */
 #define PWR_DBM_VALUE                       (0)
 
-/** 
- * Constant PROMISCUOUS_ENABLE 
+// *****************************************************************************
+/* PROMISCUOUS_ENABLE
+ 
+   Summary:
+    Macro for enabling promiscuous mode
+   Remarks:
+    None 
  */
 #define PROMISCUOUS_ENABLE                  (1)
 
-/** 
- * Constant PROMISCUOUS_DISABLE 
+// *****************************************************************************
+/* PROMISCUOUS_DISABLE
+ 
+   Summary:
+    Macro for disabling promiscuous mode
+   Remarks:
+    None 
  */
 #define PROMISCUOUS_DISABLE                 (0)
 
-
-/* Constant Total number of Timers used by the PHY Layer*/
+// *****************************************************************************
+/* NUMBER_OF_TOTAL_STACK_TIMERS
+ 
+   Summary:
+    Total numbers of software timer instance used by PHY Layer
+   Remarks:
+    None 
+ */
 #define NUMBER_OF_TOTAL_STACK_TIMERS        (1)
-
-
-// *****************************************************************************
-// *****************************************************************************
-// Section: Prototypes
-// *****************************************************************************
-// *****************************************************************************
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#ifdef __cplusplus
-} /* extern "C" */
-#endif
 
 #endif /* PHY_CONSTANTS_H */
 

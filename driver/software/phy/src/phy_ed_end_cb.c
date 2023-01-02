@@ -71,7 +71,7 @@
 /* Section: Functions                                                    */
 /* ************************************************************************** */
 /* ************************************************************************** */
-void PHY_EdEndCallback(uint8_t energyLevel)
+__attribute__((weak)) void  PHY_EdEndCallback(uint8_t energyLevel)
 {
 	energyLevel = energyLevel; /* Keep compiler happy. */
 }

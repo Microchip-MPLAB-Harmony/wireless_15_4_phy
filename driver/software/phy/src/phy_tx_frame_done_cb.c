@@ -71,7 +71,7 @@
 /* Section: Functions                                                    */
 /* ************************************************************************** */
 /* ************************************************************************** */
-void PHY_TxDoneCallback(PHY_Retval_t status, PHY_FrameInfo_t *frame)
+__attribute__((weak)) void PHY_TxDoneCallback(PHY_Retval_t status, PHY_FrameInfo_t *frame)
 {
 	/* Keep compiler happy. */
 	status = status;

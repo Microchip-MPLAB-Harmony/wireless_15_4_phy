@@ -41,7 +41,7 @@
 #ifndef PAL_H
 #define PAL_H
 
-/**
+/*
  * This module acts as a wrapper layer between the Wireless stack and the Harmony
  * drivers and peripherals
  * All hardware level access to the Harmony drivers from the stack happens through
@@ -59,12 +59,12 @@
 // Section: Macros
 // *****************************************************************************
 // *****************************************************************************
-/**
+/*
  * Adds two time values
  */
 #define ADD_TIME(a, b)                  ((a) + (b))
 
-/**
+/*
  * Subtracts two time values
  */
 #define SUB_TIME(a, b)                  ((a) - (b))
@@ -92,8 +92,18 @@
 // Section: Types
 // *****************************************************************************
 // *****************************************************************************
-/**
- * PAL Timer Timeout type
+
+// *****************************************************************************
+ /* PAL Timer Timeout type
+ 
+   Summary:
+    Enum holding the types of timer timeout
+ 
+   Description:
+    None
+	
+   Remarks:
+    None
  */
 typedef enum timeout_type_tag {
 	/** The timeout is relative to the current time. */
@@ -102,9 +112,23 @@ typedef enum timeout_type_tag {
 	TIMEOUT_ABSOLUTE
 }  TimeoutType_t;
 
-/**
- * PAL Timer Callback type
+// *****************************************************************************
+ /* PAL Timer Callback type
+ 
+   Summary:
+    Enum holding the types of callback methods
+ 
+   Description:
+    Type of callbacks,
+    CALLBACK_SINGLE   - Single Shot Timers - Callback called once the timer is
+						expired
+	CALLBACK_PERIODIC - Periodic Timer - Callback called continously on every timer expire 
+						till the timer is stopped.
+	
+   Remarks:
+    None
  */
+
 typedef enum callback_type_tag {
 	/** Single Shot timer. */
 	CALLBACK_SINGLE,
@@ -112,13 +136,29 @@ typedef enum callback_type_tag {
     CALLBACK_PERIODIC
 }  CallbackType_t;
 
-/**
+/*
  * PAL Timer Id type
  */
 typedef uint8_t TimerId_t;
 
-/**
- * PAL Return status types
+// *****************************************************************************
+ /* PAL layer Return Status
+ 
+   Summary:
+    Enum holding the return status of PAL layer
+ 
+   Description:
+    
+    PAL_SUCCESS       		- Success status for the request
+	PAL_TMR_ALREADY_RUNNING - Received the request to start the timer, but the timer 
+							is already running
+	PAL_TMR_NOT_RUNNING 	- PAL Timer is not running now. It got expired
+	PAL_TIMER_INVALID_ID 	- Timer ID given is not valid or out of range
+	PAL_TIMER_INVALID_TIMEOUT - Timer=out given is not valid
+	PAL_FAILURE 			- Failure status for the request
+	
+   Remarks:
+    None
  */
 typedef enum pal_status_tag {
 	PAL_SUCCESS                 = 0x00,
@@ -147,37 +187,146 @@ typedef enum pal_status_tag {
 extern "C" {
 #endif
 
-/**
- * @brief Initialization of PAL
- *
- * This function initializes the PAL. .
- *
- * @return PAL_SUCCESS  if PAL initialization is successful, PAL_FAILURE otherwise
- */
+// *****************************************************************************
+/*
+  Function:
+    PAL_Status_t PAL_Init(void)
+
+  Summary:
+    Initialization of PAL
+
+  Description:
+    This function initializes the timers array and initializes the PAL layer 
+	variables
+
+  Precondition:
+    SYS_TIME_Initialize() should have been called before calling this function. 
+
+  Parameters:
+    None.
+
+  Returns:
+    PAL_SUCCESS - if PAL initialization is successful
+    PAL_FAILURE - otherwise
+
+  Example:
+    <code>
+    PAL_Status_t retVal = PAL_FAILURE;
+ 
+    retVal = PAL_Init();
+    if (PAL_SUCCESS =! retVal)
+    {
+        while(1);
+    }
+    </code>
+
+  Remarks:
+    This routine is called by the PHY layer during initialization. So, user can directly uses
+	PAL APIs.
+*/
+
 PAL_Status_t PAL_Init(void);
 
-/**
- * @brief Start regular timer
- *
- * This function starts a regular timer and installs the corresponding
- * callback function handle the timeout event.
- *
- * @param timer_id Timer identifier
- * @param timer_count Timeout in microseconds
- * @param timeout_type @ref TIMEOUT_RELATIVE or @ref TIMEOUT_ABSOLUTE
- * @param timer_cb Callback handler invoked upon timer expiry
- * @param param_cb Argument for the callback handler
- * @param callback_type @ref CALLBACK_SINGLE or @ref CALLBACK_PERIODIC
- *
- * @return
- *          - @ref PAL_TMR_INVALID_ID  if the timer identifier is undefined,
- *          - @ref PAL_INVALID_PARAMETER if the callback function for this timer
- *                 is NULL,
- *          - @ref PAL_TMR_ALREADY_RUNNING if the timer is already running.
- *          - @ref PAL_SUCCESS if timer is started or
- *          - @ref PAL_TMR_INVALID_TIMEOUT if timeout is not within timeout
- * range.
- */
+// *****************************************************************************
+/*
+  Function:
+	PAL_Status_t PAL_TimerGetId(TimerId_t *timer_id)
+
+  Summary:
+    Gets the Timer Id
+
+  Description:
+    Returns a timer id to be used before starting a timer
+
+  Precondition:
+   PAL_Init() should have been called before calling this function. 
+
+  Parameters:
+   timer_id - Value of the id returned by the function
+
+  Returns:
+    PAL_Status_t - PAL_SUCCESS - If timer Id is allocated successfully 
+				   PAL_FAILURE - If there are no timer unused 
+
+  Example:
+    <code>
+    TimerId_t appTimer;
+	//Get the Id for the sotware timer instance
+	PAL_TimerGetId(&appTimer);
+    </code>
+
+  Remarks:
+	None
+*/
+
+PAL_Status_t PAL_TimerGetId(TimerId_t *timer_id);
+
+// *****************************************************************************
+/*
+  Function:
+    PAL_Status_t PAL_TimerStart(TimerId_t timerId,
+		uint32_t timerCount,
+		TimeoutType_t timeoutType,
+		void * timerCb,
+		void *paramCb, 
+        CallbackType_t callbackType)
+
+  Summary:
+    Start regular timer
+
+  Description:
+    This function starts a regular timer and installs the corresponding
+    callback function handle the timeout event
+
+  Precondition:
+    PAL_Init() should have been called before calling this function. 
+	PAL_TimerGetId() routine should be called to get the timer Id before starting it
+
+  Parameters:
+    timerId 	- Timer identifier
+    timerCount  - Timeout in microseconds
+    timeoutType - TIMEOUT_RELATIVE or @ref TIMEOUT_ABSOLUTE
+    timerCb 	- Callback handler invoked upon timer expiry
+    paramCb     - Argument for the callback handler
+    callbackType- CALLBACK_SINGLE or @ref CALLBACK_PERIODIC.
+
+  Returns:
+    PAL_TMR_INVALID_ID - if the timer identifier is undefined
+    PAL_INVALID_PARAMETER - if the callback function for this timer
+                         is NULL,
+	PAL_TMR_ALREADY_RUNNING - if the timer is already running
+	PAL_SUCCESS - if timer is started or
+	PAL_TMR_INVALID_TIMEOUT -  if timeout is not within timeout
+
+  Example:
+    <code>
+    PAL_Status_t retVal = PAL_FAILURE;
+	TimerId_t appTimer;
+	
+	static void AppTimerCallback(void *paramCb)
+	{
+		//Toggle LED
+	}
+	
+	//Get the Id for the sotware timer instance
+	PAL_TimerGetId(&appTimer);
+	
+	if (PAL_SUCCESS == PAL_TimerStart(appTimer,
+				5000,
+				TIMEOUT_RELATIVE,
+				(void *)AppTimerCallback,
+				NULL, CALLBACK_SINGLE))
+	{
+		//Timer Started
+		//ToggleLED
+	}
+		
+    </code>
+
+  Remarks:
+	Starting PAL_Timer before getting the Id of timer will lead to unpredicted behaviour
+*/
+
 PAL_Status_t PAL_TimerStart(TimerId_t timerId,
 		uint32_t timerCount,
 		TimeoutType_t timeoutType,
@@ -185,81 +334,258 @@ PAL_Status_t PAL_TimerStart(TimerId_t timerId,
 		void *paramCb, 
         CallbackType_t callbackType);
 
-/**
- * @brief Stops a running timer
- *
- * This function stops a running timer with specified timer_id
- *
- * @param timer_id Timer identifier
- *
- * @return
- *          - @ref PAL_SUCCESS if timer stopped successfully,
- *          - @ref PAL_TMR_INVALID_ID if the specifed timer id is undefined.
- */
+// *****************************************************************************
+/*
+  Function:
+	PAL_Status_t PAL_TimerStop(TimerId_t timerId)
+
+  Summary:
+    Stops a running timer
+
+  Description:
+    This function stops a running timer with specified timer_id
+
+  Precondition:
+    Timer should have been started before using this function
+
+  Parameters:
+    timerId 	- Timer identifier
+
+  Returns:
+    PAL_TMR_INVALID_ID - if the timer identifier is undefined    
+	PAL_SUCCESS - if timer is stopped successfully 
+
+  Example:
+    <code>
+    PAL_Status_t retVal = PAL_FAILURE;
+	TimerId_t appTimer;
+	
+	static void AppTimerCallback(void *paramCb)
+	{
+		//Toggle LED
+	}
+	
+	//Get the Id for the sotware timer instance
+	PAL_TimerGetId(&appTimer);
+	
+	if (PAL_SUCCESS == PAL_TimerStart(appTimer,
+				5000,
+				TIMEOUT_RELATIVE,
+				(void *)AppTimerCallback,
+				NULL, CALLBACK_SINGLE))
+	{
+		//Timer Started
+		//ToggleLED
+	}
+	
+	if (PAL_SUCCESS == PAL_TimerStop(appTimer))
+	{
+		//Timer Stopped
+		//ToggleLED
+	}
+
+    </code>
+
+  Remarks:
+	Timer should be started before stopping it
+*/
+
 PAL_Status_t PAL_TimerStop(TimerId_t timerId);
 
+// *****************************************************************************
+/*
+  Function:
+	void PAL_GetCurrentTime(uint32_t *currentTime)
 
-/**
- * @brief Gets current time
- *
- * This function returns the current time.
- *
- * @param[out] current_time Returns current system time
- */
+  Summary:
+    Gets current time
+
+  Description:
+    This function returns the current time.
+
+  Precondition:
+    None
+
+  Parameters:
+   currentTime Returns current system time
+
+  Returns:
+    None 
+
+  Example:
+    <code>
+    uint32_t  currTime ;
+	PAL_GetCurrentTimer(&currTime);
+    </code>
+
+  Remarks:
+	None
+*/
+
 void PAL_GetCurrentTime(uint32_t *currentTime);
 
-/**
- * @brief Returns a timer id to be used before starting a timer
- * @param timer_id Value of the id returned by the function
- */
-PAL_Status_t PAL_TimerGetId(TimerId_t *timer_id);
 
-/**
- * @brief Checks if the timer of requested timer identifier is running
- *
- * This function checks if the timer of requested timer identifier is running.
- *
- * @param timer_id Timer identifier
- *
- * @return
- * - true if timer with requested timer id is running,
- * - false otherwise.
- */
+// *****************************************************************************
+/*
+  Function:
+	bool PAL_TimerIsRunning(TimerId_t timer_id)
+
+  Summary:
+    Gets the status of running timer
+
+  Description:
+    Checks if the timer of requested timer identifier is running
+
+  Precondition:
+    Timer should have been started before using this function
+
+  Parameters:
+   timer_id  - Timer identifier
+
+  Returns:
+    bool - true - If timer with requested timer id is running,
+         - false otherwise.
+
+  Example:
+    <code>
+     PAL_Status_t retVal = PAL_FAILURE;
+	TimerId_t appTimer;
+	bool IsTimerRunning = false;
+	
+	static void AppTimerCallback(void *paramCb)
+	{
+		//Toggle LED
+	}
+	
+	//Get the Id for the sotware timer instance
+	PAL_TimerGetId(&appTimer);
+	
+	if (PAL_SUCCESS == PAL_TimerStart(appTimer,
+				5000,
+				TIMEOUT_RELATIVE,
+				(void *)AppTimerCallback,
+				NULL, CALLBACK_SINGLE))
+	{
+		//Timer Started
+		//ToggleLED
+	}
+	
+	IsTimerRunning = PAL_TimerIsRunning(appTimer);
+	
+	if(IsTimerRunning)
+	{
+		//Timer is running
+	}
+	
+    </code>
+
+  Remarks:
+	None
+*/
+
 bool PAL_TimerIsRunning(TimerId_t timer_id);
 
-/**
- * @brief This function is used to create the blocking delay in us
- * @param delay Delay value in Microseconds
- */
+// *****************************************************************************
+/*
+  Function:
+	void PAL_TimerDelay(uint32_t delay)
+
+  Summary:
+    Routine to introduce blocking delay
+
+  Description:
+    This function is used to create the blocking delay in us
+
+  Precondition:
+    None
+
+  Parameters:
+   delay  - Blocking delay value in microseconds
+
+  Returns:
+    None
+  Example:
+    <code>  
+	uint32_t delayUs = 5000;
+	
+	RGB_GREEN_LED_ON();
+	PAL_TimerDelay(delayUs);
+	RGB_GREEN_LED_OFF();	
+    </code>
+
+  Remarks:
+	None
+*/
+
 void PAL_TimerDelay(uint32_t delay);
 
-/**
- * @brief Adds two time values
- *
- * @param a Time value 1
- * @param b Time value 2
- *
- * @return Addition of a and b
- */
+// *****************************************************************************
+/*
+  Function:
+	static inline uint32_t pal_add_time_us(uint32_t a, uint32_t b)
+
+  Summary:
+    Routine to add two time values
+
+  Description:
+    Helper function to add two time values
+
+  Precondition:
+    None
+
+  Parameters:
+   a - Time 1 value
+   b - Time 2 value
+
+  Returns:
+    return - Addition of a and b
+	
+  Example:
+	None
+
+  Remarks:
+	None
+*/
+
 static inline uint32_t pal_add_time_us(uint32_t a, uint32_t b)
 {
 	return (ADD_TIME(a, b));
 }
 
-/**
- * @brief Subtracts two time values
- *
- * @param a Time value 1
- * @param b Time value 2
- *
- * @return Difference between a and b
- */
+// *****************************************************************************
+/*
+  Function:
+	static inline uint32_t pal_sub_time_us(uint32_t a, uint32_t b)
+
+  Summary:
+    Routine to substract two time values
+
+  Description:
+    Helper function to substract two time values
+
+  Precondition:
+    None
+
+  Parameters:
+   a - Time 1 value
+   b - Time 2 value
+
+  Returns:
+    return - Difference between a and b
+	
+  Example:
+	None
+
+  Remarks:
+	None
+*/
 static inline uint32_t pal_sub_time_us(uint32_t a, uint32_t b)
 {
 	return (SUB_TIME(a, b));
 }
 
-/**
+// *****************************************************************************
+/*
  * \brief Enables the transceiver main interrupt
  *
  * This macro is only available for non-single chip transceivers, since
@@ -274,7 +600,8 @@ static inline uint32_t pal_sub_time_us(uint32_t a, uint32_t b)
                                         NVIC_ClearPendingIRQ((IRQn_Type) ZB_INT0_IRQn);\
                                         NVIC_EnableIRQ((IRQn_Type) ZB_INT0_IRQn);
 
-/**
+// *****************************************************************************
+/*
  * \brief Disables the transceiver main interrupt
  *
  * This macro is only available for non-single chip transceivers, since
@@ -286,16 +613,18 @@ static inline uint32_t pal_sub_time_us(uint32_t a, uint32_t b)
  */
 #define pal_trx_irq_dis()               NVIC_DisableIRQ((IRQn_Type) ZB_INT0_IRQn);
 
-/**
- * @brief Enables the global interrupt
+// *****************************************************************************
+/*
+ * \brief Enables the global interrupt
  */
 static inline void pal_global_irq_enable(void)
 {
 	ENABLE_GLOBAL_IRQ();
 }
 
-/**
- * @brief Disables the global interrupt
+// *****************************************************************************
+/*
+ * \brief Disables the global interrupt
  */
 static inline void pal_global_irq_disable(void)
 {

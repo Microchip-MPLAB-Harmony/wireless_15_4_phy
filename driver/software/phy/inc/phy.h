@@ -39,7 +39,6 @@
 *******************************************************************************/
 // DOM-IGNORE-END
 
-/* Prevent double inclusion */
 #ifndef PHY_H
 #define PHY_H
 
@@ -84,6 +83,7 @@
   Remarks:
     None
 */
+
 typedef union {
 	/** PIB Attribute Bool */
 	bool pib_value_bool;
@@ -110,30 +110,31 @@ typedef union {
    Remarks:
     None
  */
+ 
 typedef enum param_tag {
-    /* Antenna Diversity */
+    /** Antenna Diversity */
 	ANT_DIVERSITY     = 0x00,
-    /* Antenna Configured - ANTENNA_1/ANTENNA_2*/
+    /** Antenna Configured - ANTENNA_1/ANTENNA_2*/
 	ANT_SELECT        = 0x01,
-    /* Antenna Control */
+    /** Antenna Control */
 	ANT_CTRL          = 0x02,
-    /* Promiscuous Mode*/
+    /** Promiscuous Mode*/
 	AACK_PROMSCS_MODE = 0x03,
-    /* Tx Power Configured*/
+    /** Tx Power Configured*/
 	TX_PWR            = 0x06,
-    /* Rx Sensitivity*/
+    /** Rx Sensitivity*/
     RX_SENS           = 0x07,
-    /* RX Reduced Power Consumption*/
+    /** RX Reduced Power Consumption*/
     RX_RPC            = 0x08,
-    /* RX Safe Mode*/
+    /** RX Safe Mode*/
     RX_SAFE_MODE      = 0x09,
-    /* Automatic acknowledgement*/
+    /** Automatic acknowledgement*/
     RX_AUTO_ACK       = 0x0A,
-    /* Reserved frame reception*/
+    /** Reserved frame reception*/
     RX_RESERVED_FRAME = 0x0B,
-    /* Filter reserved frame*/
+    /** Filter reserved frame*/
     FILTER_RESERVED_FRAME = 0x0C,
-    /* External PA Control*/
+    /** External PA Control*/
     EXT_PA_CTRL  = 0x0D
 }PHY_ConfigParam_t;
 
@@ -150,6 +151,7 @@ typedef enum param_tag {
    Remarks:
     None 
  */
+ 
 typedef struct frame_info_tag
 {
 	/** Pointer to buffer header of frame */
@@ -172,6 +174,7 @@ typedef struct frame_info_tag
    Remarks:
     None 
  */
+ 
 typedef enum sleep_mode_tag {
 	SLEEP_MODE_1,
 	DEEP_SLEEP_MODE
@@ -197,6 +200,7 @@ typedef enum sleep_mode_tag {
    Remarks:
     None 
  */
+ 
 typedef enum csma_mode_tag {
 	NO_CSMA_NO_IFS,
 	NO_CSMA_WITH_IFS,
@@ -217,6 +221,7 @@ typedef enum csma_mode_tag {
    Remarks:
     None 
  */
+ 
 typedef enum continuous_tx_mode_tag {
 	/* Continuous Wave mode to transmit 
 	 * the signal at Fc +&- 0.5MHz frequency */
@@ -226,7 +231,7 @@ typedef enum continuous_tx_mode_tag {
 } PHY_ContinuousTxMode_t;
 
 
- // *****************************************************************************
+// *****************************************************************************
 /* PHY Return Values
  
    Summary:
@@ -237,6 +242,7 @@ typedef enum continuous_tx_mode_tag {
    Remarks:
     None 
  */
+ 
 typedef enum phy_return_value_tag {
 	/* General Success condition*/
     PHY_SUCCESS                 = 0x00, 
@@ -280,6 +286,7 @@ typedef enum phy_return_value_tag {
    Remarks:
     None 
  */
+ 
 typedef enum phy_trx_state_tag{
 	/* Transceiver to be configured to Transceiver OFF state*/
 	PHY_STATE_TRX_OFF,
@@ -297,6 +304,7 @@ typedef enum phy_trx_state_tag{
    Remarks:
     None 
  */
+
 typedef enum phy_trx_status_tag{
 	/* Transceiver is in Transceiver OFF state*/
     PHY_TRX_OFF = 0x08,
@@ -314,120 +322,224 @@ typedef enum phy_trx_status_tag{
     PHY_TRX_DEEP_SLEEP = 0x20
 }PHY_TrxStatus_t;
 
-/* === EXTERNALS =========================================================== */
+// *****************************************************************************
+// *****************************************************************************
+// Section: Macros
+// *****************************************************************************
+// *****************************************************************************
 
-/* === MACROS ============================================================== */
-
-/* Custom attribute used by PHY */
-/**
- * Attribute id of mac_i_pan_coordinator PIB
+// *****************************************************************************
+/* Custom PHY PIB attribute ID 
+ 
+   Summary:
+    Seting this attribute enables the device as PAN Coordinator 
+   Description:
+    if only source addressing fields are included in a data or MAC command frame, 
+	the frame shall be accepted only if the device is the PAN coordinator and 
+	the source PAN identifier matches macPANId, for details refer to 
+	IEEE 802.15.4-2006, Section 7.5.6.2 (third-level filter rule six
+   Remarks:
+    None 
  */
+
 #define mac_i_pan_coordinator                         (0x0B)
 
-/**
- * Conversion of symbols to microseconds
+// *****************************************************************************
+/* Macro to convert Symbols to Microsecond 
+ 
+   Summary:
+    This macro function converts the given symbol value to microseconds 
+   Description:
+    None
+   Remarks:
+    None 
  */
 #define PHY_CONVERT_SYMBOLS_TO_US(symbols)            ((uint32_t)(symbols) << 4)
 
-/**
- * Conversion of microseconds to symbols
+// *****************************************************************************
+/* Macro to convert Microsecond to symbols
+ 
+   Summary:
+    This macro function converts the given time in microseconds to symbols 
+   Description:
+    None
+   Remarks:
+    None 
  */
 #define PHY_CONVERT_US_TO_SYMBOLS(time)               ((time) >> 4)
 
-
-/**
- * The following macros hold the size of a large buffer.
- * Additional octets for the length of the frame, the LQI
- * and the ED value are required.
- * 
- * 
- * Size of PHY_FrameInfo_t + max number of payload octets +
- * 1 octet LQI  + 1 octet ED value + 1 octet Length field.
+// *****************************************************************************
+/* LARGE_BUFFER_SIZE
+ 
+   Summary:
+    This macro hold the Large buffer size value used in PHY library
+   Description:
+	The following macros hold the size of a large buffer.
+	Additional octets for the length of the frame, the LQI
+	and the ED value are required.
+	Size of PHY_FrameInfo_t + max number of payload octets +
+	1 octet LQI  + 1 octet ED value + 1 octet Length field.
+   Remarks:
+    None 
  */
+
 #ifndef LARGE_BUFFER_SIZE
 #define LARGE_BUFFER_SIZE                   (((sizeof(PHY_FrameInfo_t) + \
 	aMaxPHYPacketSize + \
 	LENGTH_FIELD_LEN + LQI_LEN + ED_VAL_LEN) / 4 + 1) * 4)
 #endif
 
-
-/**
- * The following macros hold the size of a small buffer.
- * Additional octets for the length of the frame, the LQI
- * and the ED value are required.
- * 
- * 
- * Size of PHY_FrameInfo_t + max number of mac management frame len +
- * 1 octet LQI  + 1 octet ED value + 1 octet Length field.
+// *****************************************************************************
+/* SMALL_BUFFER_SIZE
+ 
+   Summary:
+    This macro hold the small buffer size value 
+   Description:
+	The following macros hold the size of a small buffer.
+	Additional octets for the length of the frame, the LQI
+	and the ED value are required.
+	Size of PHY_FrameInfo_t + max number of mac management frame len +
+	1 octet LQI  + 1 octet ED value + 1 octet Length field.
+   Remarks:
+    None 
  */
+
 #ifndef SMALL_BUFFER_SIZE
 #define SMALL_BUFFER_SIZE                   (((sizeof(PHY_FrameInfo_t) + \
 	MAX_MGMT_FRAME_LENGTH +	\
 	LENGTH_FIELD_LEN + LQI_LEN + ED_VAL_LEN) / 4 + 1) * 4) 
 #endif
 
-/* PHY Software Version related Macros*/
+// *****************************************************************************
+// *****************************************************************************
+// Section: Release Version Macros
+// *****************************************************************************
+// *****************************************************************************
 
-/* Stack version string */
+
+/* Major Number
+ 
+   Summary:
+    This macro holds the stack Major number 
+   Description:
+	None
+   Remarks:
+    None 
+ */
 #define MAJOR_NUM                 "1"
+
+
+/* Minor Number
+ 
+   Summary:
+    This macro holds the stack Minor number 
+   Description:
+	None
+   Remarks:
+    None 
+ */
 #define MINOR_NUM                 "0"
+
+/* Patch Number
+ 
+   Summary:
+    This macro holds the stack patch number 
+   Description:
+	None
+   Remarks:
+    None 
+ */
 #define PATCH_NUM                 "0"
 
 
+/* PHY Version
+ 
+   Summary:
+    This macro holds the PHY SW version as a String 
+   Description:
+	None
+   Remarks:
+    None 
+ */
 #if (defined RC_NUM)
-/* Release Version Information */
 #define PHY_VER   "802.15.4-PHY v" MAJOR_NUM"." MINOR_NUM"." PATCH_NUM"-rc." RC_NUM
 #else
-/* Release Version Information */
 #define PHY_VER   "802.15.4-PHY v" MAJOR_NUM"." MINOR_NUM"." PATCH_NUM
 #endif
 
-/* Release version information in 32-bit bitfield */
-/******************************************************************************
-Bit field information: This must be updated manually
+/* Release version information in 32-bit bitfield 
+ 
+| bit pos | field name      | meaning                        |
+|---------|-----------------|------------------------------  |
+| 0-13    | reserved        | NA                             |
+| 14-17   | build itreation | running version of this release|
+| 18-19   | qualifier       | 00 - reserved                  |
+|         |                 | 01 - Production (P)            |
+|         |                 | 10 - Engineering (E)           |
+|         |                 | 11 - reserved                  |
+| 20-23   | stack minor     | minor version                  |
+| 24-27   | stack major     | major version                  |
+| 28-31   | reserved        | NA                             |
 
-  /---------------------------------------------------\
-  | bit pos |    field name   |        meaning        |
-  |---------------------------------------------------|
-  |   0-13  |   reserved      |         NA            |
-  |         |                 |                       |
-  |---------------------------------------------------|
-  |  14-17  |     build       | running version of    |
-  |         |   iteration     | this release          |
-  |         |                 |                       |
-  |---------------------------------------------------|
-  |  18-19  |    qualifier    | 00 - reserved         |
-  |         |                 | 01 - Production  (P)  |
-  |         |                 | 10 - Engineering (E)  |
-  |         |                 | 11 - reserved         |
-  |---------------------------------------------------|
-  |  20-23  |  stack minor    | minor version         |
-  |         |                 |                       |
-  |---------------------------------------------------|
-  |  24-27  |  stack major    | major version         |
-  |         |                 |                       |
-  |---------------------------------------------------|
-  |  28-31  |   reserved      |         NA            |
-  |         |                 |                       |
-  \---------------------------------------------------/
 
 Example:
   802.15.4-PHY v1.0.0 is represented as 0x01040000
 
-  0000     0001    0000   01      0000   00000000000000
-    |       |       |      |       |            |
- Reserved  stack  stack  qual. iteration    Reserved
-           major  minor
-******************************************************************************/
+|0000       |0001        | 0000        | 01        | 0000           | 00000000000000|
+|-----------|------------|-------------|-----------|----------------|---------------|
+|Reserved   | Stack Major| Stack Minor | Qualifier | Build Iteration| Reserved      |
+*/
+
+ 
+/* PHY Software Version Information in 32-bit bitfield
+ 
+   Summary:
+    This macro holds PHY Software Version Information in 32-bit bitfield
+   Description:
+	None
+   Remarks:
+    None 
+*/
 #define PHY_VERSION_VALUE      (0x01040000)
 
 // *****************************************************************************
 // *****************************************************************************
-// Section: FUNCTION PROTOTYPES
+// Section: PHY PIB Attribute List
 // *****************************************************************************
 // *****************************************************************************
-    
-/*******************************************************************************
+
+// ***************************************************************************** 
+/* PHY Information Base (PIB) Attribute list
+
+| PIB Attribute       |AccessType| Type    | DefaultValue     | Range           |
+|---------------------|----------|---------|------------------|-----------------|
+| phyCurrentChannel   | Get/Set  | uint8_t | 11               | 11 - 26         |
+| phyChannelsSupported| Get      | uint32_t| 0x07FFF800       | NA              |                    
+| phyCurrentPage      | Get/Set  | uint8_t | 0                | 0,2,16,17       |
+| phyTransmitPower    | Get/Set  | uint8_t | 4                |                 |
+| phyCCAMode          | Get/Set  | uint8_t | 1                | 0 - 3           |
+| macIeeeAddress      | Get/Set  | uint64_t| All 0's          | NA              |
+| macShortAddress     | Get/Set  | uint16_t| 0xFFFF           | 0x0000 - 0xFFFF |
+| macPANId            | Get/Set  | uint16_t| 0xFFFF           | 0x0000 - 0xFFFF |
+| macMinBE            | Get/Set  | uint8_t | 3                | 0 - 3           |
+| macMaxBE            | Get/Set  | uint8_t | 5                | 3 - 8           |
+| macMaxCSMABackoffs  | Get/Set  | uint8_t | 4                | 0 - 5           |
+| macMaxFrameRetries  | Get/Set  | uint8_t | 3                | 0 - 7           |
+| macPromiscuousMode  | Get/Set  | bool    | 0                | 0 or 1          |
+| phySHRDuration      | Get      | uint8_t | 10 Symbols       | NA              |
+| phySymbolsPerOctet  | Get      | uint8_t | 2 Symbols        | NA              |
+| phyMaxFrameDuration | Get      | uint16_t| 266 Symbols      | NA              |
+| macIpanCoordinator  | Get/Set  | bool    | 0                | 0 or 1          |
+ */
+
+// *****************************************************************************
+// *****************************************************************************
+// Section: PHY Task Handler Funtions
+// *****************************************************************************
+// *****************************************************************************
+
+// *****************************************************************************    
+/*
   Function:
     void PHY_TaskHandler ( void )
 
@@ -460,7 +572,14 @@ Example:
 */
 void PHY_TaskHandler(void);
 
-/*******************************************************************************
+// *****************************************************************************
+// *****************************************************************************
+// Section: PHY Initialization and Reset Routines
+// *****************************************************************************
+// *****************************************************************************
+
+// *****************************************************************************
+/*
   Function:
     PHY_Retval_t PHY_Init( void )
 
@@ -499,7 +618,8 @@ void PHY_TaskHandler(void);
 */
 PHY_Retval_t PHY_Init(void);
 
-/*******************************************************************************
+// *****************************************************************************
+/*
   Function:
     PHY_Retval_t PHY_Reset( bool setDefaultPibs )
 
@@ -540,7 +660,144 @@ PHY_Retval_t PHY_Init(void);
 
 PHY_Retval_t PHY_Reset(bool setDefaultPib);
 
-/*******************************************************************************
+// *****************************************************************************
+// *****************************************************************************
+// Section: PHY Tranmission Routines
+// *****************************************************************************
+// *****************************************************************************
+
+// *****************************************************************************
+/*
+  Function:
+    PHY_Retval_t PHY_TxFrame(PHY_FrameInfo_t *txFrame, PHY_CSMAMode_t csmaMode,
+                             bool performFrameRetry)
+
+  Summary:
+    Request to PHY to transmit frame
+
+  Description:
+    This function is called by the upper layer (MAC/Application) to deliver a 
+    frame to the PHY to be transmitted by the transceiver.
+  
+  Precondition:
+    PHY_Init() should have been called before calling this function
+
+  Parameters:
+    txFrame     - Pointer to the PHY_FrameInfo_t structure or
+                  to frame array to be transmitted
+                txFrame->mpdu - Pointer to the PHY Payload. mpdu[0] should hold 
+						the length of the payload(N) + 1 (for length field length)
+                txFrame->mpdu[1-N] - Hold the phyPayload
+  
+    csmaMode    - Indicates mode of csma-ca to be performed for this frame
+                NO_CSMA_NO_IFS    - Immediate Tx and SIFS(Short InterFrameSpacing) 
+                                    between subsequent frames
+                NO_CSMA_WITH_IFS  - Immediate Tx and LIFS (Long InterFrameSpacing) 
+                                    between subsequent frames
+                CSMA_UNSLOTTED    - Hardware CSMA will be performed before packet 
+                                    transmission with number of retries configured 
+                CSMA_SLOTTED      - Hardware CSMA will be performed - Used with 
+                                    Beacon Enabled network - Currently not supported 
+                                    by PHY
+    performFrameRetry - Indicates whether to retries are to be performed
+                        for this frame
+                        true - SW retry will be performed for macMaxFrameRetries
+                               value
+                        false- SW retry is disabled       
+
+  Returns:
+    PHY_SUCCESS -  If PHY has accepted the data from the MAC for frame
+                   transmission
+    PHY_BUSY    -  If PHY is busy servicing the previous MAC request
+
+  Example:
+    <code>
+    uint8_t txBuffer[LARGE_BUFFER_SIZE];
+    uint8_t txData[] = "Wireless!!!";
+    PHY_CSMAMode_t csmaMode = CSMA_UNSLOTTED;
+    bool performRetry = true;
+    PHY_FrameInfo_t txFrame;
+    
+    txFrame.mpdu = txBuffer;
+    txBuffer[0] = sizeof(txData);
+    memcpy((uint8_t *)&txBuffer[1], txData, sizeof(txData));
+ 
+    if(PHY_SUCCESS == PHY_TxFrame(&txFrame, csmaMode, performRetry))
+    {
+        //Frame transmitted successfully
+    }   
+    </code>
+
+  Remarks:
+    None
+*/
+PHY_Retval_t PHY_TxFrame(PHY_FrameInfo_t *txFrame, PHY_CSMAMode_t csmaMode,
+		bool performFrameRetry);
+		
+// *****************************************************************************
+/*
+  Function:
+    void PHY_TxDoneCallback(PHY_Retval_t status, PHY_FrameInfo_t *frame)
+
+  Summary:
+    User callback function for the transmission of a frame
+
+  Description:
+    This callback function SHOULD be defined by the upper layer(Application/MAC)
+    for getting the status of last transmitted packet.
+  
+  Precondition:
+    This is a Asynchronous function call for the transmission of a frame
+
+  Parameters:
+    status      - Status of frame transmission attempt
+                  PHY_SUCCESS        - The transaction was responded to by a valid ACK, 
+                                       or, if no ACK is requested, after a successful
+                                       frame transmission.
+                  PHY_FRAME_PENDING  - Equivalent to SUCCESS and indicating that 
+                                       the ?Frame Pending? bit of the received 
+                                       acknowledgment frame was set.
+                  PHY_CHANNEL_ACCESS_FAILURE - Channel is still busy after attempting 
+                                               MAX_CSMA_RETRIES of CSMA-CA.
+                  PHY_NO_ACK         - No acknowledgement frames were received 
+                                       during all retry attempts.
+                  PHY_FAILURE        - Transaction not yet finished.
+                  PHY_RF_REQ_ABORTED - RF is busy performing Higher priority BLE task 
+                                       and the transmission is aborted
+                  PHY_RF_UNAVAILABLE - RF is currently unavailable for 15.4 subsystem
+ 
+    frame       - Pointer to the PHY_FrameInfo_t structure or
+                  to frame array to be transmitted
+                txFrame->mpdu - Pointer to the PHY Payload. mpdu[0] should hold 
+						the length of the payload(N) + 1 (for length field length)
+                txFrame->mpdu[1-N] - Hold the phyPayload     
+
+  Returns:
+    None
+
+  Example:
+    <code>
+    void PHY_TxDoneCallback(PHY_Retval_t status, PHY_FrameInfo_t *frame)
+    {
+        // Keep compiler happy. 
+        status = status;
+        frame = frame;
+    }
+    </code>
+
+  Remarks:
+    None
+*/
+void PHY_TxDoneCallback(PHY_Retval_t status, PHY_FrameInfo_t *frame);
+
+// *****************************************************************************
+// *****************************************************************************
+// Section: PHY Energy Detaction Functions
+// *****************************************************************************
+// *****************************************************************************
+
+// *****************************************************************************
+/*
   Function:
     PHY_Retval_t PHY_EdStart(uint8_t scanDuration)
 
@@ -588,7 +845,8 @@ PHY_Retval_t PHY_Reset(bool setDefaultPib);
 */
 PHY_Retval_t PHY_EdStart(uint8_t scanDuration);
 
-/*******************************************************************************
+// *****************************************************************************
+/*
   Function:
     void PHY_EdEndCallback(uint8_t energyLevel)
 
@@ -626,46 +884,14 @@ PHY_Retval_t PHY_EdStart(uint8_t scanDuration);
 */
 void PHY_EdEndCallback(uint8_t energyLevel);
 
-/* PHY Information Base (PIB) Parameters list */
-/******************************************************************************
-  /--------------------------------------------------------------------------\
-  | PIB Attribute        |AccessType|    Type   | DefaultValue |  Range      |
-  |--------------------------------------------------------------------------|
-  |  phyCurrentChannel   | Get/Set  |  uint8_t  |       11     | 11 - 26     |
-  |--------------------------------------------------------------------------|
-  |  phyChannelsSupported|   Get    |  uint32_t |    0x07FFF800| NA          |
-  |--------------------------------------------------------------------------|
-  |  phyCurrentPage      |  Get/Set |  uint8_t  |       0      | 0,2,16,17   |
-  |--------------------------------------------------------------------------|       
-  |  phyTransmitPower    |  Get/Set |  uint8_t  |       4      |             |   
-  |--------------------------------------------------------------------------|
-  |  phyCCAMode          |  Get/Set |  uint8_t  |       1      | 0 - 3       |
-  |--------------------------------------------------------------------------|
-  |  macIeeeAddress      |  Get/Set |  uint64_t |      All 0's | NA          |    
-  |--------------------------------------------------------------------------|
-  |	 macShortAddress     |  Get/Set |  uint16_t |	   0xFFFF  | 0x0000 - 0xFFFF|
-  |--------------------------------------------------------------------------|
-  |	 macPANId            |  Get/Set |  uint16_t |     0xFFFF   | 0x0000 - 0xFFFF|
-  |--------------------------------------------------------------------------|
-  |	 macMinBE            |  Get/Set |  uint8_t  |      3       | 0 - 3       |
-  |--------------------------------------------------------------------------| 
-  |	 macMaxBE            |  Get/Set |  uint8_t  |      5       | 3 - 8       |
-  |	-------------------------------------------------------------------------| 
-  |	 macMaxCSMABackoffs  |  Get/Set |  uint8_t  |      4       | 0 - 5       |
-  |--------------------------------------------------------------------------| 
-  |	 macMaxFrameRetries  |  Get/Set |  uint8_t  |      3       | 0 - 7       |
-  |--------------------------------------------------------------------------|	 
-  |	 macPromiscuousMode  |  Get/Set |  bool     |      0       | 0 or 1      |
-  |--------------------------------------------------------------------------|
-  |  phySHRDuration      |   Get    | uint8_t   |  10 Symbols  | NA          |
-  |--------------------------------------------------------------------------|
-  |  phySymbolsPerOctet  |   Get    | uint8_t   |   2 Symbols  | NA          |
-  |--------------------------------------------------------------------------|
-  | phyMaxFrameDuration  |   Get    | uint16_t   | 266 Symbols | NA          |
-  \--------------------------------------------------------------------------/
- ******************************************************************************/
+// *****************************************************************************
+// *****************************************************************************
+// Section: PHY Information Base Set/Get Functions
+// *****************************************************************************
+// *****************************************************************************
 
-/*******************************************************************************
+// *****************************************************************************
+/*
   Function:
     PHY_Retval_t PHY_PibGet(uint8_t attribute, uint8_t *value)
 
@@ -716,7 +942,8 @@ void PHY_EdEndCallback(uint8_t energyLevel);
 */
 PHY_Retval_t PHY_PibGet(uint8_t attribute, uint8_t *value);
 
-/*******************************************************************************
+// *****************************************************************************
+/*
   Function:
     PHY_Retval_t PHY_PibSet(uint8_t attribute, PibValue_t *value)
 
@@ -776,7 +1003,15 @@ PHY_Retval_t PHY_PibGet(uint8_t attribute, uint8_t *value);
 */
 PHY_Retval_t PHY_PibSet(uint8_t attribute, PibValue_t *value);
 
-/*******************************************************************************
+
+// *****************************************************************************
+// *****************************************************************************
+// Section: PHY Reception Functions
+// *****************************************************************************
+// *****************************************************************************
+
+// *****************************************************************************
+/*
   Function:
     PHY_TrxStatus_t PHY_RxEnable(PHY_TrxState_t state)
 
@@ -815,7 +1050,8 @@ PHY_Retval_t PHY_PibSet(uint8_t attribute, PibValue_t *value);
 */
 PHY_TrxStatus_t PHY_RxEnable(PHY_TrxState_t state);
 
-/*******************************************************************************
+// *****************************************************************************
+/*
   Function:
     void PHY_RxFrameCallback(PHY_FrameInfo_t *rxFrame)
 
@@ -870,129 +1106,15 @@ PHY_TrxStatus_t PHY_RxEnable(PHY_TrxState_t state);
 */
 void PHY_RxFrameCallback(PHY_FrameInfo_t *rxFrame);
 
-/*******************************************************************************
-  Function:
-    PHY_Retval_t PHY_TxFrame(PHY_FrameInfo_t *txFrame, PHY_CSMAMode_t csmaMode,
-                             bool performFrameRetry)
 
-  Summary:
-    Request to PHY to transmit frame
+// *****************************************************************************
+// *****************************************************************************
+// Section: PHY TRX Power Management Functions
+// *****************************************************************************
+// *****************************************************************************
 
-  Description:
-    This function is called by the upper layer (MAC/Application) to deliver a 
-    frame to the PHY to be transmitted by the transceiver.
-  
-  Precondition:
-    PHY_Init() should have been called before calling this function
-
-  Parameters:
-    txFrame     - Pointer to the PHY_FrameInfo_t structure or
-                  to frame array to be transmitted
-                txFrame->mpdu - Pointer to the PHY Payload. mpdu[0] should hold 
-						the length of the payload(N) + 1 (for length field length)
-                txFrame->mpdu[1-N] - Hold the phyPayload
-  
-    csmaMode    - Indicates mode of csma-ca to be performed for this frame
-                NO_CSMA_NO_IFS    - Immediate Tx and SIFS(Short InterFrameSpacing) 
-                                    between subsequent frames
-                NO_CSMA_WITH_IFS  - Immediate Tx and LIFS (Long InterFrameSpacing) 
-                                    between subsequent frames
-                CSMA_UNSLOTTED    - Hardware CSMA will be performed before packet 
-                                    transmission with number of retries configured 
-                CSMA_SLOTTED      - Hardware CSMA will be performed - Used with 
-                                    Beacon Enabled network - Currently not supported 
-                                    by PHY
-    performFrameRetry - Indicates whether to retries are to be performed
-                        for this frame
-                        true - SW retry will be performed for macMaxFrameRetries
-                               value
-                        false- SW retry is disabled       
-
-  Returns:
-    PHY_SUCCESS -  If PHY has accepted the data from the MAC for frame
-                   transmission
-    PHY_BUSY    -  If PHY is busy servicing the previous MAC request
-
-  Example:
-    <code>
-    uint8_t txBuffer[LARGE_BUFFER_SIZE];
-    uint8_t txData[] = "Wireless!!!";
-    PHY_CSMAMode_t csmaMode = CSMA_UNSLOTTED;
-    bool performRetry = true;
-    PHY_FrameInfo_t *txFrame;
-    
-    txFrame->mpdu = txBuffer;
-    txBuffer[0] = sizeof(txData);
-    memcpy((uint8_t *)&txBuffer[1], txData, sizeof(txData));
- 
-    if(PHY_SUCCESS == PHY_TxFrame(txFrame, csmaMode, performRetry))
-    {
-        //Frame transmitted successfully
-    }   
-    </code>
-
-  Remarks:
-    None
-*/
-PHY_Retval_t PHY_TxFrame(PHY_FrameInfo_t *txFrame, PHY_CSMAMode_t csmaMode,
-		bool performFrameRetry);
-
-/*******************************************************************************
-  Function:
-    void PHY_TxDoneCallback(PHY_Retval_t status, PHY_FrameInfo_t *frame)
-
-  Summary:
-    User callback function for the transmission of a frame
-
-  Description:
-    This callback function SHOULD be defined by the upper layer(Application/MAC)
-    for getting the status of last transmitted packet.
-  
-  Precondition:
-    This is a Asynchronous function call for the transmission of a frame
-
-  Parameters:
-    status      - Status of frame transmission attempt
-                  PHY_SUCCESS        - The transaction was responded to by a valid ACK, 
-                                       or, if no ACK is requested, after a successful
-                                       frame transmission.
-                  PHY_FRAME_PENDING  - Equivalent to SUCCESS and indicating that 
-                                       the ?Frame Pending? bit of the received 
-                                       acknowledgment frame was set.
-                  PHY_CHANNEL_ACCESS_FAILURE - Channel is still busy after attempting 
-                                               MAX_CSMA_RETRIES of CSMA-CA.
-                  PHY_NO_ACK         - No acknowledgement frames were received 
-                                       during all retry attempts.
-                  PHY_FAILURE        - Transaction not yet finished.
-                  PHY_RF_REQ_ABORTED - RF is busy performing Higher priority BLE task 
-                                       and the transmission is aborted
-                  PHY_RF_UNAVAILABLE - RF is currently unavailable for 15.4 subsystem
- 
-    frame       - Pointer to the PHY_FrameInfo_t structure or
-                  to frame array to be transmitted
-                txFrame->mpdu - Pointer to the PHY Payload. mpdu[0] should hold 
-						the length of the payload(N) + 1 (for length field length)
-                txFrame->mpdu[1-N] - Hold the phyPayload     
-
-  Returns:
-    None
-
-  Example:
-    <code>
-    void PHY_TxDoneCallback(PHY_Retval_t status, PHY_FrameInfo_t *frame)
-    {
-        // Keep compiler happy. 
-        status = status;
-        frame = frame;
-    }
-    </code>
-
-  Remarks:
-    None
-*/
-void PHY_TxDoneCallback(PHY_Retval_t status, PHY_FrameInfo_t *frame);
-
-/*******************************************************************************
+// *****************************************************************************
+/*
   Function:
     PHY_Retval_t PHY_TrxSleep(PHY_SleepMode_t mode)
 
@@ -1033,7 +1155,8 @@ void PHY_TxDoneCallback(PHY_Retval_t status, PHY_FrameInfo_t *frame);
 */
 PHY_Retval_t PHY_TrxSleep(PHY_SleepMode_t mode);
 
-/*******************************************************************************
+// *****************************************************************************
+/*
   Function:
     PHY_Retval_t PHY_TrxWakeup(void)
 
@@ -1079,492 +1202,60 @@ PHY_Retval_t PHY_TrxSleep(PHY_SleepMode_t mode);
 */
 PHY_Retval_t PHY_TrxWakeup(void);
 
-/*******************************************************************************
+// *****************************************************************************
+// *****************************************************************************
+// Section: PHY TRX Feature Access Functions
+// *****************************************************************************
+// *****************************************************************************
+
+// *****************************************************************************
+/*
   Function:
-    PHY_TrxStatus_t PHY_GetTrxStatus(void)
+    uint8_t PHY_EdSample(void)
 
   Summary:
-    Returns the current status of the Transceiver
+    Perform a single ED measurement on current channel
 
   Description:
-    This function gets the status of the transceiver
+    This function is used to measure the energy level on current channel
  
   Precondition:
-    PHY_Init() should have been called before calling this function
-
+    PHY_Init() should have been called before calling this function.
+ 
   Parameters:
-    None     
+    None
 
   Returns:
-    PHY_TRX_OFF - The transceiver is in TRX_OFF state
-    PHY_RX_ON - The transceiver is in receive state
-    PHY_TX_ON - The transceiver is in Transmit state
-    PHY_BUSY_RX - The transceiver currently receiving the packet
-    PHY_BUSY_TX - The transceiver is currently transmitting the packet
-    PHY_TRX_SLEEP - The transceiver is in sleep state
-    PHY_DEEP_SLEEP - The transceiver is in Deep sleep state
+    edValue -  Result of the measurement
 
   Example:
     <code>
-    PHY_TrxStatus_t trxStatus;
-    //Gets the current status of trx
-    trxStatus = PHY_GetTrxStatus();
-     
-    </code>
-
-  Remarks:
-    None .
-*/
-PHY_TrxStatus_t PHY_GetTrxStatus(void);
-
-/*******************************************************************************
-  Function:
-    PHY_Retval_t PHY_ConfigTxPwr(bool type, int8_t pwrValue)
-
-  Summary:
-    Configures the TX Power in Transceiver
-
-  Description:
-    This function is used to configure the Transmit power of the transceiver
- 
-  Precondition:
-    PHY_Init() should have been called before calling this function
-
-  Parameters:
-    type        -  PWR_REGISTER_VALUE or PWR_DBM_VALUE
-    pwrValue    -  Index of the power register value (0-15) or Power value in dBm
-                   If LPA is enabled - Pmax - +5.5 dBm to Pmin - (-14)dbm
-                   If LPA&MPA enabled - Pmax - +12 dBm to Pmin - (-16)dbm     
-
-  Returns:
-    PHY_SUCCESS  - If pwrValue bit is configured correctly
-    PHY_FAILURE  - Otherwise
-
-  Example:
-    <code>
-    bool pwrType = PWR_REGISTER_VALUE;
-    uint8_t pwrIndex = 0x00;
-    bool configStatus = false;
-    //Set Tx Power with Register Index value
-    if (PHY_SUCCESS == PHY_ConfigTxPwr(pwrType, int8_t (pwrIndex)))
+    PHY_Retval_t retVal = PHY_FAILURE;
+    uint8_t phyChannel = 15;
+    uint8_t edLevel;
+    int8_t pwrDbm;
+    PibValue_t pibValue;
+    
+    // Setting Current channel
+    pibValue.pib_value_8bit = phyChannel;
+    retVal = PHY_PibSet(phyCurrentChannel, &pibValue);
+    if(PHY_SUCCESS == retVal)
     {
-        configStatus = true;
+        //Take the Ed sample
+        edLevel = PHY_EdSample();  
+        //Convert the energy level to input power in Dbm
+        pwrDbm = (int8_t)(edLevel + PHY_GetRSSIBaseVal());
     }
- 
-    //Set Tx Power with dBm value
-    int8_t pwrDbm = -17;
-    pwrType = PWR_DBM_VALUE;
-    if (PHY_SUCCESS == PHY_ConfigTxPwr(pwrType, int8_t (pwrDbm)))
-    {
-        configStatus = true;
-    }
- 
-    uint8_t pwrReg;
-    // To get the tx power index value configured in the TRX
-    PHY_GetTrxConfig(TX_PWR, &pwrReg);   
-    </code>
-
-  Remarks:
-    None .
-*/
-PHY_Retval_t PHY_ConfigTxPwr(bool type, int8_t pwrValue);
-
-/*******************************************************************************
-  Function:
-    PHY_Retval_t  PHY_ConfigAntennaDiversity(bool divCtrl, uint8_t antCtrl)
-
-  Summary:
-    Configures antenna diversity and selects antenna
-
-  Description:
-    This function is used to enable the Antenna Diversity feature and 
-    to select the antenna path if the feature is disabled.
-    Antenna Diversity uses two antennas to select the most reliable RF signal path. 
-    To ensure highly independent receive signals on both antennas, 
-    the antennas should be carefully separated from each other.
-    If a valid IEEE 802.15.4 frame is detected on one antenna, this antenna is 
-    selected for reception. Otherwise the search is continued on the other antenna 
-    and vice versa.
- 
-  Precondition:
-    PHY_Init() should have been called before calling this function
-
-  Parameters:
-    divCtrl  - true/false to enable/disable antenna diversity algorithm
-    antCtrl  - 0 or 3 when antenna diversity is enabled
-               1 or 2 to select antenna 1 or antenna 2   
-
-  Returns:
-    PHY_SUCCESS -  If Antenna Diversity/ Control bits are configured correctly
-    PHY_FAILURE -  otherwise
-
-  Example:
-    <code>
-    bool antDiv = ANTENNA_DIVERSITY_DISABLE;
-    uint8_t antennaSel =  ANTENNA_CTRL_1;
- 
-    // Antenna Diversity is disabled and Antenna 1 is selected for rx/tx path
-	PHY_ConfigAntennaDiversity(antDiv, antennaSel);
     
-    // To get the antenna diversity value configured in the TRX
-    PHY_GetTrxConfig(ANT_DIV, &antDiv); 
-    // To get antenna selected for rx/tx
-    PHY_GetTrxConfig(ANT_SELECT, &antennaSel);    
     </code>
 
   Remarks:
-    None 
+    PHY_EdSample scans the channel for 8 symbols(128us) and returns the energy level  
 */
-PHY_Retval_t  PHY_ConfigAntennaDiversity(bool divCtrl, uint8_t antCtrl);
+uint8_t PHY_EdSample(void);
 
-/*******************************************************************************
-  Function:
-    PHY_Retval_t PHY_ConfigRxSensitivity(uint8_t pdtLevel)
-
-  Summary:
-    Configures receiver sensitivity level. This is used to desensitize 
-    the receiver
-
-  Description:
-    This function is used to reduce the sensitivity of the receiver. 
-    The input pdtLevel(Power Detect Level) desensitize the receiver such that 
-    frames with an RSSI level below the pdtLevel threshold level (if pdtLevel > 0) 
-    are not received. For a pdtLevel > 0 value the threshold level can be 
-    calculated according to the following formula: 
-            PRF[dBm] > RSSIBASE_VAL[dBm] + 3[dB] x (pdtLevel - 1)
- 
-  Precondition:
-    PHY_Init() should have been called before calling this function
-
-  Parameters:
-    pdtLevel    -   0 to 15 levels of rx sensitivity(RX_PDT_LEVEL)
-                      
-
-  Returns:
-    PHY_SUCCESS -  If pdtLevel bits are configured correctly
-    PHY_FAILURE -  otherwise
-
-  Example:
-    <code>
-    uint8_t pdtLevel =  0x03;
- 
-    // Reduce the PDT level 
-	PHY_ConfigRxSensitivity(pdtLevel);
-    
-    // To get the PDT level configured
-    PHY_GetTrxConfig(RX_SENS, &pdtLevel); 
-     
-    </code>
-
-  Remarks:
-    None 
-*/
-PHY_Retval_t PHY_ConfigRxSensitivity(uint8_t pdtLevel);
-
-/*******************************************************************************
-  Function:
-    PHY_Retval_t PHY_ConfigRxPromiscuousMode(bool promCtrl)
-
-  Summary:
-    Configures RX promiscuous mode
-
-  Description:
-    This function is used to enable the RX promiscuous mode. The TRX will receive
-    all frames even with FCS failure, PHY layer will discard the CRC invalid packet 
-    and TRX will not acknowledge even ack is requested by the received 
-    packet(auto ack is disabled in this mode). 
- 
-  Precondition:
-    PHY_Init() should have been called before calling this function
-
-  Parameters:
-    promCtrl  - true  -  To enable promiscuous mode
-                false -  To disable promiscuous mode
-
-  Returns:
-    PHY_SUCCESS -  If promCtrl bits are configured correctly
-    PHY_FAILURE -  otherwise
-
-  Example:
-    <code>
-    bool promCtrl =  true;
- 
-    // Enable Promiscuous mode
-	PHY_ConfigRxPromiscuousMode(promCtrl);
-    
-    // To get the PDT level configured
-    PHY_GetTrxConfig(AACK_PROMSCS_MODE, &promCtrl); 
-     
-    </code>
-
-  Remarks:
-    None 
-*/
-PHY_Retval_t PHY_ConfigRxPromiscuousMode(bool promCtrl);
-
-/*******************************************************************************
-  Function:
-    PHY_Retval_t PHY_GetTrxConfig(PHY_ConfigParam_t parameter, uint8_t *paramValue)
-
-  Summary:
-    To read a current setting of particular transceiver parameter
-
-  Description:
-    The function is used to read the current of particular parameter. 
-    The following parameters can be read from TRX,
-        // Antenna Diversity 
-        ANT_DIVERSITY     
-        // Antenna Configured - ANTENNA_1/ANTENNA_2
-        ANT_SELECT        
-        // Antenna Control
-        ANT_CTRL          
-        // Promiscuous Mode
-        AACK_PROMSCS_MODE 
-        // Tx Power Configured
-        TX_PWR            
-        // Rx Sensitivity
-        RX_SENS           
-        // RX Reduced Power Consumption
-        RX_RPC                
-        // Automatic acknowledgement
-        RX_AUTO_ACK       
-        // Reserved frame reception
-        RX_RESERVED_FRAME 
-        // Filter reserved frame
-        FILTER_RESERVED_FRAME 
- 
-  Precondition:
-    PHY_Init() should have been called before calling this function.
- 
-  Parameters:
-    parameter   - Type of the parameter to be read
-    paramValue  - Pointer to the current parameter value
- 
-  Returns:
-    PHY_Retval_t - PHY_INVALID_PARAMETER If the parameter is invalid
-                 - PHY_SUCCESS otherwise
-  Example:
-    <code>
-    PHY_Retval_t retVal = PHY_FAILURE;
-    bool promCtrl = true;
- 
-    // To get the promiscuous mode configured
-    PHY_GetTrxConfig(AACK_PROMSCS_MODE, (uint8_t *)&promCtrl); 
-    </code>
-
-  Remarks:
-    None 
-*/
-PHY_Retval_t PHY_GetTrxConfig(PHY_ConfigParam_t parameter, uint8_t *paramValue);
-
-/*******************************************************************************
-  Function:
-    PHY_Retval_t PHY_ConfigRxRPCMode(uint8_t rxRPCEnable)
-
-  Summary:
-    Configures the reduced power consumption mode
-
-  Description:
-    The function is used to configure the reduced power consumption mode of the receiver
- 
-  Precondition:
-    PHY_Init() should have been called before calling this function.
- 
-  Parameters:
-    rxRPCEnable - 0x01  -  to enable the rx RPC mode
-                  0x00 -  to disable the rx RPC mode
- 
-
-  Returns:
-    PHY_Retval_t - PHY_SUCCESS  If trx is configured correctly
- *                 PHY_FAILURE  otherwise
-  Example:
-    <code>
-    PHY_Retval_t retVal = PHY_FAILURE;
-    uint8_t rxRPCEnable = 0x01;
- 
-    retVal = PHY_ConfigRxRPCMode(rxRPCEnable);
-    if(PHY_SUCCESS == retVal)
-    {
-        //Trx is configured to reduced power consumption mode
-    }   
-    </code>
-
-  Remarks:
-    None 
-*/
-PHY_Retval_t PHY_ConfigRxRPCMode(uint8_t rxRPCEnable);
-
-/*******************************************************************************
-  Function:
-    PHY_Retval_t PHY_ConfigAutoAck(bool enableAACK)
-
-  Summary:
-    Configures TRX for auto acknowledging the reserved frame
-
-  Description:
-    The function is used to configure the automatic acknowledgment from 
-    Transceiver after packet reception. 
- 
-  Precondition:
-    PHY_Init() should have been called before calling this function.
- 
-  Parameters:
-    nableAACK - true -  to enable the automatic 
-                        acknowledgment after reception
-                false - to disable the automatic 
-                        acknowledgment after reception
- 
-
-  Returns:
-    PHY_Retval_t - PHY_SUCCESS  If trx is configured correctly
- *                 PHY_FAILURE  otherwise
-  Example:
-    <code>
-    PHY_Retval_t retVal = PHY_FAILURE;
-    bool isEnableAACK = true;
- 
-    retVal = PHY_ConfigAutoAck(isEnableAACK);
-    if(PHY_SUCCESS == retVal)
-    {
-        //Trx is configured to auto acknowledge for the received packet
-    }   
-    </code>
-
-  Remarks:
-    None 
-*/
-PHY_Retval_t PHY_ConfigAutoAck(bool enableAACK);
-
-/*******************************************************************************
-  Function:
-    PHY_Retval_t PHY_ConfigReservedFrameFiltering(bool recReservedFrame, 
-        bool bypassFrameFilter )
-
-  Summary:
-    Configures TRX for receiving reserved frame
-
-  Description:
-    This function is used to configure the trx for receiving the reserved frame 
-    type frames and to enable/disable the frame filtering . 
- 
-  Precondition:
-    PHY_Init() should have been called before calling this function.
- 
-  Parameters:
-    recReservedFrame    - true  to enable the reception of reserved frame types 
-                          acknowledgment after reception
-    bypassFrameFilter   - true to bypass the frame filtering at the hardware 
-                           level like data frame as specified in IEEE specification
-
-  Returns:
-    PHY_Retval_t - PHY_SUCCESS  If trx is configured correctly
- *                 PHY_FAILURE  otherwise
-  Example:
-    <code>
-    PHY_Retval_t retVal = PHY_FAILURE;
-    bool rxResFrame = true;
-    bool bypassFrameFiltering = false;
- 
-    retVal = PHY_ConfigReservedFrameFiltering(rxResFrame, bypassFrameFiltering);
-    if(PHY_SUCCESS == retVal)
-    {
-        //Trx is configured to receive the reserved frame and to do the frame 
-         filtering as stated in IEEE Spec
-    }   
-    </code>
-
-  Remarks:
-    None 
-*/
-PHY_Retval_t PHY_ConfigReservedFrameFiltering(bool recReservedFrame, 
-        bool bypassFrameFilter );
-
-/*******************************************************************************
-  Function:
-    PHY_Retval_t  PHY_ConfigExtPACtrl(bool paExtSwCtrl)
-
-  Summary:
-    Enable/Disable the External RF front end control
-
-  Description:
-    This function is used to Enable/Disable the External RF front end control . 
- 
-  Precondition:
-    PHY_Init() should have been called before calling this function.
- 
-  Parameters:
-    paExtSwCtrl     -   true  If external rf front end control has to be
-                               enabled
-
-  Returns:
-    PHY_Retval_t - PHY_SUCCESS  If trx is configured correctly
- *                 PHY_FAILURE  otherwise
-  Example:
-    <code>
-    PHY_Retval_t retVal = PHY_FAILURE;
-    bool paExtSwCtrl = true;
- 
-    retVal = PHY_ConfigExtPACtrl(paExtSwCtrl);
-    if(PHY_SUCCESS == retVal)
-    {
-        //Trx is configured to enable the external PA
-    }   
-    </code>
-
-  Remarks:
-    None 
-*/
-PHY_Retval_t  PHY_ConfigExtPACtrl(bool paExtSwCtrl);
-
-/**
- * \brief Enable/Disable the rx safe mode
- *
- * \param safeModeCtrl true  if rx safe mode has to be enabled
- *
- * \return PHY_SUCCESS  if safeModeCtrl bit is configured correctly
- *         FAILURE      otherwise
- */
-
-/*******************************************************************************
-  Function:
-    PHY_Retval_t  PHY_ConfigExtPACtrl(bool paExtSwCtrl)
-
-  Summary:
-    Enable/Disable the rx safe mode
-
-  Description:
-    This function is used to Enable/Disable the rx safe mode. This is useful to 
-    protect a received frame against overwriting by subsequent received frames. 
- 
-  Precondition:
-    PHY_Init() should have been called before calling this function.
- 
-  Parameters:
-    safeModeCtrl     -   true  - To enable dynamic frame buffer protection for 
-                                 received packet
-
-  Returns:
-    PHY_Retval_t - PHY_SUCCESS  If trx is configured correctly
- *                 PHY_FAILURE  otherwise
-  Example:
-    <code>
-    PHY_Retval_t retVal = PHY_FAILURE;
-    bool safeModeCtrl = true;
- 
-    retVal = PHY_EnableRxSafeMode(safeModeCtrl);
-    if(PHY_SUCCESS == retVal)
-    {
-        //Trx is configured to enable the frame buffer protection
-    }   
-    </code>
-
-  Remarks:
-    None 
-*/
-PHY_Retval_t PHY_EnableRxSafeMode(bool safeModeCtrl);
-
-/*******************************************************************************
+// *****************************************************************************
+/*
   Function:
     PHY_Retval_t PHY_CCAPerform(void)
 
@@ -1626,52 +1317,10 @@ PHY_Retval_t PHY_EnableRxSafeMode(bool safeModeCtrl);
 */
 PHY_Retval_t PHY_CCAPerform(void);
 
-/*******************************************************************************
-  Function:
-    uint8_t PHY_EdSample(void)
 
-  Summary:
-    Perform a single ED measurement on current channel
 
-  Description:
-    This function is used to measure the energy level on current channel
- 
-  Precondition:
-    PHY_Init() should have been called before calling this function.
- 
-  Parameters:
-    None
-
-  Returns:
-    edValue -  Result of the measurement
-
-  Example:
-    <code>
-    PHY_Retval_t retVal = PHY_FAILURE;
-    uint8_t phyChannel = 15;
-    uint8_t edLevel;
-    int8_t pwrDbm;
-    PibValue_t pibValue;
-    
-    // Setting Current channel
-    pibValue.pib_value_8bit = phyChannel;
-    retVal = PHY_PibSet(phyCurrentChannel, &pibValue);
-    if(PHY_SUCCESS == retVal)
-    {
-        //Take the Ed sample
-        edLevel = PHY_EdSample();  
-        //Convert the energy level to input power in Dbm
-        pwrDbm = (int8_t)(edLevel + PHY_GetRSSIBaseVal());
-    }
-    
-    </code>
-
-  Remarks:
-    PHY_EdSample scans the channel for 8 symbols(128us) and returns the energy level  
-*/
-uint8_t PHY_EdSample(void);
-
-/*******************************************************************************
+// *****************************************************************************
+/*
   Function:
     void PHY_StartContinuousTransmit(PHY_ContinuousTxMode_t txMode, 
                                         bool randomContent)
@@ -1721,8 +1370,8 @@ uint8_t PHY_EdSample(void);
 */
 void PHY_StartContinuousTransmit(PHY_ContinuousTxMode_t txMode, 
                                  bool randomContent);
-
-/*******************************************************************************
+// *****************************************************************************
+/*
   Function:
     void PHY_StopContinuousTransmit(void)
 
@@ -1776,7 +1425,509 @@ void PHY_StartContinuousTransmit(PHY_ContinuousTxMode_t txMode,
 */
 void PHY_StopContinuousTransmit(void);
 
-/*******************************************************************************
+// *****************************************************************************
+// *****************************************************************************
+// Section: PHY TRX Configuration Functions
+// *****************************************************************************
+// *****************************************************************************
+
+// *****************************************************************************
+/*
+  Function:
+    PHY_Retval_t PHY_ConfigTxPwr(bool type, int8_t pwrValue)
+
+  Summary:
+    Configures the TX Power in Transceiver
+
+  Description:
+    This function is used to configure the Transmit power of the transceiver
+ 
+  Precondition:
+    PHY_Init() should have been called before calling this function
+
+  Parameters:
+    type        -  PWR_REGISTER_VALUE or PWR_DBM_VALUE
+    pwrValue    -  Index of the power register value (0-15) or Power value in dBm
+                   If LPA is enabled - Pmax - +5.5 dBm to Pmin - (-14)dbm
+                   If LPA&MPA enabled - Pmax - +12 dBm to Pmin - (-16)dbm     
+
+  Returns:
+    PHY_SUCCESS  - If pwrValue bit is configured correctly
+    PHY_FAILURE  - Otherwise
+
+  Example:
+    <code>
+    bool pwrType = PWR_REGISTER_VALUE;
+    uint8_t pwrIndex = 0x00;
+    bool configStatus = false;
+    //Set Tx Power with Register Index value
+    if (PHY_SUCCESS == PHY_ConfigTxPwr(pwrType, int8_t (pwrIndex)))
+    {
+        configStatus = true;
+    }
+ 
+    //Set Tx Power with dBm value
+    int8_t pwrDbm = -17;
+    pwrType = PWR_DBM_VALUE;
+    if (PHY_SUCCESS == PHY_ConfigTxPwr(pwrType, int8_t (pwrDbm)))
+    {
+        configStatus = true;
+    }
+ 
+    uint8_t pwrReg;
+    // To get the tx power index value configured in the TRX
+    PHY_GetTrxConfig(TX_PWR, &pwrReg);   
+    </code>
+
+  Remarks:
+    None .
+*/
+PHY_Retval_t PHY_ConfigTxPwr(bool type, int8_t pwrValue);
+
+// *****************************************************************************
+/*
+  Function:
+    PHY_Retval_t  PHY_ConfigAntennaDiversity(bool divCtrl, uint8_t antCtrl)
+
+  Summary:
+    Configures antenna diversity and selects antenna
+
+  Description:
+    This function is used to enable the Antenna Diversity feature and 
+    to select the antenna path if the feature is disabled.
+    Antenna Diversity uses two antennas to select the most reliable RF signal path. 
+    To ensure highly independent receive signals on both antennas, 
+    the antennas should be carefully separated from each other.
+    If a valid IEEE 802.15.4 frame is detected on one antenna, this antenna is 
+    selected for reception. Otherwise the search is continued on the other antenna 
+    and vice versa.
+ 
+  Precondition:
+    PHY_Init() should have been called before calling this function
+
+  Parameters:
+    divCtrl  - true/false to enable/disable antenna diversity algorithm
+    antCtrl  - 0 or 3 when antenna diversity is enabled
+               1 or 2 to select antenna 1 or antenna 2   
+
+  Returns:
+    PHY_SUCCESS -  If Antenna Diversity/ Control bits are configured correctly
+    PHY_FAILURE -  otherwise
+
+  Example:
+    <code>
+    bool antDiv = ANTENNA_DIVERSITY_DISABLE;
+    uint8_t antennaSel =  ANTENNA_CTRL_1;
+ 
+    // Antenna Diversity is disabled and Antenna 1 is selected for rx/tx path
+	PHY_ConfigAntennaDiversity(antDiv, antennaSel);
+    
+    // To get the antenna diversity value configured in the TRX
+    PHY_GetTrxConfig(ANT_DIV, &antDiv); 
+    // To get antenna selected for rx/tx
+    PHY_GetTrxConfig(ANT_SELECT, &antennaSel);    
+    </code>
+
+  Remarks:
+    None 
+*/
+PHY_Retval_t  PHY_ConfigAntennaDiversity(bool divCtrl, uint8_t antCtrl);
+
+// *****************************************************************************
+/*
+  Function:
+    PHY_Retval_t PHY_ConfigRxSensitivity(uint8_t pdtLevel)
+
+  Summary:
+    Configures receiver sensitivity level. This is used to desensitize 
+    the receiver
+
+  Description:
+    This function is used to reduce the sensitivity of the receiver. 
+    The input pdtLevel(Power Detect Level) desensitize the receiver such that 
+    frames with an RSSI level below the pdtLevel threshold level (if pdtLevel > 0) 
+    are not received. For a pdtLevel > 0 value the threshold level can be 
+    calculated according to the following formula: 
+            PRF[dBm] > RSSIBASE_VAL[dBm] + 3[dB] x (pdtLevel - 1)
+ 
+  Precondition:
+    PHY_Init() should have been called before calling this function
+
+  Parameters:
+    pdtLevel    -   0 to 15 levels of rx sensitivity(RX_PDT_LEVEL)
+                      
+
+  Returns:
+    PHY_SUCCESS -  If pdtLevel bits are configured correctly
+    PHY_FAILURE -  otherwise
+
+  Example:
+    <code>
+    uint8_t pdtLevel =  0x03;
+ 
+    // Reduce the PDT level 
+	PHY_ConfigRxSensitivity(pdtLevel);
+    
+    // To get the PDT level configured
+    PHY_GetTrxConfig(RX_SENS, &pdtLevel); 
+     
+    </code>
+
+  Remarks:
+    None 
+*/
+PHY_Retval_t PHY_ConfigRxSensitivity(uint8_t pdtLevel);
+
+// *****************************************************************************
+/*
+  Function:
+    PHY_Retval_t PHY_ConfigRxPromiscuousMode(bool promCtrl)
+
+  Summary:
+    Configures RX promiscuous mode
+
+  Description:
+    This function is used to enable the RX promiscuous mode. The TRX will receive
+    all frames even with FCS failure, PHY layer will discard the CRC invalid packet 
+    and TRX will not acknowledge even ack is requested by the received 
+    packet(auto ack is disabled in this mode). 
+ 
+  Precondition:
+    PHY_Init() should have been called before calling this function
+
+  Parameters:
+    promCtrl  - true  -  To enable promiscuous mode
+                false -  To disable promiscuous mode
+
+  Returns:
+    PHY_SUCCESS -  If promCtrl bits are configured correctly
+    PHY_FAILURE -  otherwise
+
+  Example:
+    <code>
+    bool promCtrl =  true;
+ 
+    // Enable Promiscuous mode
+	PHY_ConfigRxPromiscuousMode(promCtrl);
+    
+    // To get the PDT level configured
+    PHY_GetTrxConfig(AACK_PROMSCS_MODE, &promCtrl); 
+     
+    </code>
+
+  Remarks:
+    None 
+*/
+PHY_Retval_t PHY_ConfigRxPromiscuousMode(bool promCtrl);
+
+// *****************************************************************************
+/*
+  Function:
+    PHY_Retval_t PHY_ConfigRxRPCMode(uint8_t rxRPCEnable)
+
+  Summary:
+    Configures the reduced power consumption mode
+
+  Description:
+    The function is used to configure the reduced power consumption mode of the receiver
+ 
+  Precondition:
+    PHY_Init() should have been called before calling this function.
+ 
+  Parameters:
+    rxRPCEnable - 0x01  -  to enable the rx RPC mode
+                  0x00 -  to disable the rx RPC mode
+ 
+
+  Returns:
+    PHY_Retval_t - PHY_SUCCESS  If trx is configured correctly
+ *                 PHY_FAILURE  otherwise
+  Example:
+    <code>
+    PHY_Retval_t retVal = PHY_FAILURE;
+    uint8_t rxRPCEnable = 0x01;
+ 
+    retVal = PHY_ConfigRxRPCMode(rxRPCEnable);
+    if(PHY_SUCCESS == retVal)
+    {
+        //Trx is configured to reduced power consumption mode
+    }   
+    </code>
+
+  Remarks:
+    None 
+*/
+PHY_Retval_t PHY_ConfigRxRPCMode(uint8_t rxRPCEnable);
+
+// *****************************************************************************
+/*
+  Function:
+    PHY_Retval_t PHY_ConfigAutoAck(bool enableAACK)
+
+  Summary:
+    Configures TRX for auto acknowledging the reserved frame
+
+  Description:
+    The function is used to configure the automatic acknowledgment from 
+    Transceiver after packet reception. 
+ 
+  Precondition:
+    PHY_Init() should have been called before calling this function.
+ 
+  Parameters:
+    nableAACK - true -  to enable the automatic 
+                        acknowledgment after reception
+                false - to disable the automatic 
+                        acknowledgment after reception
+ 
+
+  Returns:
+    PHY_Retval_t - PHY_SUCCESS  If trx is configured correctly
+ *                 PHY_FAILURE  otherwise
+  Example:
+    <code>
+    PHY_Retval_t retVal = PHY_FAILURE;
+    bool isEnableAACK = true;
+ 
+    retVal = PHY_ConfigAutoAck(isEnableAACK);
+    if(PHY_SUCCESS == retVal)
+    {
+        //Trx is configured to auto acknowledge for the received packet
+    }   
+    </code>
+
+  Remarks:
+    None 
+*/
+PHY_Retval_t PHY_ConfigAutoAck(bool enableAACK);
+
+// *****************************************************************************
+/*
+  Function:
+    PHY_Retval_t PHY_ConfigReservedFrameFiltering(bool recReservedFrame, 
+        bool bypassFrameFilter )
+
+  Summary:
+    Configures TRX for receiving reserved frame
+
+  Description:
+    This function is used to configure the trx for receiving the reserved frame 
+    type frames and to enable/disable the frame filtering . 
+ 
+  Precondition:
+    PHY_Init() should have been called before calling this function.
+ 
+  Parameters:
+    recReservedFrame    - true  to enable the reception of reserved frame types 
+                          acknowledgment after reception
+    bypassFrameFilter   - true to bypass the frame filtering at the hardware 
+                           level like data frame as specified in IEEE specification
+
+  Returns:
+    PHY_Retval_t - PHY_SUCCESS  If trx is configured correctly
+ *                 PHY_FAILURE  otherwise
+  Example:
+    <code>
+    PHY_Retval_t retVal = PHY_FAILURE;
+    bool rxResFrame = true;
+    bool bypassFrameFiltering = false;
+ 
+    retVal = PHY_ConfigReservedFrameFiltering(rxResFrame, bypassFrameFiltering);
+    if(PHY_SUCCESS == retVal)
+    {
+        //Trx is configured to receive the reserved frame and to do the frame 
+         filtering as stated in IEEE Spec
+    }   
+    </code>
+
+  Remarks:
+    None 
+*/
+PHY_Retval_t PHY_ConfigReservedFrameFiltering(bool recReservedFrame, 
+        bool bypassFrameFilter );
+
+// *****************************************************************************
+/*
+  Function:
+    PHY_Retval_t  PHY_ConfigExtPACtrl(bool paExtSwCtrl)
+
+  Summary:
+    Enable/Disable the External RF front end control
+
+  Description:
+    This function is used to Enable/Disable the External RF front end control . 
+ 
+  Precondition:
+    PHY_Init() should have been called before calling this function.
+ 
+  Parameters:
+    paExtSwCtrl     -   true  If external rf front end control has to be
+                               enabled
+
+  Returns:
+    PHY_Retval_t - PHY_SUCCESS  If trx is configured correctly
+ *                 PHY_FAILURE  otherwise
+  Example:
+    <code>
+    PHY_Retval_t retVal = PHY_FAILURE;
+    bool paExtSwCtrl = true;
+ 
+    retVal = PHY_ConfigExtPACtrl(paExtSwCtrl);
+    if(PHY_SUCCESS == retVal)
+    {
+        //Trx is configured to enable the external PA
+    }   
+    </code>
+
+  Remarks:
+    None 
+*/
+PHY_Retval_t  PHY_ConfigExtPACtrl(bool paExtSwCtrl);
+
+
+// *****************************************************************************
+/*
+  Function:
+    PHY_Retval_t  PHY_ConfigExtPACtrl(bool paExtSwCtrl)
+
+  Summary:
+    Enable/Disable the rx safe mode
+
+  Description:
+    This function is used to Enable/Disable the rx safe mode. This is useful to 
+    protect a received frame against overwriting by subsequent received frames. 
+ 
+  Precondition:
+    PHY_Init() should have been called before calling this function.
+ 
+  Parameters:
+    safeModeCtrl     -   true  - To enable dynamic frame buffer protection for 
+                                 received packet
+
+  Returns:
+    PHY_Retval_t - PHY_SUCCESS  If trx is configured correctly
+ *                 PHY_FAILURE  otherwise
+  Example:
+    <code>
+    PHY_Retval_t retVal = PHY_FAILURE;
+    bool safeModeCtrl = true;
+ 
+    retVal = PHY_EnableRxSafeMode(safeModeCtrl);
+    if(PHY_SUCCESS == retVal)
+    {
+        //Trx is configured to enable the frame buffer protection
+    }   
+    </code>
+
+  Remarks:
+    None 
+*/
+PHY_Retval_t PHY_EnableRxSafeMode(bool safeModeCtrl);
+
+// *****************************************************************************
+/*
+  Function:
+    PHY_Retval_t PHY_GetTrxConfig(PHY_ConfigParam_t parameter, uint8_t *paramValue)
+
+  Summary:
+    To read a current setting of particular transceiver parameter
+
+  Description:
+    The function is used to read the current of particular parameter. 
+    The following parameters can be read from TRX,
+        // Antenna Diversity 
+        ANT_DIVERSITY     
+        // Antenna Configured - ANTENNA_1/ANTENNA_2
+        ANT_SELECT        
+        // Antenna Control
+        ANT_CTRL          
+        // Promiscuous Mode
+        AACK_PROMSCS_MODE 
+        // Tx Power Configured
+        TX_PWR            
+        // Rx Sensitivity
+        RX_SENS           
+        // RX Reduced Power Consumption
+        RX_RPC                
+        // Automatic acknowledgement
+        RX_AUTO_ACK       
+        // Reserved frame reception
+        RX_RESERVED_FRAME 
+        // Filter reserved frame
+        FILTER_RESERVED_FRAME 
+ 
+  Precondition:
+    PHY_Init() should have been called before calling this function.
+ 
+  Parameters:
+    parameter   - Type of the parameter to be read
+    paramValue  - Pointer to the current parameter value
+ 
+  Returns:
+    PHY_Retval_t - PHY_INVALID_PARAMETER If the parameter is invalid
+                 - PHY_SUCCESS otherwise
+  Example:
+    <code>
+    PHY_Retval_t retVal = PHY_FAILURE;
+    bool promCtrl = true;
+ 
+    // To get the promiscuous mode configured
+    PHY_GetTrxConfig(AACK_PROMSCS_MODE, (uint8_t *)&promCtrl); 
+    </code>
+
+  Remarks:
+    None 
+*/
+PHY_Retval_t PHY_GetTrxConfig(PHY_ConfigParam_t parameter, uint8_t *paramValue);
+
+
+// *****************************************************************************
+// *****************************************************************************
+// Section: PHY Utility Functions
+// *****************************************************************************
+// *****************************************************************************
+
+// *****************************************************************************
+/*
+  Function:
+    PHY_TrxStatus_t PHY_GetTrxStatus(void)
+
+  Summary:
+    Returns the current status of the Transceiver
+
+  Description:
+    This function gets the status of the transceiver
+ 
+  Precondition:
+    PHY_Init() should have been called before calling this function
+
+  Parameters:
+    None     
+
+  Returns:
+    PHY_TRX_OFF - The transceiver is in TRX_OFF state
+    PHY_RX_ON - The transceiver is in receive state
+    PHY_TX_ON - The transceiver is in Transmit state
+    PHY_BUSY_RX - The transceiver currently receiving the packet
+    PHY_BUSY_TX - The transceiver is currently transmitting the packet
+    PHY_TRX_SLEEP - The transceiver is in sleep state
+    PHY_DEEP_SLEEP - The transceiver is in Deep sleep state
+
+  Example:
+    <code>
+    PHY_TrxStatus_t trxStatus;
+    //Gets the current status of trx
+    trxStatus = PHY_GetTrxStatus();
+     
+    </code>
+
+  Remarks:
+    None .
+*/
+PHY_TrxStatus_t PHY_GetTrxStatus(void);
+
+// *****************************************************************************
+/*
   Function:
     int8_t PHY_GetRSSIBaseVal(void)
 
@@ -1809,7 +1960,9 @@ void PHY_StopContinuousTransmit(void);
     None 
 */
 int8_t PHY_GetRSSIBaseVal(void);
-/*******************************************************************************
+
+// *****************************************************************************
+/*
   Function:
     uint32_t PHY_GetSWVersion(void)
 
@@ -1842,9 +1995,10 @@ int8_t PHY_GetRSSIBaseVal(void);
 */
 uint32_t PHY_GetSWVersion(void);
 
-/*******************************************************************************
+// *****************************************************************************
+/*
   Function:
-    PHY_Retval_t PHY_ConfigTxPwr(bool type, int8_t pwrValue)
+    PHY_Retval_t PHY_ConvertTxPwrRegValToDbm(uint8_t regValue, int8_t *dbmValue)
 
   Summary:
     To convert the Tx Power Register index value to dbm Value
@@ -1868,7 +2022,7 @@ uint32_t PHY_GetSWVersion(void);
     uint8_t pwrRegIndex = 0x04;
     int8_t pwrDbm;
  
-    // ATo get the dBm value corresponding to power register index
+    // To get the dBm value corresponding to power register index
 	PHY_ConvertTxPwrRegValToDbm(pwrRegIndex, &pwrDbm);
     
     </code>

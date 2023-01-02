@@ -40,59 +40,93 @@
 #ifndef PHY_TASKS_H
 #define PHY_TASKS_H
 
-// *****************************************************************************
-// *****************************************************************************
-// Section: Includes
-// *****************************************************************************
-// *****************************************************************************
-
-// *****************************************************************************
-// *****************************************************************************
-// Section: Externals
-// *****************************************************************************
-// *****************************************************************************
-
-// *****************************************************************************
-// *****************************************************************************
-// Section: Macros
-// *****************************************************************************
-// *****************************************************************************
-
-// *****************************************************************************
-// *****************************************************************************
-// Section: Types
-// *****************************************************************************
-// *****************************************************************************
 
 // *****************************************************************************
 // *****************************************************************************
 // Section: Prototypes
 // *****************************************************************************
 // *****************************************************************************
-/**
- * @brief RTOS task for the PHY layer. This function inturn calls the PHY layer 
- *        Task handler upon reception of Semaphore signal
- *
- */
+
+// *****************************************************************************
+/*
+  Function:
+    void PHY_Tasks(void)
+
+  Summary:
+    RTOS task for the PHY Layer
+
+  Description:
+    This function inturn calls the PHY layer task handler upon reception of 
+	Semaphore signal
+ 
+  Precondition:
+    PHY_Init() should have been called before calling this function
+
+  Parameters:
+    None
+
+  Returns:
+    None
+
+  Example:
+    <code>
+	xTaskCreate((TaskFunction_t) _PHY_Tasks,
+                "PHY_Tasks",
+                1024,
+                NULL,
+                1,
+                &xPHY_Tasks);
+				
+    //Handle for the PHY_Tasks. 
+	TaskHandle_t xPHY_Tasks;
+
+	void _PHY_Tasks(  void *pvParameters  )
+	{     
+		while(1)
+		{
+			PHY_Tasks();
+		}
+	}
+    
+    </code>
+
+  Remarks:
+    None 
+*/
+
 void PHY_Tasks(void);
 
+// *****************************************************************************
+/*
+  Function:
+    void PHY_PostTask(bool isISRContext)
 
-/**
- * @brief This function is used to invoke the PHY RTOS task. This will be used 
- *        by the PHY layer for signaling the task done status 
- * @param isISRContext true - Task is called from the ISR context false - otherwise
- */
+  Summary:
+    This function is used to invoke the PHY RTOS task
+
+  Description:
+    This function is used to invoke the PHY RTOS task. This will be used 
+	by the PHY layer for signaling the task done status
+ 
+  Precondition:
+    This function gets called from the PHY Library.
+
+  Parameters:
+    isISRContext true - Task is called from the ISR context false - otherwise
+
+  Returns:
+    None
+
+  Example:
+	None
+
+  Remarks:
+    None 
+*/
+
 void PHY_PostTask(bool isISRContext);
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#ifdef __cplusplus
-} /* extern "C" */
-#endif
-
-#endif /* TAL_CONSTANTS_H */
+#endif /* PHY_TASKS_H */
 
 /* EOF */

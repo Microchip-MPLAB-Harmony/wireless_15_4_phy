@@ -47,11 +47,9 @@
 // *****************************************************************************
 #include "bmm.h"
 
-/**
- * \ingroup group_resources
- * \defgroup group_qmm  Queue Management
+/* 
  * Queue Management: provides services for creating and maintaining the queues.
- *  @{
+ *  
  */
 
 // *****************************************************************************
@@ -66,9 +64,18 @@
 // *****************************************************************************
 // *****************************************************************************
 
-/**
- * @brief Structure to search for a buffer to be removed from a queue
- */
+// *****************************************************************************
+/* Structure used for searching
+
+  Summary:
+    Structure to search for a buffer to be removed from a queue
+
+  Description:
+    search_t is used for searching the buffer in a queue
+
+  Remarks:
+    None
+*/
 
 typedef struct search_tag
 {
@@ -78,15 +85,20 @@ typedef struct search_tag
 	void *handle;
 } search_t;
 
-/**
- * @brief Queue structure
- *
- * This structur defines the queue structure.
- * The application should declare the queue of type queue_t
- * and call qmm_queue_init before invoking any other functionality of qmm.
- *
- * @ingroup apiMacTypes
- */
+// *****************************************************************************
+/* Structure holding the Queue details
+
+  Summary:
+    This structure defines the queue structure
+
+  Description:
+   The application should declare the queue of type queue_t
+   and call qmm_queue_init before invoking any other functionality of qmm.
+
+  Remarks:
+    None
+*/
+
 typedef struct queue_tag
 {
 	/** Pointer to head of queue */
@@ -110,8 +122,25 @@ typedef struct queue_tag
 	uint8_t size;
 } queue_t;
 
+
+// *****************************************************************************
+/* Enum holding the Queue layer status
+
+  Summary:
+    This enum hold the different status from the queue management service 
+
+  Description:
+   QMM_SUCCESS - Requst to Queue layer processed successfully
+   QMM_QUEUE_FULL - The designated queue is full to add more buffers 
+
+  Remarks:
+    None
+*/
+
 typedef enum qmm_status_tag{
+	/** Success Status */
     QMM_SUCCESS     = 0x00,
+	/** Queue is full */
     QMM_QUEUE_FULL  = 0x01
 }qmm_status_t;
 
@@ -131,15 +160,40 @@ extern "C"
 {
 #endif
 
-/**
- * @brief Initializes the queue.
- *
- * This function initializes the queue. Note that this function
- * should be called before invoking any other functionality of QMM.
- *
- * @param q The queue which should be initialized.
- *
- */
+// *****************************************************************************    
+/*
+  Function:
+   void qmm_queue_init(queue_t *q, uint8_t capacity)
+
+  Summary:
+    Initializes the queue
+
+  Description:
+    This function initializes the queue. Note that this function
+    should be called before invoking any other functionality of QMM.
+
+  Precondition:
+    None
+
+  Parameters:
+    q - The queue which should be initialized
+	capacity - Queue length (Max No of buffers which can be accomodated 
+							   in the queue)
+
+  Returns:
+    None.
+
+  Example:
+    <code>
+	queue_t app_queue;
+	uint8_t queue_size = 10;
+    qmm_queue_init(&app_queue, queue_size);
+    </code>
+
+  Remarks:
+    None
+*/
+
 #ifdef ENABLE_QUEUE_CAPACITY
 void qmm_queue_init(queue_t *q, uint8_t capacity);
 
@@ -148,18 +202,48 @@ void qmm_queue_init(queue_t *q);
 
 #endif  /* ENABLE_QUEUE_CAPACITY */
 
-/**
- * @brief Appends a buffer into the queue.
- *
- * This function appends a buffer into the queue.
- *
- * @param q Queue into which buffer should be appended
- *
- * @param buf Pointer to the buffer that should be appended into the queue.
- * Note that this pointer should be same as the
- * pointer returned by bmm_buffer_alloc.
- *
- */
+// *****************************************************************************    
+/*
+  Function:
+   qmm_status_t qmm_queue_append(queue_t *q, buffer_t *buf)
+
+  Summary:
+    Appends a buffer into the queue
+
+  Description:
+    This function appends a buffer into the designated queue
+
+  Precondition:
+    qmm_queue_init should have called for initilazing the particular queue before 
+	using it
+
+  Parameters:
+    q 	- Queue into which buffer should be appended
+	buf - Pointer to the buffer that should be appended into the queue.
+		  Note that this pointer should be same as the
+	      pointer returned by bmm_buffer_alloc.
+	
+  Returns:
+    qmm_status_t - Status of Queue request
+
+  Example:
+    <code>
+	queue_t app_queue;
+	buffer_t *app_buf;
+	// Allocate the buffer 
+	app_buf = bmm_buffer_alloc(LARGE_BUFFER_SIZE);
+	
+	uint8_t queue_size = 10;
+    qmm_queue_init(&app_queue, queue_size);
+	// Append buffer in queue
+	qmm_queue_append(&app_queue, app_buf);
+	
+    </code>
+
+  Remarks:
+    None
+*/
+
 #ifdef ENABLE_QUEUE_CAPACITY
 qmm_status_t qmm_queue_append(queue_t *q, buffer_t *buf);
 
@@ -168,46 +252,137 @@ void qmm_queue_append(queue_t *q, buffer_t *buf);
 
 #endif  /* ENABLE_QUEUE_CAPACITY */
 
-/**
- * @brief Removes a buffer from queue.
- *
- * This function removes a buffer from queue
- *
- * @param q Queue from which buffer should be removed
- *
- * @param search Search criteria. If this parameter is NULL, first buffer in the
- * queue will be removed. Otherwise buffer matching the criteria will be
- * removed.
- *
- * @return Pointer to the buffer header, if the buffer is
- * successfully removed, NULL otherwise.
- *
- */
-buffer_t *qmm_queue_remove(queue_t *q, search_t *search);
+// *****************************************************************************    
+/*
+  Function:
+   buffer_t* qmm_queue_remove(queue_t *q, search_t *search)
 
-/**
- * @brief Reads a buffer from queue.
- *
- * This function reads either the first buffer if search is NULL or buffer
- * matching the given criteria from queue.
- *
- * @param q The queue from which buffer should be read.
- *
- * @param search If this parameter is NULL first buffer in the queue will be
- * read. Otherwise buffer matching the criteria will be read
- *
- * @return Pointer to the buffer header which is to be read, NULL if the buffer
- * is not available
- *
- */
-buffer_t *qmm_queue_read(queue_t *q, search_t *search);
+  Summary:
+    Removes a buffer from queue.
 
-/**
- * @brief Internal function for flushing a specific queue
- *
- * @param q Queue to be flushed
- *
- */
+  Description:
+    This function removes a buffer from queue
+
+  Precondition:
+    qmm_queue_init should have called for initilazing the particular queue before 
+	using it and buffer should be appended before removing it
+
+  Parameters:
+    q 	- Queue from which buffer should be removed
+	buf - Search criteria. If this parameter is NULL, first buffer in the
+		  queue will be removed. Otherwise buffer matching the criteria will be
+  removed
+	
+  Returns:
+    return - Pointer to the buffer header, if the buffer is
+    successfully removed, NULL otherwise.
+
+  Example:
+    <code>
+	queue_t app_queue;
+	buffer_t *app_buf;
+	// Allocate the buffer 
+	app_buf = bmm_buffer_alloc(LARGE_BUFFER_SIZE);
+	
+	uint8_t queue_size = 10;
+    qmm_queue_init(&app_queue, queue_size);
+	// Append buffer in queue
+	qmm_queue_append(&app_queue, app_buf);
+	//Remove buffer from queue
+	app_buf = qmm_queue_remove(&app_queue, NULL);
+    </code>
+
+  Remarks:
+    None
+*/
+
+buffer_t* qmm_queue_remove(queue_t *q, search_t *search);
+
+// *****************************************************************************    
+/*
+  Function:
+    buffer_t* qmm_queue_read(queue_t *q, search_t *search)
+
+  Summary:
+    Reads a buffer from queue
+
+  Description:
+    This function reads either the first buffer if search is NULL or buffer
+    matching the given criteria from queue.
+
+  Precondition:
+    qmm_queue_init should have called for initilazing the particular queue before 
+	using it and buffer should be appended before reading it
+
+  Parameters:
+    q 	- Queue from which buffer should be read
+	buf - Search criteria. If this parameter is NULL, first buffer in the
+		  queue will be read. Otherwise buffer matching the criteria will be
+		  read
+	
+  Returns:
+    return - Pointer to the buffer header, if the buffer is
+			 successfully read, NULL otherwise.
+
+  Example:
+    <code>
+	queue_t app_queue;
+	buffer_t *app_buf;
+	// Allocate the buffer 
+	app_buf = bmm_buffer_alloc(LARGE_BUFFER_SIZE);
+	
+	uint8_t queue_size = 10;
+    qmm_queue_init(&app_queue, queue_size);
+	// Append buffer in queue
+	qmm_queue_append(&app_queue, app_buf);
+	//Read buffer from queue
+	app_buf = qmm_queue_read(&app_queue, NULL);
+    </code>
+
+  Remarks:
+    None
+*/
+
+buffer_t* qmm_queue_read(queue_t *q, search_t *search);
+
+// *****************************************************************************    
+/*
+  Function:
+    void qmm_queue_flush(queue_t *q)
+
+  Summary:
+    Internal function for flushing a specific queue
+
+  Description:
+    This function flushes the entire queue
+
+  Precondition:
+    qmm_queue_init should have called for initilazing the particular queue before 
+	using it.
+
+  Parameters:
+    q 	- Queue to be flushed
+	
+  Returns:
+    None
+
+  Example:
+    <code>
+	queue_t app_queue;
+	buffer_t *app_buf;
+	// Allocate the buffer 
+	app_buf = bmm_buffer_alloc(LARGE_BUFFER_SIZE);
+	
+	uint8_t queue_size = 10;
+    qmm_queue_init(&app_queue, queue_size);
+	
+	qmm_queue_flush(&app_queue);
+    </code>
+
+  Remarks:
+    None
+*/
+
 void qmm_queue_flush(queue_t *q);
 
 #ifdef __cplusplus
