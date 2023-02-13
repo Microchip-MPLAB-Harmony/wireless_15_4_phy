@@ -14,7 +14,7 @@ def loadModule():
     print('processor={}'.format(processor))
                           
     if (processor in pic32cx_bz2_family):                      
-        ieee802154phy  = Module.CreateComponent('IEEE_802154_PHY', 'IEEE 802.15.4 PHY', 'Wireless/Drivers', 'driver/config/drv_ieee802154_phy.py')
+        ieee802154phy  = Module.CreateComponent('IEEE_802154_PHY', 'IEEE 802.15.4 PHY', 'Wireless/Drivers/IEEE 802.15.4', 'driver/config/drv_ieee802154_phy.py')
         ieee802154phy.setDisplayType('Standalone PHY Driver')
         ieee802154phy.addDependency('HarmonyCoreDependency', 'Core Service', 'Core', True, True)
         ieee802154phy.addDependency('SysTimeDependency', 'SYS_TIME', 'SYS_TIME', True, True)

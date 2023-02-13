@@ -14,7 +14,7 @@ The following are the funcionalities of PHY layer
 -PHY PIB storage
 -CSMA module
 -Energy detection
--Power management
+-Power management(Trx Sleep)
 -Interrupt handling
 -Initialization and Reset
 -Enabling High Datarate Support
@@ -34,11 +34,13 @@ The following are the funcionalities of PHY layer
 -Device Pack: PIC32CX-BZ2-DFP (1.0.107)
 
 ## Harmony 3 Dependent Packages
+-bsp - v3.13.0
 -csp - v3.13.1
 -core - v3.11.1
 -dev_packs - v3.13.1
--CMSISFreeRTOS - v10.4.6
--wireless_pic32cxbz_wbz
+-CMSISFreeRTOS - v10.3.1
+-wireless_pic32cxbz_wbz -v1.1.0
+-mhc - v3.8.5
 
 ## Notes
 -None
