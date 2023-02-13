@@ -1,14 +1,16 @@
 /*******************************************************************************
-  PHY Task Header
+  APP Config Header
 
   File Name:
-    phy_tasks.h
+    app_config.h
 
   Summary:
-    This file contains PHY-RTOS task related functions
+    This file contains the application specific definitions for 
+    Resource management
 
   Description:
-    None
+    These are application-specific resources which are used in the example 
+    application of the coordinator in addition to the underlaying stack.
 *******************************************************************************/
 
 // DOM-IGNORE-BEGIN
@@ -37,95 +39,58 @@
 // DOM-IGNORE-END
 
 /* Prevent double inclusion */
-#ifndef PHY_TASKS_H
-#define PHY_TASKS_H
+#ifndef APP_CONFIG_H
+#define APP_CONFIG_H
 
 
+
+#include "stack_config.h"
 // *****************************************************************************
 // *****************************************************************************
-// Section: Prototypes
+// Section: Macros
 // *****************************************************************************
 // *****************************************************************************
 
-// *****************************************************************************
-/*
-  Function:
-    void PHY_Tasks(void)
+/** Defines the number of timers used by the application. */
+#define NUMBER_OF_APP_TIMERS        (0U)
 
-  Summary:
-    RTOS task for the PHY Layer
+#define NUMBER_OF_TOTAL_STACK_TIMERS (1U)
 
-  Description:
-    This function inturn calls the PHY layer task handler upon reception of 
-	Semaphore signal
- 
-  Precondition:
-    PHY_Init() should have been called before calling this function
+#if (!defined TOTAL_NUMBER_OF_TIMERS)
 
-  Parameters:
-    None
+/** Defines the total number of timers used by the application and the layers
+ * below. */
+#define TOTAL_NUMBER_OF_TIMERS      (NUMBER_OF_APP_TIMERS + \
+	NUMBER_OF_TOTAL_STACK_TIMERS)
+#endif /* (!define TOTAL_NUMBER_OF_TIMERS) */
 
-  Returns:
-    None
+#define NUMBER_OF_LARGE_STACK_BUFS	(${PHY_INTEGER_BMMLARGEBUFFERS}U)
 
-  Example:
-    <code>
-	xTaskCreate((TaskFunction_t) _PHY_Tasks,
-                "PHY_Tasks",
-                1024,
-                NULL,
-                1,
-                &xPHY_Tasks);
-				
-	TaskHandle_t xPHY_Tasks;
+#define NUMBER_OF_SMALL_STACK_BUFS	(${PHY_INTEGER_BMMSMALLBUFFERS}U)
 
-	void _PHY_Tasks(  void *pvParameters  )
-	{     
-		while(1)
-		{
-			PHY_Tasks();
-		}
-	}
-    
-    </code>
+/** Defines the number of additional large buffers used by the application */
+#define NUMBER_OF_LARGE_APP_BUFS    (0U)
 
-  Remarks:
-    None 
-*/
+/** Defines the number of additional small buffers used by the application */
+#define NUMBER_OF_SMALL_APP_BUFS    (0U)
 
-void PHY_Tasks(void);
+/**
+ *  Defines the total number of large buffers used by the application and the
+ *  layers below.
+ */
+#define TOTAL_NUMBER_OF_LARGE_BUFS  (NUMBER_OF_LARGE_APP_BUFS +	\
+	NUMBER_OF_LARGE_STACK_BUFS)
 
-// *****************************************************************************
-/*
-  Function:
-    void PHY_PostTask(bool isISRContext)
+/**
+ *  Defines the total number of small buffers used by the application and the
+ *  layers below.
+ */
+#define TOTAL_NUMBER_OF_SMALL_BUFS  (NUMBER_OF_SMALL_APP_BUFS +	\
+	NUMBER_OF_SMALL_STACK_BUFS)
 
-  Summary:
-    This function is used to invoke the PHY RTOS task
-
-  Description:
-    This function is used to invoke the PHY RTOS task. This will be used 
-	by the PHY layer for signaling the task done status
- 
-  Precondition:
-    This function gets called from the PHY Library.
-
-  Parameters:
-    isISRContext true - Task is called from the ISR context false - otherwise
-
-  Returns:
-    None
-
-  Example:
-	None
-
-  Remarks:
-    None 
-*/
-
-void PHY_PostTask(bool isISRContext);
+#define TOTAL_NUMBER_OF_BUFS        (TOTAL_NUMBER_OF_LARGE_BUFS + \
+	TOTAL_NUMBER_OF_SMALL_BUFS)
 
 
-#endif /* PHY_TASKS_H */
-
+#endif /* APP_CONFIG_H */
 /* EOF */

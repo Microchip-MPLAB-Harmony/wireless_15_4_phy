@@ -1,8 +1,8 @@
 /*******************************************************************************
-  APP Config Header
+  Stack Config Header
 
   File Name:
-    app_config.h
+    stack_config.h
 
   Summary:
     This file contains the application specific definitions for 
@@ -39,58 +39,65 @@
 // DOM-IGNORE-END
 
 /* Prevent double inclusion */
-#ifndef APP_CONFIG_H
-#define APP_CONFIG_H
+#ifndef STACK_CONFIG_H
+#define STACK_CONFIG_H
 
+/* === INCLUDES ============================================================ */
+#include "phy.h"
 
-#include "stack_config.h"
+/* === EXTERNALS =========================================================== */
 
-// *****************************************************************************
-// *****************************************************************************
-// Section: Macros
-// *****************************************************************************
-// *****************************************************************************
-
-/** Defines the number of timers used by the application. */
-#define NUMBER_OF_APP_TIMERS        (0U)
-
-#define NUMBER_OF_TOTAL_STACK_TIMERS  1U
-
-#if (!defined TOTAL_NUMBER_OF_TIMERS)
-
-/** Defines the total number of timers used by the application and the layers
- * below. */
-#define TOTAL_NUMBER_OF_TIMERS      (NUMBER_OF_APP_TIMERS + \
-	NUMBER_OF_TOTAL_STACK_TIMERS)
-#endif /* (!define TOTAL_NUMBER_OF_TIMERS) */
-
-/** Defines the number of additional large buffers used by the application */
-#define NUMBER_OF_LARGE_APP_BUFS    (0U)
-
-/** Defines the number of additional small buffers used by the application */
-#define NUMBER_OF_SMALL_APP_BUFS    (0U)
-
-#define NUMBER_OF_LARGE_STACK_BUFS   (3U)
-
-#define NUMBER_OF_SMALL_STACK_BUFS   (0U)
-
-/**
- *  Defines the total number of large buffers used by the application and the
- *  layers below.
+/* === MACROS ============================================================== */
+/* LARGE_BUFFER_SIZE
+ 
+   Summary:
+    This macro hold the Large buffer size value used in PHY library
+   Description:
+    The following macros hold the size of a large buffer.
+    Additional octets for the length of the frame, the LQI
+    and the ED value are required.
+    Size of PHY_FrameInfo_t + max number of payload octets +
+    1 octet LQI  + 1 octet ED value + 1 octet Length field.
+   Remarks:
+    None 
  */
-#define TOTAL_NUMBER_OF_LARGE_BUFS  (NUMBER_OF_LARGE_APP_BUFS +	\
-	NUMBER_OF_LARGE_STACK_BUFS)
 
-/**
- *  Defines the total number of small buffers used by the application and the
- *  layers below.
+#ifndef LARGE_BUFFER_SIZE
+#define LARGE_BUFFER_SIZE                   (((sizeof(PHY_FrameInfo_t) + \
+	aMaxPHYPacketSize + \
+	LENGTH_FIELD_LEN + LQI_LEN + ED_VAL_LEN) / 4U + 1U) * 4U)
+#endif
+
+// *****************************************************************************
+/* SMALL_BUFFER_SIZE
+ 
+   Summary:
+    This macro hold the small buffer size value 
+   Description:
+    The following macros hold the size of a small buffer.
+    Additional octets for the length of the frame, the LQI
+    and the ED value are required.
+    Size of PHY_FrameInfo_t + max number of mac management frame len +
+    1 octet LQI  + 1 octet ED value + 1 octet Length field.
+   Remarks:
+    None 
  */
-#define TOTAL_NUMBER_OF_SMALL_BUFS  (NUMBER_OF_SMALL_APP_BUFS +	\
-	NUMBER_OF_SMALL_STACK_BUFS)
 
-#define TOTAL_NUMBER_OF_BUFS        (TOTAL_NUMBER_OF_LARGE_BUFS + \
-	TOTAL_NUMBER_OF_SMALL_BUFS)
+#ifndef SMALL_BUFFER_SIZE
+#define SMALL_BUFFER_SIZE                   (((sizeof(PHY_FrameInfo_t) + \
+	MAX_MGMT_FRAME_LENGTH +	\
+	LENGTH_FIELD_LEN + LQI_LEN + ED_VAL_LEN) / 4U + 1U) * 4U) 
+#endif
+
+/*
+ * TAL PIB default values
+ */
+#define NUMBER_OF_LARGE_PHY_BUFS          (${PHY_INTEGER_BMMLARGEBUFFERS}U)
+#define NUMBER_OF_SMALL_PHY_BUFS          (${PHY_INTEGER_BMMSMALLBUFFERS}U)
+
+/* === TYPES =============================================================== */
 
 
-#endif /* APP_CONFIG_H */
-/* EOF */
+/* === PROTOTYPES ========================================================== */
+
+#endif /* TAL_CONFIG_H */

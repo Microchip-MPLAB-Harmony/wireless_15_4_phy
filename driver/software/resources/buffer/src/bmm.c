@@ -14,7 +14,7 @@
 
 // DOM-IGNORE-BEGIN
 /*******************************************************************************
-* Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) 2023 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -42,12 +42,13 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "pal.h"
+
 #include "bmm.h"
 #include "qmm.h"
-#include "ieee_phy_const.h"
+
+#include "stack_config.h"
 #include "app_config.h"
-#include "phy.h"
+
 
 
 
@@ -121,6 +122,8 @@ static queue_t free_small_buffer_q;
 void bmm_buffer_init(void)
 {
 	uint8_t index;
+    
+    qmm_status_t qmm_status;
 
 	/* Initialize free buffer queue for large buffers */
 #if (TOTAL_NUMBER_OF_LARGE_BUFS > 0)
@@ -149,7 +152,7 @@ void bmm_buffer_init(void)
 		buf_header[index].body = buf_pool + (index * LARGE_BUFFER_SIZE);
 
 		/* Append the buffer to free large buffer queue */
-		qmm_queue_append(&free_large_buffer_q, &buf_header[index]);
+		qmm_status = qmm_queue_append(&free_large_buffer_q, &buf_header[index]);
 	}
 #endif
 
@@ -166,10 +169,11 @@ void bmm_buffer_init(void)
 				(index * SMALL_BUFFER_SIZE);
 
 		/* Append the buffer to free small buffer queue */
-		qmm_queue_append(&free_small_buffer_q, &buf_header[index + \
+		qmm_status = qmm_queue_append(&free_small_buffer_q, &buf_header[index + \
 				TOTAL_NUMBER_OF_LARGE_BUFS]);
 	}
 #endif
+    (void)qmm_status;
 }
 
 /**
@@ -257,8 +261,8 @@ buffer_t * bmm_buffer_alloc(uint8_t size)
 
 	size = size; /* Keep compiler happy. */
 
-#endif		
-    
+#endif	
+
     return pfree_buffer;
 }
 
@@ -274,6 +278,7 @@ buffer_t * bmm_buffer_alloc(uint8_t size)
 	 */
 void bmm_buffer_free(buffer_t *pbuffer)
 {
+    qmm_status_t qmm_status;
     if (NULL == pbuffer) {
         /* If the buffer pointer is NULL abort free operation */
         return;
@@ -282,16 +287,17 @@ void bmm_buffer_free(buffer_t *pbuffer)
 #if (TOTAL_NUMBER_OF_SMALL_BUFS > 0)
     if (IS_SMALL_BUF(pbuffer)) {
         /* Append the buffer into free small buffer queue */
-        qmm_queue_append(&free_small_buffer_q, pbuffer);
+        qmm_status = qmm_queue_append(&free_small_buffer_q, pbuffer);
     } else {
         /* Append the buffer into free large buffer queue */
-        qmm_queue_append(&free_large_buffer_q, pbuffer);
+        qmm_status = qmm_queue_append(&free_large_buffer_q, pbuffer);
     }
 
 #else /* no small buffers available at all */
     /* Append the buffer into free large buffer queue */
-    qmm_queue_append(&free_large_buffer_q, pbuffer);
+    qmm_status = qmm_queue_append(&free_large_buffer_q, pbuffer);
 #endif
+    (void)qmm_status;
 }
 
 #endif /* (TOTAL_NUMBER_OF_BUFS > 0) */

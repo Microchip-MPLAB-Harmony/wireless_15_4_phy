@@ -14,7 +14,7 @@
 
 // DOM-IGNORE-BEGIN
 /*******************************************************************************
-* Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) 2023 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -85,13 +85,26 @@
 #define LEAVE_CRITICAL_REGION()              NVIC_INT_Restore(flags); }
 
 /* This macro defines the CPU clock frequency */
-#define PAL_CPU_CLOCK_FREQUENCY               CPU_CLOCK_FREQUENCY           
+#define PAL_CPU_CLOCK_FREQUENCY               CPU_CLOCK_FREQUENCY   
+
 
 // *****************************************************************************
 // *****************************************************************************
 // Section: Types
 // *****************************************************************************
 // *****************************************************************************
+ /* PAL Timer Callback type
+ 
+   Summary:
+    Function Pointer holding application callback
+ 
+   Description:
+    None
+	
+   Remarks:
+    None
+ */
+typedef void (*appCallback_t) (void *context);
 
 // *****************************************************************************
  /* PAL Timer Timeout type
@@ -251,7 +264,7 @@ PAL_Status_t PAL_Init(void);
   Example:
     <code>
     TimerId_t appTimer;
-	//Get the Id for the sotware timer instance
+	
 	PAL_TimerGetId(&appTimer);
     </code>
 
@@ -259,7 +272,7 @@ PAL_Status_t PAL_Init(void);
 	None
 */
 
-PAL_Status_t PAL_TimerGetId(TimerId_t *timer_id);
+PAL_Status_t PAL_TimerGetId(TimerId_t *timerId);
 
 // *****************************************************************************
 /*
@@ -305,10 +318,9 @@ PAL_Status_t PAL_TimerGetId(TimerId_t *timer_id);
 	
 	static void AppTimerCallback(void *paramCb)
 	{
-		//Toggle LED
+		
 	}
 	
-	//Get the Id for the sotware timer instance
 	PAL_TimerGetId(&appTimer);
 	
 	if (PAL_SUCCESS == PAL_TimerStart(appTimer,
@@ -317,8 +329,7 @@ PAL_Status_t PAL_TimerGetId(TimerId_t *timer_id);
 				(void *)AppTimerCallback,
 				NULL, CALLBACK_SINGLE))
 	{
-		//Timer Started
-		//ToggleLED
+		printf("Timer Started");
 	}
 		
     </code>
@@ -330,7 +341,7 @@ PAL_Status_t PAL_TimerGetId(TimerId_t *timer_id);
 PAL_Status_t PAL_TimerStart(TimerId_t timerId,
 		uint32_t timerCount,
 		TimeoutType_t timeoutType,
-		void * timerCb,
+		appCallback_t timerCb,
 		void *paramCb, 
         CallbackType_t callbackType);
 
@@ -362,10 +373,9 @@ PAL_Status_t PAL_TimerStart(TimerId_t timerId,
 	
 	static void AppTimerCallback(void *paramCb)
 	{
-		//Toggle LED
+        LED_Off();
 	}
 	
-	//Get the Id for the sotware timer instance
 	PAL_TimerGetId(&appTimer);
 	
 	if (PAL_SUCCESS == PAL_TimerStart(appTimer,
@@ -374,14 +384,14 @@ PAL_Status_t PAL_TimerStart(TimerId_t timerId,
 				(void *)AppTimerCallback,
 				NULL, CALLBACK_SINGLE))
 	{
-		//Timer Started
-		//ToggleLED
+		printf("Timer Started");
+        LED_On();
 	}
 	
 	if (PAL_SUCCESS == PAL_TimerStop(appTimer))
 	{
-		//Timer Stopped
-		//ToggleLED
+		printf("Timer Stopped");
+		LED_Toggle();
 	}
 
     </code>
@@ -395,7 +405,7 @@ PAL_Status_t PAL_TimerStop(TimerId_t timerId);
 // *****************************************************************************
 /*
   Function:
-	void PAL_GetCurrentTime(uint32_t *currentTime)
+	uint32_t PAL_GetCurrentTime(void)
 
   Summary:
     Gets current time
@@ -407,7 +417,7 @@ PAL_Status_t PAL_TimerStop(TimerId_t timerId);
     None
 
   Parameters:
-   currentTime Returns current system time
+    None
 
   Returns:
     None 
@@ -415,14 +425,15 @@ PAL_Status_t PAL_TimerStop(TimerId_t timerId);
   Example:
     <code>
     uint32_t  currTime ;
-	PAL_GetCurrentTimer(&currTime);
+	currTime = PAL_GetCurrentTimer();
+    return currTime;
     </code>
 
   Remarks:
 	None
 */
 
-void PAL_GetCurrentTime(uint32_t *currentTime);
+uint32_t PAL_GetCurrentTime(void);
 
 
 // *****************************************************************************
@@ -454,10 +465,9 @@ void PAL_GetCurrentTime(uint32_t *currentTime);
 	
 	static void AppTimerCallback(void *paramCb)
 	{
-		//Toggle LED
+		LED_Toggle();
 	}
 	
-	//Get the Id for the sotware timer instance
 	PAL_TimerGetId(&appTimer);
 	
 	if (PAL_SUCCESS == PAL_TimerStart(appTimer,
@@ -466,15 +476,15 @@ void PAL_GetCurrentTime(uint32_t *currentTime);
 				(void *)AppTimerCallback,
 				NULL, CALLBACK_SINGLE))
 	{
-		//Timer Started
-		//ToggleLED
+		printf("Timer Started");
+		LED_Toggle();
 	}
 	
 	IsTimerRunning = PAL_TimerIsRunning(appTimer);
 	
 	if(IsTimerRunning)
 	{
-		//Timer is running
+		printf("Timer is Running");
 	}
 	
     </code>
@@ -483,7 +493,7 @@ void PAL_GetCurrentTime(uint32_t *currentTime);
 	None
 */
 
-bool PAL_TimerIsRunning(TimerId_t timer_id);
+bool PAL_TimerIsRunning(TimerId_t timerId);
 
 // *****************************************************************************
 /*
@@ -612,25 +622,6 @@ static inline uint32_t pal_sub_time_us(uint32_t a, uint32_t b)
  *
  */
 #define pal_trx_irq_dis()               NVIC_DisableIRQ((IRQn_Type) ZB_INT0_IRQn);
-
-// *****************************************************************************
-/*
- * \brief Enables the global interrupt
- */
-static inline void pal_global_irq_enable(void)
-{
-	ENABLE_GLOBAL_IRQ();
-}
-
-// *****************************************************************************
-/*
- * \brief Disables the global interrupt
- */
-static inline void pal_global_irq_disable(void)
-{
-	DISABLE_GLOBAL_IRQ();
-}
-
 
 /* ! @} */
 #ifdef __cplusplus

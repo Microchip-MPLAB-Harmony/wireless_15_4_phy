@@ -13,7 +13,7 @@
 
 // DOM-IGNORE-BEGIN
 /*******************************************************************************
-* Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) 2023 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -56,7 +56,7 @@
     None 
  */
 
-#define MIN_CHANNEL                 (11)
+#define MIN_CHANNEL                 (11U)
 
 // *****************************************************************************
 /* Maximum channel
@@ -68,7 +68,7 @@
    Remarks:
     None 
  */
-#define MAX_CHANNEL                 (26)
+#define MAX_CHANNEL                 (26U)
 
 // *****************************************************************************
 /* Valid Channel Mask
@@ -93,7 +93,7 @@
     None 
  */
 
-#define SYMBOLS_PER_OCTET                   (2)
+#define SYMBOLS_PER_OCTET                   (2U)
 
 // *****************************************************************************
 /* No of Symbols included in the preamble
@@ -106,7 +106,7 @@
     None 
  */
 
-#define NO_SYMBOLS_PREAMBLE                 (8)
+#define NO_SYMBOLS_PREAMBLE                 (8U)
 
 // *****************************************************************************
 /* Number of symbols included in the SFD field
@@ -119,7 +119,7 @@
     None 
  */
 
-#define NO_SYMBOLS_SFD                      (2)
+#define NO_SYMBOLS_SFD                      (2U)
 
 // *****************************************************************************
 /* Number of symbols forming the synchronization header (SHR) for the current
@@ -348,14 +348,14 @@
 #define PROMISCUOUS_DISABLE                 (0)
 
 // *****************************************************************************
-/* NUMBER_OF_TOTAL_STACK_TIMERS
+/* NUMBER_OF_TOTAL_PHY_TIMERS
  
    Summary:
     Total numbers of software timer instance used by PHY Layer
    Remarks:
     None 
  */
-#define NUMBER_OF_TOTAL_STACK_TIMERS        (1)
+#define NUMBER_OF_TOTAL_PHY_TIMERS        (1)
 
 #endif /* PHY_CONSTANTS_H */
 

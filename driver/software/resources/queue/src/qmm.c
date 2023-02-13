@@ -15,7 +15,7 @@
 
 // DOM-IGNORE-BEGIN
 /*******************************************************************************
-* Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) 2023 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -43,10 +43,10 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include "pal.h"
+
 #include "bmm.h"
 #include "qmm.h"
-#include "configuration.h"
+
 #include "app_config.h"
 
 #if (TOTAL_NUMBER_OF_BUFS > 0)
@@ -114,8 +114,8 @@ void qmm_queue_append(queue_t *q, buffer_t *buf)
 #ifdef ENABLE_QUEUE_CAPACITY
 	qmm_status_t  status;
 #endif  /* ENABLE_QUEUE_CAPACITY */
+    uint8_t sizeEmpty = 0;
 
-//	ENTER_CRITICAL_REGION();
 
 #ifdef ENABLE_QUEUE_CAPACITY
 	/* Check if queue is full */
@@ -126,7 +126,7 @@ void qmm_queue_append(queue_t *q, buffer_t *buf)
 #endif  /* ENABLE_QUEUE_CAPACITY */
 	{
 		/* Check whether queue is empty */
-		if (q->size == 0) {
+		if (q->size == sizeEmpty) {
 			/* Add the buffer at the head */
 			q->head = buf;
 		} else {
@@ -143,18 +143,11 @@ void qmm_queue_append(queue_t *q, buffer_t *buf)
 		/* Update size */
 		q->size++;
 
-#if (_DEBUG_ > 1)
-		if (q->head == NULL) {
-			Assert("Corrupted queue: Null pointer has been queued");
-		}
-#endif
-
 #ifdef ENABLE_QUEUE_CAPACITY
 		status = QMM_SUCCESS;
 #endif  /* ENABLE_QUEUE_CAPACITY */
 	}
 
-	//LEAVE_CRITICAL_REGION();
 
 #ifdef ENABLE_QUEUE_CAPACITY
 	return (status);
@@ -188,10 +181,11 @@ static buffer_t *queue_read_or_remove(queue_t *q,
 {
 	buffer_t *buffer_current = NULL;
 	buffer_t *buffer_previous;
+    uint8_t sizeEmpty = 0;
+    uint8_t buffer_match = 0;
 
-//	ENTER_CRITICAL_REGION();
 	/* Check whether queue is empty */
-	if (q->size != 0) {
+	if (q->size != sizeEmpty) {
 		buffer_current = q->head;
 		buffer_previous = q->head;
 
@@ -204,7 +198,7 @@ static buffer_t *queue_read_or_remove(queue_t *q,
 						(void *)buffer_current->body,
 						search->handle);
 
-				if (match) {
+				if (match > buffer_match) {
 					/* Break, if search criteria matches */
 					break;
 				}
@@ -248,8 +242,6 @@ static buffer_t *queue_read_or_remove(queue_t *q,
 			}
 		}
 	} /* q->size != 0 */
-
-//	LEAVE_CRITICAL_REGION();
 
 	/* Return the buffer. note that pointer to header of buffer is returned
 	**/
@@ -302,20 +294,18 @@ buffer_t *qmm_queue_read(queue_t *q, search_t *search)
 void qmm_queue_flush(queue_t *q)
 {
 	buffer_t *buf_to_free;
+    uint8_t sizeEmpty = 0;
 
-	while (q->size > 0) {
+	while (q->size > sizeEmpty) {
 		/* Remove the buffer from the queue and free it */
 		buf_to_free = qmm_queue_remove(q, NULL);
 
 		if (NULL == buf_to_free) {
-#if (_DEBUG_ > 0)
-			ABORT("Corrupted queue");
-#endif
-			q->size = 0;
-			return;
+			q->size = sizeEmpty;
 		}
-
-		bmm_buffer_free(buf_to_free);
+        else{           
+            bmm_buffer_free(buf_to_free);
+        }
 	}
 }
 

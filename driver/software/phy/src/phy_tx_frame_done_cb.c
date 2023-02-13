@@ -13,7 +13,7 @@
 
 // DOM-IGNORE-BEGIN
 /*******************************************************************************
-* Copyright (C) 2018 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) 2023 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -74,8 +74,8 @@
 __attribute__((weak)) void PHY_TxDoneCallback(PHY_Retval_t status, PHY_FrameInfo_t *frame)
 {
 	/* Keep compiler happy. */
-	status = status;
-	frame = frame;
+	(void)status;
+	(void)frame;
 }
 
 /* EOF */

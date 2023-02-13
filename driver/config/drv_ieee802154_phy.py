@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MLS CONFIGURATIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ IEEE 802.15.4 PHY CONFIGURATIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #-------------------------------------------------------------------------------
 
 #-------------------------------------------------------------------------------
@@ -40,7 +40,6 @@ def instantiateComponent(ieee802154phy):
     includeResources = [
         ["resources/buffer/inc/bmm.h", conditionAlwaysInclude],
         ["resources/queue/inc/qmm.h", conditionAlwaysInclude],
-        ["resources/module_config/app_config.h", conditionAlwaysInclude]
     ]
     includePhy = [
         ["phy/inc/phy.h", conditionAlwaysInclude],
@@ -88,7 +87,6 @@ def instantiateComponent(ieee802154phy):
         ["/IEEE_802154_PHY/phy/inc/", conditionAlwaysInclude],
         ["/IEEE_802154_PHY/resources/buffer/inc/", conditionAlwaysInclude],
         ["/IEEE_802154_PHY/resources/queue/inc/", conditionAlwaysInclude],
-        ["/IEEE_802154_PHY/resources/module_config/", conditionAlwaysInclude],
     ]
     for incPathEntry in includePathsPhy:
         setIncPath(ieee802154phy, configName, incPathEntry)
@@ -103,10 +101,19 @@ def instantiateComponent(ieee802154phy):
 
     # === File templates processing
     phyConfHeader = ieee802154phy.createFileSymbol("PHY_CONF_HEADER", None)
-    phyConfHeader.setSourcePath("/driver/templates/phy_config.h.ftl")
-    phyConfHeader.setOutputName("phy_config.h")
-    phyConfHeader.setDestPath("/IEEE_802154_PHY/phy/inc/")
-    phyConfHeader.setProjectPath("config/" + configName + "/IEEE_802154_PHY/phy/inc/")
+    phyConfHeader.setSourcePath("/driver/templates/stack_config.h.ftl")
+    phyConfHeader.setOutputName("stack_config.h")
+    phyConfHeader.setDestPath('../../')
+    phyConfHeader.setProjectPath('')
+    phyConfHeader.setType("HEADER")
+    phyConfHeader.setOverwrite(True)
+    phyConfHeader.setMarkup(True)
+    
+    phyConfHeader = ieee802154phy.createFileSymbol("APP_CONF_HEADER", None)
+    phyConfHeader.setSourcePath("/driver/templates/app_config.h.ftl")
+    phyConfHeader.setOutputName("app_config.h")
+    phyConfHeader.setDestPath('../../')
+    phyConfHeader.setProjectPath('')
     phyConfHeader.setType("HEADER")
     phyConfHeader.setOverwrite(True)
     phyConfHeader.setMarkup(True)
@@ -164,7 +171,7 @@ def instantiateComponent(ieee802154phy):
     libIeee802154Phy.setOutputName("lib-ieee802154_phy_pic32cxbz-v1.0.0.a")
 #end instantiateComponent
 
-def finalizeComponent(mlsComponent):
+def finalizeComponent(ieee802154phy):
     pass
 #end finalizeComponent
 

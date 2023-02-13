@@ -13,7 +13,7 @@
 
 // DOM-IGNORE-BEGIN
 /*******************************************************************************
-* Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) 2023 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -230,12 +230,10 @@ void qmm_queue_init(queue_t *q);
     <code>
 	queue_t app_queue;
 	buffer_t *app_buf;
-	// Allocate the buffer 
 	app_buf = bmm_buffer_alloc(LARGE_BUFFER_SIZE);
 	
 	uint8_t queue_size = 10;
     qmm_queue_init(&app_queue, queue_size);
-	// Append buffer in queue
 	qmm_queue_append(&app_queue, app_buf);
 	
     </code>
@@ -281,14 +279,11 @@ void qmm_queue_append(queue_t *q, buffer_t *buf);
     <code>
 	queue_t app_queue;
 	buffer_t *app_buf;
-	// Allocate the buffer 
 	app_buf = bmm_buffer_alloc(LARGE_BUFFER_SIZE);
 	
 	uint8_t queue_size = 10;
     qmm_queue_init(&app_queue, queue_size);
-	// Append buffer in queue
 	qmm_queue_append(&app_queue, app_buf);
-	//Remove buffer from queue
 	app_buf = qmm_queue_remove(&app_queue, NULL);
     </code>
 
@@ -328,14 +323,11 @@ buffer_t* qmm_queue_remove(queue_t *q, search_t *search);
     <code>
 	queue_t app_queue;
 	buffer_t *app_buf;
-	// Allocate the buffer 
 	app_buf = bmm_buffer_alloc(LARGE_BUFFER_SIZE);
 	
 	uint8_t queue_size = 10;
     qmm_queue_init(&app_queue, queue_size);
-	// Append buffer in queue
 	qmm_queue_append(&app_queue, app_buf);
-	//Read buffer from queue
 	app_buf = qmm_queue_read(&app_queue, NULL);
     </code>
 
@@ -370,7 +362,7 @@ buffer_t* qmm_queue_read(queue_t *q, search_t *search);
     <code>
 	queue_t app_queue;
 	buffer_t *app_buf;
-	// Allocate the buffer 
+
 	app_buf = bmm_buffer_alloc(LARGE_BUFFER_SIZE);
 	
 	uint8_t queue_size = 10;

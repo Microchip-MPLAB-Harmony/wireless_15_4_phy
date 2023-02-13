@@ -14,7 +14,7 @@
 
 // DOM-IGNORE-BEGIN
 /*******************************************************************************
-* Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) 2023 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -186,7 +186,7 @@ void bmm_buffer_init(void);
 		
 		if (buffer == NULL)
 		{
-			//Buffer is unavailable
+			printf("Buffer is unavailable");
 		}
 		
     </code>
@@ -236,10 +236,9 @@ buffer_t* bmm_buffer_alloc(uint8_t size);
 		
 		if (buffer != NULL)
 		{
-			//Use the buffer
+			printf("Use the buffer");
 		}
 		
-		//Buffer Freeing
 		bmm_buffer_free(buffer);		
     </code>
 

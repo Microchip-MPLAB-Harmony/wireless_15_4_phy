@@ -14,7 +14,7 @@
 
 //DOM-IGNORE-BEGIN
 /*******************************************************************************
-* Copyright (C) 2018 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) 2023 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -140,7 +140,7 @@ typedef enum ch_pg_tag {
     None 
  */
  
-#define MIN_FRAME_LENGTH                (8)
+#define MIN_FRAME_LENGTH                (8U)
 
 // *****************************************************************************
 /* Max MGMT Frame Length
@@ -153,7 +153,7 @@ typedef enum ch_pg_tag {
     None 
  */
  
-#define MAX_MGMT_FRAME_LENGTH           (30)
+#define MAX_MGMT_FRAME_LENGTH           (30U)
 
 // *****************************************************************************
 // *****************************************************************************
@@ -172,7 +172,7 @@ typedef enum ch_pg_tag {
     None 
  */
  
-#define aMaxPHYPacketSize               (127)
+#define aMaxPHYPacketSize               (127U)
 
 // *****************************************************************************
 /* Maximum turnaround Time
@@ -186,7 +186,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define aTurnaroundTime                 (12)
+#define aTurnaroundTime                 (12U)
 
 // *****************************************************************************
 /* maximum size of an MPDU
@@ -200,7 +200,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define aMaxSIFSFrameSize               (18)
+#define aMaxSIFSFrameSize               (18U)
 
 // *****************************************************************************
 /* 
@@ -213,7 +213,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define aMinMPDUOverhead                 (9)
+#define aMinMPDUOverhead                 (9U)
 
 // *****************************************************************************
 /* 
@@ -226,7 +226,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define aNumSuperframeSlots             (16)
+#define aNumSuperframeSlots             (16U)
 
 // *****************************************************************************
 /* 
@@ -240,7 +240,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define aUnitBackoffPeriod              (20)
+#define aUnitBackoffPeriod              (20U)
 
 
 // *****************************************************************************
@@ -255,7 +255,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define aBaseSlotDuration               (60)
+#define aBaseSlotDuration               (60U)
 
 // *****************************************************************************
 /* 
@@ -411,7 +411,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define PHY_OVERHEAD                    (5)
+#define PHY_OVERHEAD                    (5U)
 
 // *****************************************************************************
 // *****************************************************************************
@@ -433,7 +433,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define macAckWaitDuration              (0x40)
+#define macAckWaitDuration              (0x40U)
 
 // *****************************************************************************
 /* macMaxCSMABackoffs
@@ -447,7 +447,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define macMaxCSMABackoffs              (0x4E)
+#define macMaxCSMABackoffs              (0x4EU)
 
 // *****************************************************************************
 /* macMaxCSMABackoffs_def
@@ -460,7 +460,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define macMaxCSMABackoffs_def          (4)
+#define macMaxCSMABackoffs_def          (4U)
 
 // *****************************************************************************
 /* macMinBE
@@ -551,7 +551,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define macShortAddress_def             (0xFFFF)
+#define macShortAddress_def             (0xFFFFU)
 
 // *****************************************************************************
 /* macMaxBE
@@ -564,7 +564,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define macMaxBE                        (0x57)
+#define macMaxBE                        (0x57U)
 
 // *****************************************************************************
 /* macMaxFrameRetries
@@ -577,7 +577,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define macMaxFrameRetries              (0x59)
+#define macMaxFrameRetries              (0x59U)
 
 // *****************************************************************************
 /* macMaxFrameRetries
@@ -591,7 +591,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define NO_PIB_INDEX                    (0)
+#define NO_PIB_INDEX                    (0U)
 
 // *****************************************************************************
 /* macMinLIFSPeriod
@@ -604,7 +604,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define macMinLIFSPeriod                (0x5E)
+#define macMinLIFSPeriod                (0x5EU)
 
 // *****************************************************************************
 /* macMinLIFSPeriod_def
@@ -617,7 +617,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define macMinLIFSPeriod_def            (40)
+#define macMinLIFSPeriod_def            (40U)
 
 // *****************************************************************************
 /* macMinSIFSPeriod
@@ -630,7 +630,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define macMinSIFSPeriod                (0x5F)
+#define macMinSIFSPeriod                (0x5FU)
 
 // *****************************************************************************
 /* macMinSIFSPeriod_def
@@ -643,7 +643,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define macMinSIFSPeriod_def            (12)
+#define macMinSIFSPeriod_def            (12U)
 
 // *****************************************************************************
 /* macMinSIFSPeriod_def
@@ -657,7 +657,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define macIeeeAddress                  (0xF0)
+#define macIeeeAddress                  (0xF0U)
 
 // *****************************************************************************
 // *****************************************************************************
@@ -677,7 +677,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define PHY_SUCCESS_DATA_PENDING        (0x10)
+#define PHY_SUCCESS_DATA_PENDING        (0x10U)
 
 // *****************************************************************************
 /* ED_SAMPLE_DURATION_SYM
@@ -690,7 +690,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define ED_SAMPLE_DURATION_SYM          (8)
+#define ED_SAMPLE_DURATION_SYM          (8U)
 
 // *****************************************************************************
 /* FCF_FRAMETYPE_BEACON
@@ -703,7 +703,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define FCF_FRAMETYPE_BEACON            (0x00)
+#define FCF_FRAMETYPE_BEACON            (0x00U)
 
 // *****************************************************************************
 /* FCF_FRAMETYPE_DATA
@@ -716,7 +716,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define FCF_FRAMETYPE_DATA              (0x01)
+#define FCF_FRAMETYPE_DATA              (0x01U)
 
 // *****************************************************************************
 /* FCF_FRAMETYPE_ACK
@@ -729,7 +729,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define FCF_FRAMETYPE_ACK               (0x02)
+#define FCF_FRAMETYPE_ACK               (0x02U)
 
 // *****************************************************************************
 /* FCF_FRAMETYPE_ACK
@@ -742,7 +742,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define FCF_FRAMETYPE_MAC_CMD           (0x03)
+#define FCF_FRAMETYPE_MAC_CMD           (0x03U)
 
 // *****************************************************************************
 /* FCF_FRAMETYPE_LLDN
@@ -755,7 +755,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define FCF_FRAMETYPE_LLDN              (0x04)
+#define FCF_FRAMETYPE_LLDN              (0x04U)
 
 // *****************************************************************************
 /* FCF_FRAMETYPE_MP
@@ -768,7 +768,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define FCF_FRAMETYPE_MP                (0x05)
+#define FCF_FRAMETYPE_MP                (0x05U)
 
 // *****************************************************************************
 /* FCF_SET_FRAMETYPE
@@ -794,7 +794,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define FCF_SECURITY_ENABLED            (1 << 3)
+#define FCF_SECURITY_ENABLED            (1U << 3U)
 
 // *****************************************************************************
 /* FCF_FRAME_PENDING
@@ -807,7 +807,7 @@ typedef enum ch_pg_tag {
     None 
  */
  
-#define FCF_FRAME_PENDING               (1 << 4)
+#define FCF_FRAME_PENDING               (1U << 4U)
 
 // *****************************************************************************
 /* FCF_ACK_REQUEST
@@ -820,7 +820,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define FCF_ACK_REQUEST                 (1 << 5)
+#define FCF_ACK_REQUEST                 (1U << 5U)
 
 // *****************************************************************************
 /* FCF_PAN_ID_COMPRESSION
@@ -833,7 +833,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define FCF_PAN_ID_COMPRESSION          (1 << 6)
+#define FCF_PAN_ID_COMPRESSION          (1U << 6U)
 
 // *****************************************************************************
 /* FCF_FRAME_VERSION_2003
@@ -847,7 +847,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define FCF_FRAME_VERSION_2003          (0 << 12)
+#define FCF_FRAME_VERSION_2003          (0U << 12U)
 
 // *****************************************************************************
 /* FCF_FRAME_VERSION_2006
@@ -861,7 +861,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define FCF_FRAME_VERSION_2006          (1 << 12)
+#define FCF_FRAME_VERSION_2006          (1U << 12U)
 
 // *****************************************************************************
 /* FCF_FRAME_VERSION_2012
@@ -875,7 +875,7 @@ typedef enum ch_pg_tag {
     None 
  */
  
-#define FCF_FRAME_VERSION_2012          (2 << 12)
+#define FCF_FRAME_VERSION_2012          (2U << 12U)
 
 // *****************************************************************************
 /* FCF1_FV_SHIFT
@@ -888,7 +888,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define FCF1_FV_SHIFT                   (4)
+#define FCF1_FV_SHIFT                   (4U)
 
 // *****************************************************************************
 /* FCF1_FV_MASK
@@ -901,7 +901,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define FCF1_FV_MASK                    (3 << FCF1_FV_SHIFT)
+#define FCF1_FV_MASK                    (3U << FCF1_FV_SHIFT)
 
 // *****************************************************************************
 /* FCF1_FV_2003
@@ -915,7 +915,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define FCF1_FV_2003                    (0)
+#define FCF1_FV_2003                    (0U)
 
 // *****************************************************************************
 /* FCF1_FV_2006
@@ -929,7 +929,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define FCF1_FV_2006                    (1)
+#define FCF1_FV_2006                    (1U)
 
 // *****************************************************************************
 /* FCF1_FV_2012
@@ -943,7 +943,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define FCF1_FV_2012                    (2)
+#define FCF1_FV_2012                    (2U)
 
 // *****************************************************************************
 /* FCF_NO_ADDR
@@ -956,7 +956,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define FCF_NO_ADDR                     (0x00)
+#define FCF_NO_ADDR                     (0x00U)
 
 // *****************************************************************************
 /* FCF_RESERVED_ADDR
@@ -969,7 +969,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define FCF_RESERVED_ADDR               (0x01)
+#define FCF_RESERVED_ADDR               (0x01U)
 
 // *****************************************************************************
 /* FCF_SHORT_ADDR
@@ -982,7 +982,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define FCF_SHORT_ADDR                  (0x02)
+#define FCF_SHORT_ADDR                  (0x02U)
 
 // *****************************************************************************
 /* FCF_LONG_ADDR
@@ -995,7 +995,7 @@ typedef enum ch_pg_tag {
     None 
  */
  
-#define FCF_LONG_ADDR                   (0x03)
+#define FCF_LONG_ADDR                   (0x03U)
 
 // *****************************************************************************
 /* FCF_DEST_ADDR_OFFSET
@@ -1008,7 +1008,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define FCF_DEST_ADDR_OFFSET            (10)
+#define FCF_DEST_ADDR_OFFSET            (10U)
 
 // *****************************************************************************
 /* FCF_SOURCE_ADDR_OFFSET
@@ -1021,7 +1021,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define FCF_SOURCE_ADDR_OFFSET          (14)
+#define FCF_SOURCE_ADDR_OFFSET          (14U)
 
 // *****************************************************************************
 /* FCF_SET_SOURCE_ADDR_MODE
@@ -1034,8 +1034,8 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define FCF_SET_SOURCE_ADDR_MODE(x)     ((unsigned int)((x) << \
-	FCF_SOURCE_ADDR_OFFSET))
+#define FCF_SET_SOURCE_ADDR_MODE(x)     ((uint16_t)(((uint16_t)x) << \
+	(uint16_t)FCF_SOURCE_ADDR_OFFSET))
 
 // *****************************************************************************
 /* FCF_SET_DEST_ADDR_MODE
@@ -1048,8 +1048,8 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define FCF_SET_DEST_ADDR_MODE(x)       ((unsigned int)((x) << \
-	FCF_DEST_ADDR_OFFSET))
+#define FCF_SET_DEST_ADDR_MODE(x)       ((uint16_t)(((uint16_t)x) << \
+	(uint16_t)FCF_DEST_ADDR_OFFSET))
 
 // *****************************************************************************
 /* FCF_FRAMETYPE_MASK
@@ -1062,7 +1062,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define FCF_FRAMETYPE_MASK              (0x07)
+#define FCF_FRAMETYPE_MASK              (0x07U)
 
 // *****************************************************************************
 /* FCF_GET_FRAMETYPE
@@ -1088,7 +1088,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define BROADCAST                       (0xFFFF)
+#define BROADCAST                       (0xFFFFU)
 
 // *****************************************************************************
 /* FCF_2_DEST_ADDR_OFFSET
@@ -1101,7 +1101,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define FCF_2_DEST_ADDR_OFFSET              (2)
+#define FCF_2_DEST_ADDR_OFFSET              (2U)
 
 // *****************************************************************************
 /* FCF_2_SOURCE_ADDR_OFFSET
@@ -1114,7 +1114,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define FCF_2_SOURCE_ADDR_OFFSET            (6)
+#define FCF_2_SOURCE_ADDR_OFFSET            (6U)
 
 
 // *****************************************************************************
@@ -1132,7 +1132,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define PL_POS_FCF_1                        (1)
+#define PL_POS_FCF_1                        (1U)
 
 // *****************************************************************************
 /* PL_POS_FCF_2
@@ -1145,7 +1145,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define PL_POS_FCF_2                        (2)
+#define PL_POS_FCF_2                        (2U)
 
 // *****************************************************************************
 /* PL_POS_SEQ_NUM
@@ -1159,7 +1159,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define PL_POS_SEQ_NUM                      (3)
+#define PL_POS_SEQ_NUM                      (3U)
 
 // *****************************************************************************
 /* PL_POS_DST_PAN_ID_START
@@ -1173,7 +1173,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define PL_POS_DST_PAN_ID_START             (4)
+#define PL_POS_DST_PAN_ID_START             (4U)
 
 // *****************************************************************************
 /* PL_POS_DST_ADDR_START
@@ -1187,7 +1187,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define PL_POS_DST_ADDR_START               (6)
+#define PL_POS_DST_ADDR_START               (6U)
 
 // *****************************************************************************
 /* LENGTH_FIELD_LEN
@@ -1200,7 +1200,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define LENGTH_FIELD_LEN                    (1)
+#define LENGTH_FIELD_LEN                    (1U)
 
 // *****************************************************************************
 /* LQI_LEN
@@ -1213,7 +1213,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define LQI_LEN                             (1)
+#define LQI_LEN                             (1U)
 
 // *****************************************************************************
 /* ED_VAL_LEN
@@ -1226,7 +1226,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define ED_VAL_LEN                          (1)
+#define ED_VAL_LEN                          (1U)
 
 // *****************************************************************************
 /* FCF_LEN
@@ -1239,7 +1239,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define FCF_LEN                             (2)
+#define FCF_LEN                             (2U)
 
 // *****************************************************************************
 /* FCS_LEN
@@ -1252,7 +1252,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define FCS_LEN                             (2)
+#define FCS_LEN                             (2U)
 
 // *****************************************************************************
 /* SEQ_NUM_LEN
@@ -1265,7 +1265,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define SEQ_NUM_LEN                         (1)
+#define SEQ_NUM_LEN                         (1U)
 
 // *****************************************************************************
 /* EXT_ADDR_LEN
@@ -1278,7 +1278,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define EXT_ADDR_LEN                        (8)
+#define EXT_ADDR_LEN                        (8U)
 
 // *****************************************************************************
 /* SHORT_ADDR_LEN
@@ -1291,7 +1291,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define SHORT_ADDR_LEN                      (2)
+#define SHORT_ADDR_LEN                      (2U)
 
 // *****************************************************************************
 /* PAN_ID_LEN
@@ -1304,7 +1304,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define PAN_ID_LEN                          (2)
+#define PAN_ID_LEN                          (2U)
 
 // *****************************************************************************
 /* ACK_PAYLOAD_LEN
@@ -1317,7 +1317,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define ACK_PAYLOAD_LEN                     (0x03)
+#define ACK_PAYLOAD_LEN                     (0x03U)
 
 // *****************************************************************************
 /* CONV_phyTransmitPower_TO_DBM
@@ -1333,11 +1333,11 @@ typedef enum ch_pg_tag {
 
 #define CONV_phyTransmitPower_TO_DBM(phyTransmitPower_value) \
    ( \
-		((phyTransmitPower_value & 0x20) == 0x00) ? \
-		((int8_t)(phyTransmitPower_value & 0x3F)) : \
+		(((phyTransmitPower_value) & 0x20U) == 0x00U) ? \
+		((int8_t)((phyTransmitPower_value) & 0x3FU)) : \
 		((-1) *	\
-		(int8_t)((~((phyTransmitPower_value & \
-		0x1F) - 1)) & 0x1F)) \
+		(int8_t)((~(((phyTransmitPower_value) & \
+		0x1FU) - 1)) & 0x1FU)) \
 	)
 
 // *****************************************************************************
@@ -1352,20 +1352,20 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define CONV_DBM_TO_phyTransmitPower(dbm_value)  \
-   ( \
-		dbm_value < -32 ? \
-		0x20 : \
-		( \
-			dbm_value > 31 ? \
-			0x1F : \
+#define CONV_DBM_TO_phyTransmitPower(dbm_value)   \
+	( \
+		(dbm_value) < -32 ? \
+		0x20U : \
+		(\
+			(dbm_value) > 31 ? \
+			0x1FU : \
 			( \
-				dbm_value < 0 ?	\
-				(((~(((uint8_t)((-1) * \
-				dbm_value)) - 1)) & 0x1F) | 0x20) : \
-				(uint8_t)dbm_value \
-			) \
-		) \
+				(dbm_value) < 0 ? \
+				((uint8_t)(((~(((uint8_t)((uint8_t)(-1) * \
+				(uint8_t)(dbm_value))) - 1U)) & 0x1FU) | 0x20U)) : \
+				(uint8_t)(dbm_value) \
+			)\
+		)\
 	)
  
 
