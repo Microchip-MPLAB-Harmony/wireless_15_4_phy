@@ -90,7 +90,7 @@
 #endif
 
 /*
- * TAL PIB default values
+ * Configuration of Large and Small Buffers Used in Radio Layer
  */
 #define NUMBER_OF_LARGE_PHY_BUFS          (${PHY_INTEGER_BMMLARGEBUFFERS}U)
 #define NUMBER_OF_SMALL_PHY_BUFS          (${PHY_INTEGER_BMMSMALLBUFFERS}U)
@@ -100,4 +100,4 @@
 
 /* === PROTOTYPES ========================================================== */
 
-#endif /* TAL_CONFIG_H */
+#endif /* STACK_CONFIG_H */

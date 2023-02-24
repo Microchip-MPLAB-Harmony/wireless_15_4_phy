@@ -28,19 +28,10 @@ The following are the funcionalities of PHY layer
 -	No issues
 
 ## Development Tools
--	MPLAB X v6.00
--	MPLAB® XC32 C/C++ Compiler v4.10
--	MPLAB® X IDE plug-ins: MPLAB® Code Configurator (MCC) v5.1.17 and above
--	Device Pack: PIC32CX-BZ2-DFP (1.0.107)
-
-## Harmony 3 Dependent Packages
--	bsp - v3.13.0
--	csp - v3.13.1
--	core - v3.11.1
--	dev_packs - v3.13.1
--	CMSISFreeRTOS - v10.3.1
--	wireless_pic32cxbz_wbz -v1.1.0
--	mhc - v3.8.5
+-	MPLAB X v6.05
+-	MPLAB® XC32 C/C++ Compiler v4.21
+-	MPLAB® X IDE plug-ins: MPLAB® Code Configurator (MCC) v5.2.2 and above
+-	Device Pack: PIC32CX-BZ2-DFP (1.1.218)
 
 ## Notes
 -	None
