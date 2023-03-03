@@ -317,6 +317,23 @@ typedef enum phy_trx_status_tag{
     PHY_TRX_DEEP_SLEEP = 0x20
 }PHY_TrxStatus_t;
 
+// ****************************************************************************
+/* Short address type declaration */
+typedef uint16_t ShortAddr_t; 
+
+// ****************************************************************************
+/* Ieee address type declaration */
+typedef uint64_t IeeeAddr_t;   
+
+// ****************************************************************************
+/* Union of possible MAC address types*/
+typedef union
+{
+  ShortAddr_t shortAddr;
+  IeeeAddr_t   ieeeAddr;
+  uint8_t     val[8];
+} PHY_Addr_t;
+
 // *****************************************************************************
 // *****************************************************************************
 // Section: Macros
@@ -1865,6 +1882,48 @@ uint32_t PHY_GetSWVersion(void);
     None 
 */
 PHY_Retval_t PHY_ConvertTxPwrRegValToDbm(uint8_t regValue, int8_t *dbmValue);
+
+// *****************************************************************************
+/*
+  Function:
+	bool PHY_IsFramePendingFromNextLayer(PHY_Addr_t *addr, uint8_t *addrMode)
+
+  Summary:
+    Function to check whether Any frame is pending from higher layer upon 
+	reception of Datarequest command frame (Ex: MAC/APP)
+
+  Description:
+    Function to check whether Any frame is pending from higher layer upon 
+	reception of Datarequest command frame (Ex: MAC/APP)
+	so that the automatic acknowledgement frame will have proper FramePeding bit status
+ 
+  Precondition:
+    PHY_Init() should have been called before calling this function.
+
+  Parameters:
+    addr  - Source Address of the Datarequest (Either Short/Long) frame received
+    addrMode - Either FCF_SHORT_ADDR or FCF_LONG_ADDR  
+
+  Returns:
+    PHY_SUCCESS -  If reg value can be converted into dBm value
+    PHY_FAILURE -  If regVaue is holding the invalid value
+
+  Example:
+    <code>
+    	bool PHY_IsFramePendingFromNextLayer(PHY_Addr_t *addr, uint8_t *addrMode)
+		{
+			bool isFramePening = false;
+			return isFramePending;
+		}  
+    </code>
+
+  Remarks:
+    This function is invloked by phy layer on thereception of Datarequest frame in ISR context.
+	The higher layer has to implement this function approprietely to set the framepending bit in Acknoewledgement frame.
+	This function is weak by default with FramePending bit set to false. 
+*/
+
+bool PHY_IsFramePendingFromNextLayer(PHY_Addr_t *addr, uint8_t *addrMode);
 
 //DOM-IGNORE-BEGIN
 #ifdef __cplusplus
