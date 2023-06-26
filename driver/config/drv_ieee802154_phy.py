@@ -34,6 +34,7 @@ def instantiateComponent(ieee802154phy):
     configName = Variables.get("__CONFIGURATION_NAME")
     print configName
     # === Activate required components automatically
+    global requiredComponents
     requiredComponents = [
         "HarmonyCore",
         "sys_time",
@@ -53,6 +54,27 @@ def instantiateComponent(ieee802154phy):
     Database.setSymbolValue("core", "ZIGBEE_CLOCK_ENABLE", True)
 
     # === Interfaces
+
+    # === PHY RTOS Configuration
+    global phyRtosConfig
+    phyRtosConfig = ieee802154phy.createMenuSymbol("PHY_RTOS_CONFIG", None)
+    phyRtosConfig.setLabel("PHY RTOS Configuration")
+    phyRtosConfig.setVisible(True)
+
+    global createPhyRtosTask
+    # === Create PHY RTOS Task
+    createPhyRtosTask = ieee802154phy.createBooleanSymbol('CREATE_PHY_RTOS_TASK', phyRtosConfig)
+    createPhyRtosTask.setLabel('Create PHY RTOS Task')
+    createPhyRtosTask.setDefaultValue(True)
+    
+    global createPhySemaphore
+    # === Create PHY Semaphore
+    createPhySemaphore = ieee802154phy.createBooleanSymbol('CREATE_PHY_SEMAPHORE', phyRtosConfig)
+    createPhySemaphore.setLabel('Create PHY Semaphore')
+    createPhySemaphore.setVisible(False)
+    createPhySemaphore.setDefaultValue(True)
+
+    
     # === Radio menu
     execfile(Module.getPath() + "/driver/config/drv_ieee802154_phy_bmm.py")
     
@@ -300,3 +322,5 @@ def phyCommentBmmSmallBuffersDepend(sourceSymbol, event):
     phyCommentBmmSmallBuffers.setLabel("Memory occupied: ~%d bytes" %totalMem)
 #end phyCommentBmmSmallBuffersDepend
 
+def destroyComponent(ieee802154phy):
+    Database.deactivateComponents(requiredComponents)

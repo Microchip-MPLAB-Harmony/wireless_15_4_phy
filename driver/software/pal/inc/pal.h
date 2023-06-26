@@ -623,6 +623,42 @@ static inline uint32_t pal_sub_time_us(uint32_t a, uint32_t b)
  */
 #define pal_trx_irq_dis()               NVIC_DisableIRQ((IRQn_Type) ZB_INT0_IRQn);
 
+// *****************************************************************************
+
+/*
+  Function:
+	PAL_Status_t PAL_GetRandomNumber(uint8_t *rnOutput, uint16_t rnLength)
+
+  Summary:
+    Random number generation
+
+  Description:
+    This function is used to generate random number
+
+  Precondition:
+    None
+
+  Parameters:
+    rnOutput - random number
+    rnLength - size of random number
+
+  Returns:
+    None
+  Example:
+    <code>  
+	uint64_t randomNumber;    
+    if (PAL_SUCCESS != PAL_GetRandomNumber((uint8_t*)&randomNumber, sizeof(randomNumber))) {
+		return PAL_FAILURE;
+	}    
+    PHY_PibSet(macIeeeAddress,(PibValue_t *) &randomNumber);
+    </code>
+
+  Remarks:
+	None
+*/
+
+PAL_Status_t PAL_GetRandomNumber(uint8_t *rnOutput, uint16_t rnLength);
+
 /* ! @} */
 #ifdef __cplusplus
 } /* extern "C" */

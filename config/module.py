@@ -43,5 +43,6 @@ def loadModule():
         ieee802154phy.addDependency('SysTimeDependency', 'SYS_TIME', 'SYS_TIME', True, True)
         ieee802154phy.addDependency('FreeRtosDependency', 'RTOS', 'RTOS', True, True)
         ieee802154phy.addDependency('DeviceSupportDependency', 'Device_Support', 'Device_Support', True, True)
+        ieee802154phy.addCapability('ieee802154phy_Capability', 'IEEE 802.15.4 PHY', True)
 
         

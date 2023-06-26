@@ -377,3 +377,28 @@ static void palTimerCallback(uintptr_t paramCb)
         }
     }
 }
+
+/**
+ * @brief Gets Random number
+ * @param[rnOutput] random number @param[rnLength] size of Random number
+ */
+
+PAL_Status_t PAL_GetRandomNumber(uint8_t *rnOutput, uint16_t rnLength)
+{
+    uint32_t random;
+    uint8_t *end = rnOutput;
+    end += rnLength;
+    for (uint16_t i = 0; i < (rnLength / sizeof(uint32_t)); i++)
+    {
+        random = TRNG_ReadData();
+        *((uint32_t *)rnOutput) = random;
+        rnOutput += sizeof(uint32_t);
+    }
+    
+    if ((rnLength % sizeof(uint32_t)) != 0){
+        random = TRNG_ReadData();
+        memcpy((uint8_t *)rnOutput, (uint8_t *)random, (end - rnOutput));
+    }
+
+    return PAL_SUCCESS;
+}
