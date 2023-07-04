@@ -28,10 +28,10 @@ The following are the funcionalities of PHY layer
 -	No issues
 
 ## Development Tools
--	MPLAB X v6.05
+-	MPLAB X v6.10
 -	MPLAB® XC32 C/C++ Compiler v4.21
--	MPLAB® X IDE plug-ins: MPLAB® Code Configurator (MCC) v5.2.2 and above
--	Device Pack: PIC32CX-BZ2-DFP (1.1.218)
+-	MPLAB® X IDE plug-ins: MPLAB® Code Configurator (MCC) v5.3.7 and above
+-	Device Pack: PIC32CX-BZ2-DFP (1.2.230)
 
 ## Notes
 -	None

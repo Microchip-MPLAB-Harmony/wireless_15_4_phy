@@ -39,7 +39,8 @@ def instantiateComponent(ieee802154phy):
         "HarmonyCore",
         "sys_time",
         "pic32cx_bz2_devsupport",
-        "RTOS"
+        "RTOS",
+        "trng"
     ]
     
     conditionAlwaysInclude = [True, None, []]
@@ -321,6 +322,14 @@ def phyCommentBmmSmallBuffersDepend(sourceSymbol, event):
     totalMem = phyConstSmallBufferSize * phyIntegerBmmSmallBuffers.getValue()
     phyCommentBmmSmallBuffers.setLabel("Memory occupied: ~%d bytes" %totalMem)
 #end phyCommentBmmSmallBuffersDepend
+
+def onAttachmentConnected(source, target):
+    remoteComponent = Database.getComponentByID("trng")
+    if (remoteComponent):
+          print('Printing TRNG remoteComponent Value')
+          remoteComponent.getSymbolByID("trngEnableInterrupt").setReadOnly(True)
+          remoteComponent.getSymbolByID("trngEnableEvent").setReadOnly(True)
+          remoteComponent.getSymbolByID("TRNG_STANDBY").setReadOnly(True)  
 
 def destroyComponent(ieee802154phy):
     Database.deactivateComponents(requiredComponents)
