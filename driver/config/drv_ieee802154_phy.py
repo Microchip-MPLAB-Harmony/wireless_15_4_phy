@@ -29,6 +29,22 @@
 #-------------------------------------------------------------------------------
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COMPONENT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #-------------------------------------------------------------------------------
+pic32cx_bz2_family = {'PIC32CX1012BZ25048',
+                      'PIC32CX1012BZ25032',
+                      'PIC32CX1012BZ24032',
+                      'WBZ451',
+                      'WBZ450',
+                      }
+
+pic32cx_bz3_family = {'PIC32CX5109BZ31048',
+                      'PIC32CX5109BZ31032',
+                      'WBZ351',
+                      'WBZ350',
+                      }
+global deviceName
+deviceName = Variables.get("__PROCESSOR")
+
+
 def instantiateComponent(ieee802154phy):
     print("IEEE 802.15.4 PHY Standlone library driver component")
     configName = Variables.get("__CONFIGURATION_NAME")
@@ -74,7 +90,89 @@ def instantiateComponent(ieee802154phy):
     createPhySemaphore.setLabel('Create PHY Semaphore')
     createPhySemaphore.setVisible(False)
     createPhySemaphore.setDefaultValue(True)
+    
+    # Custom Antenna Gain Enabled
+    customAntennaSpecified = ieee802154phy.createBooleanSymbol('USE_CUSTOM_ANT_GAIN', None)
+    customAntennaSpecified.setVisible(False)
+    customAntennaSpecified.setReadOnly(True)
+    customAntennaSpecified.setValue(False)
 
+    # Custom Antenna Gain
+    global customAntennaGain
+    customAntennaGain = ieee802154phy.createIntegerSymbol('CUSTOM_ANT_GAIN', None)
+    customAntennaGain.setVisible(False)
+    customAntennaGain.setReadOnly(True)
+    if((deviceName == 'WBZ450') or (deviceName == 'PIC32CX1012BZ24032') or (deviceName == 'PIC32CX1012BZ25032')):
+        customAntennaGain.setValue(5)
+    else:
+        customAntennaGain.setValue(3)
+    
+    global  customAntennaRegion1
+    customAntennaRegion1 = ieee802154phy.createBooleanSymbol('ETSI_REGION', None)
+    customAntennaRegion1.setVisible(False)
+    customAntennaRegion1.setReadOnly(True)
+    customAntennaRegion1.setValue(True)
+    
+    global  customAntennaRegion2
+    customAntennaRegion2 = ieee802154phy.createBooleanSymbol('FCC_REGION', None)
+    customAntennaRegion2.setVisible(False)
+    customAntennaRegion2.setReadOnly(True)
+    customAntennaRegion2.setValue(False)
+
+    global  customAntennaRegion3
+    customAntennaRegion3 = ieee802154phy.createBooleanSymbol('JAPAN_REGION', None)
+    customAntennaRegion3.setVisible(False)
+    customAntennaRegion3.setReadOnly(True)
+    customAntennaRegion3.setValue(False)
+    
+    global  customAntennaRegion4
+    customAntennaRegion4 = ieee802154phy.createBooleanSymbol('KOREA_REGION', None)
+    customAntennaRegion4.setVisible(False)
+    customAntennaRegion4.setReadOnly(True)
+    customAntennaRegion4.setValue(False)
+    
+    global  customAntennaRegion5
+    customAntennaRegion5 = ieee802154phy.createBooleanSymbol('CHINA_REGION', None)
+    customAntennaRegion5.setVisible(False)
+    customAntennaRegion5.setReadOnly(True)
+    customAntennaRegion5.setValue(False)
+    
+    global  customAntennaRegion6
+    customAntennaRegion6 = ieee802154phy.createBooleanSymbol('TAIWAN_REGION', None)
+    customAntennaRegion6.setVisible(False)
+    customAntennaRegion6.setReadOnly(True)
+    customAntennaRegion6.setValue(False)
+    
+    # Power Channel 
+    global  appPowerRegion
+    appPowerRegion = ieee802154phy.createIntegerSymbol("APP_TX_POWER", None)
+    appPowerRegion.setLabel("Tx Power Set")
+    appPowerRegion.setVisible(True)
+    if (deviceName == "PIC32CX1012BZ25048"):
+        appPowerRegion.setDefaultValue(3)
+        appPowerRegion.setMin(-11)
+        appPowerRegion.setMax(15)
+    elif(deviceName == "PIC32CX1012BZ25032"):
+        appPowerRegion.setDefaultValue(3)
+        appPowerRegion.setMin(-11)
+        appPowerRegion.setMax(6)
+    elif (deviceName == "PIC32CX1012BZ24032"):
+        appPowerRegion.setDefaultValue(3)
+        appPowerRegion.setMin(-11)
+        appPowerRegion.setMax(6)
+    elif(deviceName == "WBZ451"):
+        appPowerRegion.setDefaultValue(3)
+        appPowerRegion.setMin(-11)
+        appPowerRegion.setMax(15)
+    elif(deviceName == "WBZ450"):
+        appPowerRegion.setDefaultValue(3)
+        appPowerRegion.setMin(-11)
+        appPowerRegion.setMax(6)
+    else:
+        appPowerRegion.setDefaultValue(5)
+     
+    appPowerRegion.setDependencies(powerRegionCheck, ["ETSI_REGION", "FCC_REGION", "JAPAN_REGION", "KOREA_REGION", "CHINA_REGION","TAIWAN_REGION"])
+    appPowerRegion.setDefaultValue(appPowerRegion.getMax())
     
     # === Radio menu
     execfile(Module.getPath() + "/driver/config/drv_ieee802154_phy_bmm.py")
@@ -89,7 +187,7 @@ def instantiateComponent(ieee802154phy):
         ["resources/queue/inc/qmm.h", conditionAlwaysInclude],
     ]
     includePhy = [
-        ["phy/inc/phy.h", conditionAlwaysInclude],
+        # ["phy/inc/phy.h", conditionAlwaysInclude],
         ["phy/inc/phy_tasks.h", conditionAlwaysInclude],
         ["phy/inc/phy_constants.h", conditionAlwaysInclude],
         ["phy/inc/ieee_phy_const.h", conditionAlwaysInclude]
@@ -164,6 +262,15 @@ def instantiateComponent(ieee802154phy):
     phyConfHeader.setType("HEADER")
     phyConfHeader.setOverwrite(True)
     phyConfHeader.setMarkup(True)
+    
+    phyConfHeader = ieee802154phy.createFileSymbol("PHY_HEADER", None)
+    phyConfHeader.setSourcePath("/driver/templates/phy.h.ftl")
+    phyConfHeader.setOutputName("phy.h")
+    phyConfHeader.setDestPath("/IEEE_802154_PHY/phy/inc/")
+    phyConfHeader.setProjectPath("config/" + configName + "/IEEE_802154_PHY/phy/inc")
+    phyConfHeader.setType("HEADER")
+    phyConfHeader.setOverwrite(True)
+    phyConfHeader.setMarkup(True)
 
     phyDefinitionsH = ieee802154phy.createFileSymbol('IEEE802154PHY_DEFINITIONS_H', None)
     phyDefinitionsH.setType('STRING')
@@ -219,8 +326,146 @@ def instantiateComponent(ieee802154phy):
 #end instantiateComponent
 
 def finalizeComponent(ieee802154phy):
-    pass
+    try:
+        if (deviceName in pic32cx_bz2_family):    
+            ETSImValue=Database.getSymbolValue("pic32cx_bz2_devsupport", "ETSI_REGION")
+            FCCmValue=Database.getSymbolValue("pic32cx_bz2_devsupport", "FCC_REGION")
+            JapanmValue=Database.getSymbolValue("pic32cx_bz2_devsupport", "JAPAN_REGION")
+            KoreamValue=Database.getSymbolValue("pic32cx_bz2_devsupport", "KOREA_REGION")
+            ChinamValue=Database.getSymbolValue("pic32cx_bz2_devsupport", "CHINA_REGION")
+            TaiwanmValue=Database.getSymbolValue("pic32cx_bz2_devsupport", "TAIWAN_REGION")
+        elif (deviceName in pic32cx_bz3_family):
+            ETSImValue=Database.getSymbolValue("pic32cx_bz3_devsupport", "ETSI_REGION")
+            FCCmValue=Database.getSymbolValue("pic32cx_bz3_devsupport", "FCC_REGION")
+            JapanmValue=Database.getSymbolValue("pic32cx_bz3_devsupport", "JAPAN_REGION")
+            KoreamValue=Database.getSymbolValue("pic32cx_bz3_devsupport", "KOREA_REGION")
+            ChinamValue=Database.getSymbolValue("pic32cx_bz3_devsupport", "CHINA_REGION")
+            TaiwanmValue=Database.getSymbolValue("pic32cx_bz3_devsupport", "TAIWAN_REGION")
+        customAntennaRegion1.setValue(ETSImValue)
+        customAntennaRegion2.setValue(FCCmValue)
+        customAntennaRegion3.setValue(JapanmValue)
+        customAntennaRegion4.setValue(KoreamValue)
+        customAntennaRegion5.setValue(ChinamValue) 
+        customAntennaRegion6.setValue(TaiwanmValue)      
+        appPowerRegion.setDependencies(powerRegionCheck, ["ETSI_REGION", "FCC_REGION", "JAPAN_REGION", "KOREA_REGION", "CHINA_REGION", "TAIWAN_REGION"])
+      
+    except Exception as e:
+        print("Exception for getting Finalizd Dev_Support", e)
 #end finalizeComponent
+
+#
+# Dependency functions
+#
+def powerRegionCheck(symbol, event):
+    symbol.setVisible(True)
+    if (customAntennaRegion1.getValue() == True):  #ETSI
+        symbol.setVisible(True)
+        appPowerRegion.setMin(-14)
+        if((deviceName == "PIC32CX1012BZ25048") or (deviceName == 'WBZ451')):
+            ETSISetMax = 11
+    elif (customAntennaRegion1.getValue() == False):
+        ETSISetMax = 15
+        
+    if (customAntennaRegion2.getValue() == True):   #FCC or Taiwan # China #IC 
+        symbol.setVisible(True)
+        appPowerRegion.setMin(-14)
+        if((deviceName == "PIC32CX1012BZ25048") or (deviceName == 'WBZ451')):
+            FCCSetMax = 15
+    elif (customAntennaRegion2.getValue() == False): 
+        FCCSetMax = 15
+        
+    if (customAntennaRegion3.getValue() == True):   # Japan
+        symbol.setVisible(True)
+        appPowerRegion.setMin(-14)
+        if((deviceName == "PIC32CX1012BZ25048") or (deviceName == 'WBZ451')):
+            JapanSetMax = 12
+    elif (customAntennaRegion3.getValue() == False): 
+        JapanSetMax = 15
+    
+    if (customAntennaRegion4.getValue() == True):  # Korea 
+        symbol.setVisible(True)
+        appPowerRegion.setMin(-14)
+        if((deviceName == "PIC32CX1012BZ25048") or (deviceName == 'WBZ451')):
+            KoreaSetMax = 8
+    elif (customAntennaRegion4.getValue() == False):
+        KoreaSetMax = 15
+    
+    if (customAntennaRegion5.getValue() == True):  # CHINA 
+        symbol.setVisible(True)
+        appPowerRegion.setMin(-14)
+        if((deviceName == "PIC32CX1012BZ25048") or (deviceName == 'WBZ451')):
+            ChinaSetMax = 15
+    elif (customAntennaRegion5.getValue() == False):
+        ChinaSetMax = 15
+
+    if (customAntennaRegion6.getValue() == True):  # TAIWAN
+        symbol.setVisible(True)
+        appPowerRegion.setMin(-14)
+        if((deviceName == "PIC32CX1012BZ25048") or (deviceName == 'WBZ451')):
+            TaiwanSetMax = 15
+    elif (customAntennaRegion6.getValue() == False):
+        TaiwanSetMax = 15
+        
+    if(deviceName == 'WBZ450'):
+        appPowerRegion.setMin(-14)
+        appPowerRegion.setMax(11)
+    else:
+        RegMax = 0
+        RegMax = min([ETSISetMax, FCCSetMax, JapanSetMax, KoreaSetMax, ChinaSetMax, TaiwanSetMax])
+        appPowerRegion.setMax(RegMax)
+
+#end powerRegionCheck
+
+def handleMessage(messageID, args):
+    # Log.writeInfoMessage('drv_ieee802154_phy:handleMessage ID={} argLen={}'.format(messageID, len(args)))
+    ''' This message handler is designed to process messages
+        sent from the driver/pic32cx-bz/config/device_support.py
+        script.
+    '''
+    if(messageID == 'ANTENNA_GAIN_CHANGE'):
+        component = Database.getComponentByID(args['target'])
+        if (component):
+            customGainEnabled = component.getSymbolByID('USE_CUSTOM_ANT_GAIN')
+            customGainValue = component.getSymbolByID('CUSTOM_ANT_GAIN')
+            customRegion1 = component.getSymbolByID('ETSI_REGION')
+            customRegion2 = component.getSymbolByID('FCC_REGION')
+            customRegion3 = component.getSymbolByID('JAPAN_REGION')
+            customRegion4 = component.getSymbolByID('KOREA_REGION')
+            customRegion5 = component.getSymbolByID('CHINA_REGION')
+            customRegion6 = component.getSymbolByID('TAIWAN_REGION')
+            
+            
+            Log.writeInfoMessage('{:<17}: Handling - target={}'.format('drv_ieee802154_phy.py', args['target']))
+            for arg in args:
+                Log.writeInfoMessage('{:<17}: {}: {}'.format('', arg, args[arg]))
+                if('CUSTOM_ANT_ENABLE' == arg):
+                    customGainEnabled.setValue(args[arg])
+                if('CUSTOM_ANT_GAIN' == arg):
+                    customGainValue.setValue(args[arg])
+                if('ETSI_REGION' == arg):
+                    customRegion1.setValue(args[arg])
+                if('FCC_REGION' == arg):
+                    customRegion2.setValue(args[arg])
+                if('JAPAN_REGION' == arg):
+                    customRegion3.setValue(args[arg])
+                if('KOREA_REGION' == arg):
+                    customRegion4.setValue(args[arg])
+                if('CHINA_REGION' == arg):
+                    customRegion5.setValue(args[arg])
+                if('TAIWAN_REGION' == arg):
+                    customRegion6.setValue(args[arg])                
+
+#end handleMessage       
+
+def phyCommentBmmLargeBuffersDepend(sourceSymbol, event):
+    totalMem = phyConstLargeBufferSize * phyIntegerBmmLargeBuffers.getValue()
+    phyCommentBmmLargeBuffers.setLabel("Memory occupied: ~%d bytes" %totalMem)
+#end phyCommentBmmLargeBuffersDepend
+
+def phyCommentBmmSmallBuffersDepend(sourceSymbol, event):
+    totalMem = phyConstSmallBufferSize * phyIntegerBmmSmallBuffers.getValue()
+    phyCommentBmmSmallBuffers.setLabel("Memory occupied: ~%d bytes" %totalMem)
+#end phyCommentBmmSmallBuffersDepend             
 
 def importIncFile(component, configName, incFileEntry, firmwarePath = None):
     incFilePath  = incFileEntry[0]
@@ -309,19 +554,6 @@ def setIncPath(component, configName, incPathEntry):
     incPathSymCpp.setEnabled(isEnabled)
     incPathSymCpp.setDependencies(callback, dependencies)
 #end setIncPath
-
-#
-# Dependency functions
-#
-def phyCommentBmmLargeBuffersDepend(sourceSymbol, event):
-    totalMem = phyConstLargeBufferSize * phyIntegerBmmLargeBuffers.getValue()
-    phyCommentBmmLargeBuffers.setLabel("Memory occupied: ~%d bytes" %totalMem)
-#end phyCommentBmmLargeBuffersDepend
-
-def phyCommentBmmSmallBuffersDepend(sourceSymbol, event):
-    totalMem = phyConstSmallBufferSize * phyIntegerBmmSmallBuffers.getValue()
-    phyCommentBmmSmallBuffers.setLabel("Memory occupied: ~%d bytes" %totalMem)
-#end phyCommentBmmSmallBuffersDepend
 
 def onAttachmentConnected(source, target):
     remoteComponent = Database.getComponentByID("trng")

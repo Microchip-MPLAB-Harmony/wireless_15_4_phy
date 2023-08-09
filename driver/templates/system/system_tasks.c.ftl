@@ -5,7 +5,7 @@
 <#if HarmonyCore.SELECT_RTOS == "FreeRTOS">
 <#if CREATE_PHY_RTOS_TASK == true>
     /* Create FreeRTOS task for IEEE_802154_PHY */
-	 xTaskCreate((TaskFunction_t) _PHY_Tasks,
+	 (void)xTaskCreate((TaskFunction_t) _PHY_Tasks,
                 "PHY_Tasks",
                 1024,
                 NULL,

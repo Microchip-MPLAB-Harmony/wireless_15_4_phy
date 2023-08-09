@@ -3,9 +3,9 @@
 /* Handle for the APP_Tasks. */
 TaskHandle_t xPHY_Tasks;
 
-void _PHY_Tasks(  void *pvParameters  )
+static void _PHY_Tasks(  void *pvParameters  )
 {     
-    while(1)
+    while(true)
     {
         PHY_Tasks();
     }

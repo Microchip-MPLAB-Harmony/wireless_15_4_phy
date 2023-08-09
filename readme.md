@@ -27,7 +27,7 @@ reference information.
 | Folder     | Description                                                       |
 | -----------| ------------------------------------------------------------------|
 | config     | Standalone IEEE 802.15.4 Physical Layer module configuration file |
-| docs       | Standalone IEEE 802.15.4 Physical Layer library API documentation |
+| **[docs](docs/index.html)**       | Standalone IEEE 802.15.4 Physical Layer library API documentation|
 | drivers    | phy layer library and dependent files for pic32cxbz2 products     |
 
 
