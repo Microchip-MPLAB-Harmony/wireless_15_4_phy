@@ -659,6 +659,43 @@ static inline uint32_t pal_sub_time_us(uint32_t a, uint32_t b)
 
 PAL_Status_t PAL_GetRandomNumber(uint8_t *rnOutput, uint16_t rnLength);
 
+// *****************************************************************************
+
+/*
+  Function:
+	PAL_Status_t PAL_GetTrxAntennaGain(int8_t *antGain)
+
+  Summary:
+    Gets the Antenna gain from the information block of device support library
+
+  Description:
+    This function is used to get the antenna gain either from the information 
+    block of device support library or the user specified custom antenna gain 
+  
+  Precondition:
+    None
+
+  Parameters:
+    antGain - Pointer holding the module's antenna gain value
+
+  Returns:
+    None
+ 
+  Example:
+    <code>  
+	int8_t antGain = INT8_MAX;
+    
+    PAL_GetTrxAntennaGain(&antGain);
+    printf ("Antenna Gain of the module - %i", antGain);
+    </code>
+
+  Remarks:
+    If customer provides the antenna gain of the module, this function returns CUSTOM_ANT_GAIN value
+    or it will read from the information block of device support library if valid. 
+    Otherwise, DEFAULT_ANT_GAIN value is returned.
+*/
+PAL_Status_t PAL_GetTrxAntennaGain(int8_t *antGain);
+
 /* ! @} */
 #ifdef __cplusplus
 } /* extern "C" */

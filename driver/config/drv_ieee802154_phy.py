@@ -214,8 +214,8 @@ def instantiateComponent(ieee802154phy):
     # === Library
     libIeee802154Phy = ieee802154phy.createLibrarySymbol("IEEE802154PHY_LIB_FILE", None)
     libIeee802154Phy.setDestPath("lib")
-    libIeee802154Phy.setSourcePath("/driver/software/phy/pic32cx_bz/lib/lib-ieee802154_phy_pic32cxbz-v1.0.0.a")
-    libIeee802154Phy.setOutputName("lib-ieee802154_phy_pic32cxbz-v1.0.0.a")
+    libIeee802154Phy.setSourcePath("/driver/software/phy/pic32cx_bz/lib/lib-ieee802154_phy_pic32cxbz-v1.1.0.a")
+    libIeee802154Phy.setOutputName("lib-ieee802154_phy_pic32cxbz-v1.1.0.a")
 #end instantiateComponent
 
 def finalizeComponent(ieee802154phy):

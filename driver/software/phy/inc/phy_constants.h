@@ -152,7 +152,7 @@
 
 #define MAX_FRAME_DURATION \
 	(NO_OF_SYMBOLS_PREAMBLE_SFD + \
-	(aMaxPHYPacketSize + 1) * SYMBOLS_PER_OCTET)
+	(aMaxPHYPacketSize + 1U) * SYMBOLS_PER_OCTET)
 
 // *****************************************************************************
 /* Maximum Symbol Time

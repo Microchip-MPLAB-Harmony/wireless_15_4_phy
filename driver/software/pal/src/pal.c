@@ -46,6 +46,7 @@
 #include <stdio.h>
 #include "pal.h"
 #include "system/time/sys_time.h"
+#include "phy.h"
 
 /* ************************************************************************** */
 /* ************************************************************************** */
@@ -385,20 +386,48 @@ static void palTimerCallback(uintptr_t paramCb)
 
 PAL_Status_t PAL_GetRandomNumber(uint8_t *rnOutput, uint16_t rnLength)
 {
-    uint32_t random;
+    uint32_t random_num;
+    uint32_t remBytes;
     uint8_t *end = rnOutput;
     end += rnLength;
     for (uint16_t i = 0; i < (rnLength / sizeof(uint32_t)); i++)
     {
-        random = TRNG_ReadData();
-        *((uint32_t *)rnOutput) = random;
+        random_num = TRNG_ReadData();
+        (void)memcpy((uint8_t *)rnOutput, (uint8_t *)&random_num, sizeof(uint32_t));
         rnOutput += sizeof(uint32_t);
     }
     
-    if ((rnLength % sizeof(uint32_t)) != 0){
-        random = TRNG_ReadData();
-        memcpy((uint8_t *)rnOutput, (uint8_t *)random, (end - rnOutput));
+    if ((remBytes = (rnLength % sizeof(uint32_t))) != 0U){
+        random_num = TRNG_ReadData();
+        (void)memcpy((uint8_t *)rnOutput, (uint8_t *)&random_num, remBytes);
     }
 
     return PAL_SUCCESS;
+}
+
+PAL_Status_t PAL_GetTrxAntennaGain(int8_t *antGain)
+{
+    bool valid = false;
+    int8_t antennaGain = INT8_MAX;
+    
+#ifndef CUSTOM_ANT_GAIN   
+    valid = IB_GetAntennaGain(&antennaGain);
+    
+    if(valid)
+    {
+        //If infoBlock having valid antennaGain value
+        *antGain = antennaGain;
+    }
+    else
+    {
+        //If InfoBlock is not having valid antennaGain value, 
+        //return default gain of WBZ45x
+        *antGain = DEFAULT_ANT_GAIN;
+    }
+#else
+    *antGain = CUSTOM_ANT_GAIN;
+    
+#endif
+    
+    return PAL_SUCCESS;    
 }

@@ -398,7 +398,7 @@ typedef enum ch_pg_tag {
     None 
  */
 
-#define phySymbolsPerOctet              (0x07)
+#define phySymbolsPerOctet              (0x07U)
 
 // *****************************************************************************
 /* PHY_OVERHEAD

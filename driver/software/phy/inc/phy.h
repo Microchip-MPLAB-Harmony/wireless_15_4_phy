@@ -341,6 +341,39 @@ typedef union
 // *****************************************************************************
 
 // *****************************************************************************
+/* Transmit Power Max value as per Regulatory region selected in Device support 
+   library
+ 
+   Summary:
+    Constant Transmit Power Max value as per Regulatory region
+   Description:
+    This Macro defines the maximum transmit power that can be set in the Transceiver
+    as per Regulatory region selected in Device support 
+    library. User cannot set the Tx power beyond this value.
+    
+   Remarks:
+    This is auto generated value - Shouldn't be changed by user- Read only MACRO. 
+ */
+
+#define PHY_TX_PWR_MAX                       (15)
+
+// *****************************************************************************
+/* Default Antenna Gain of the Module
+ 
+   Summary:
+    Macro holding the constant default antenna gain of the module
+   Description:
+    Antenna Gain value is taken into account while converting radiated power 
+    to conductive power. If the WBZ45x/PIC32Cx-BZ2 device holding the valid antenna 
+    gain in device support library information base, that value is taken for conversion. 
+    Otherwise DEFAULT_ANT_GAIN is used
+   Remarks:
+    This is auto generated value - Shouldn't be changed by user- Read only MACRO. 
+ */
+
+#define DEFAULT_ANT_GAIN                    (3)
+
+// *****************************************************************************
 /* Custom PHY PIB attribute ID 
  
    Summary:
