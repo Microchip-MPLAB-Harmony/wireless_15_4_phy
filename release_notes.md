@@ -3,6 +3,21 @@
 
 # Microchip PIC32CX-BZ2 Device Standalone IEEE 802.15.4 Physical Layer Release Notes
 
+## Release v1.1.0
+
+### New Features
+- Introduced new API PHY_IsFramePendingFromNextLayer
+- PHY Library Update for handling Tx Power (EIRP)/Ant Gain Setting for WBZ451 and 450 based on the regions
+
+
+### Bug fixes
+- Fix for checking the BMM buffer availability frequently if there is no buffer
+
+### Known Issues
+- None
+
+__________________
+
 ## Release v1.0.0
 
 The physical layer contains the transceiver specific functionalities as mentioned as the requirements of IEEE 802.15.4 specification. It gives the interface to the MAC core layer which is independent of the underlying transceiver.
@@ -28,10 +43,10 @@ The following are the funcionalities of PHY layer
 -	No issues
 
 ## Development Tools
--	MPLAB X v6.05
+-	MPLAB X v6.10
 -	MPLAB® XC32 C/C++ Compiler v4.21
--	MPLAB® X IDE plug-ins: MPLAB® Code Configurator (MCC) v5.2.2 and above
--	Device Pack: PIC32CX-BZ2-DFP (1.1.218)
+-	MPLAB® X IDE plug-ins: MPLAB® Code Configurator (MCC) v5.3.7 and above
+-	Device Pack: PIC32CX-BZ2-DFP (1.2.230)
 
 ## Notes
 -	None

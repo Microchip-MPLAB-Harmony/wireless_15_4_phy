@@ -97,7 +97,7 @@ def instantiateComponent(ieee802154phy):
     customAntennaGain = ieee802154phy.createIntegerSymbol('CUSTOM_ANT_GAIN', None)
     customAntennaGain.setVisible(False)
     customAntennaGain.setReadOnly(True)
-    if((deviceName == 'WBZ450') or (deviceName == 'PIC32CX1012BZ24032') or (deviceName == 'PIC32CX1012BZ25032')):
+    if(deviceName == 'WBZ450'):
         customAntennaGain.setValue(5)
     else:
         customAntennaGain.setValue(3)
@@ -182,7 +182,6 @@ def instantiateComponent(ieee802154phy):
         ["resources/queue/inc/qmm.h", conditionAlwaysInclude],
     ]
     includePhy = [
-        # ["phy/inc/phy.h", conditionAlwaysInclude],
         ["phy/inc/phy_tasks.h", conditionAlwaysInclude],
         ["phy/inc/phy_constants.h", conditionAlwaysInclude],
         ["phy/inc/ieee_phy_const.h", conditionAlwaysInclude]

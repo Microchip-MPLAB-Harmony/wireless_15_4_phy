@@ -696,6 +696,41 @@ PAL_Status_t PAL_GetRandomNumber(uint8_t *rnOutput, uint16_t rnLength);
 */
 PAL_Status_t PAL_GetTrxAntennaGain(int8_t *antGain);
 
+/*
+  Function:
+	int8_t PAL_GetTrxTransmitPowerMax(void)
+
+  Summary:
+    Gets the transceiver's maximum transmit power in dBm
+
+  Description:
+    This function returns the maximum transmit power that can be set in the Transceiver
+    as per Regulatory region selected in Device support 
+    library. User cannot set the Tx power beyond this value. 
+  
+  Precondition:
+    None
+
+  Parameters:
+    Output - Integer value holding the maximum transmit power of the transceiver 
+    that can be set by higher layer.
+
+  Returns:
+    None
+ 
+  Example:
+    <code>  
+	int8_t txpwrMax = INT8_MAX;
+    
+    txpwrMax = PAL_GetTrxTransmitPowerMax();
+    printf ("Maximum Tx Pwr Value - %i", txpwrMax);
+    </code>
+
+  Remarks:
+    Transmit Power Max value as per Regulatory region
+*/
+int8_t PAL_GetTrxTransmitPowerMax(void);
+
 /* ! @} */
 #ifdef __cplusplus
 } /* extern "C" */
