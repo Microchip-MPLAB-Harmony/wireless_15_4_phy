@@ -406,8 +406,8 @@ PAL_Status_t PAL_GetRandomNumber(uint8_t *rnOutput, uint16_t rnLength)
 }
 
 /**
- * @brief Gets Random number
- * @param[rnOutput] random number @param[rnLength] size of Random number
+ * @brief Gets the Antenna gain from the information block of device support library
+ * @param[antGain] - Pointer holding the module's antenna gain value
  */
 PAL_Status_t PAL_GetTrxAntennaGain(int8_t *antGain)
 {
