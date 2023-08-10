@@ -36,11 +36,6 @@ pic32cx_bz2_family = {'PIC32CX1012BZ25048',
                       'WBZ450',
                       }
 
-pic32cx_bz3_family = {'PIC32CX5109BZ31048',
-                      'PIC32CX5109BZ31032',
-                      'WBZ351',
-                      'WBZ350',
-                      }
 global deviceName
 deviceName = Variables.get("__PROCESSOR")
 
@@ -334,13 +329,6 @@ def finalizeComponent(ieee802154phy):
             KoreamValue=Database.getSymbolValue("pic32cx_bz2_devsupport", "KOREA_REGION")
             ChinamValue=Database.getSymbolValue("pic32cx_bz2_devsupport", "CHINA_REGION")
             TaiwanmValue=Database.getSymbolValue("pic32cx_bz2_devsupport", "TAIWAN_REGION")
-        elif (deviceName in pic32cx_bz3_family):
-            ETSImValue=Database.getSymbolValue("pic32cx_bz3_devsupport", "ETSI_REGION")
-            FCCmValue=Database.getSymbolValue("pic32cx_bz3_devsupport", "FCC_REGION")
-            JapanmValue=Database.getSymbolValue("pic32cx_bz3_devsupport", "JAPAN_REGION")
-            KoreamValue=Database.getSymbolValue("pic32cx_bz3_devsupport", "KOREA_REGION")
-            ChinamValue=Database.getSymbolValue("pic32cx_bz3_devsupport", "CHINA_REGION")
-            TaiwanmValue=Database.getSymbolValue("pic32cx_bz3_devsupport", "TAIWAN_REGION")
         customAntennaRegion1.setValue(ETSImValue)
         customAntennaRegion2.setValue(FCCmValue)
         customAntennaRegion3.setValue(JapanmValue)
