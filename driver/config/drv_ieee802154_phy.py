@@ -138,11 +138,15 @@ def instantiateComponent(ieee802154phy):
     customAntennaRegion6.setReadOnly(True)
     customAntennaRegion6.setValue(False)
     
+    global phyTxPwrConfig
+    phyTxPwrConfig = ieee802154phy.createMenuSymbol("PHY_TX_POWER_CONFIG", None)
+    phyTxPwrConfig.setLabel("PHY Tx Power Configuration")
+    phyTxPwrConfig.setVisible(False)
+    
     # Power Channel 
     global  appPowerRegion
-    appPowerRegion = ieee802154phy.createIntegerSymbol("APP_TX_POWER", None)
+    appPowerRegion = ieee802154phy.createIntegerSymbol("APP_TX_POWER", phyTxPwrConfig)
     appPowerRegion.setLabel("Tx Power Set")
-    appPowerRegion.setVisible(True)
     if (deviceName == "PIC32CX1012BZ25048"):
         appPowerRegion.setDefaultValue(3)
         appPowerRegion.setMin(-11)
@@ -257,14 +261,14 @@ def instantiateComponent(ieee802154phy):
     phyConfHeader.setOverwrite(True)
     phyConfHeader.setMarkup(True)
     
-    phyConfHeader = ieee802154phy.createFileSymbol("PHY_HEADER", None)
-    phyConfHeader.setSourcePath("/driver/templates/phy.h.ftl")
-    phyConfHeader.setOutputName("phy.h")
-    phyConfHeader.setDestPath("/IEEE_802154_PHY/phy/inc/")
-    phyConfHeader.setProjectPath("config/" + configName + "/IEEE_802154_PHY/phy/inc")
-    phyConfHeader.setType("HEADER")
-    phyConfHeader.setOverwrite(True)
-    phyConfHeader.setMarkup(True)
+    phyApiHeader = ieee802154phy.createFileSymbol("PHY_HEADER", None)
+    phyApiHeader.setSourcePath("/driver/templates/phy.h.ftl")
+    phyApiHeader.setOutputName("phy.h")
+    phyApiHeader.setDestPath("driver/IEEE_802154_PHY/phy/inc")
+    phyApiHeader.setProjectPath("config/" + configName + "/driver/IEEE_802154_PHY/phy/inc")
+    phyApiHeader.setType("HEADER")
+    phyApiHeader.setOverwrite(True)
+    phyApiHeader.setMarkup(True)
 
     phyDefinitionsH = ieee802154phy.createFileSymbol('IEEE802154PHY_DEFINITIONS_H', None)
     phyDefinitionsH.setType('STRING')
@@ -314,7 +318,7 @@ def instantiateComponent(ieee802154phy):
 
     # === Library
     libIeee802154Phy = ieee802154phy.createLibrarySymbol("IEEE802154PHY_LIB_FILE", None)
-    libIeee802154Phy.setDestPath("lib")
+    libIeee802154Phy.setDestPath("/driver/lib")
     libIeee802154Phy.setSourcePath("/driver/software/phy/pic32cx_bz/lib/lib-ieee802154_phy_pic32cxbz-v1.1.0.a")
     libIeee802154Phy.setOutputName("lib-ieee802154_phy_pic32cxbz-v1.1.0.a")
 #end instantiateComponent
@@ -477,8 +481,8 @@ def importIncFile(component, configName, incFileEntry, firmwarePath = None):
     incFileSym = component.createFileSymbol(symName, None)
     incFileSym.setSourcePath("driver/software/" + secSName + "/" + incFile)
     incFileSym.setOutputName(incFile)
-    incFileSym.setDestPath("IEEE_802154_PHY/" + secDName + "")
-    incFileSym.setProjectPath("config/" + configName + "/IEEE_802154_PHY/"+ secDName + "")
+    incFileSym.setDestPath("driver/IEEE_802154_PHY/" + secDName + "")
+    incFileSym.setProjectPath("config/" + configName + "/driver/IEEE_802154_PHY/"+ secDName + "")
     incFileSym.setType("HEADER")
     incFileSym.setOverwrite(True)
     incFileSym.setEnabled(isEnabled)
@@ -511,8 +515,8 @@ def importSrcFile(component, configName, srcFileEntry, firmwarePath = None):
     srcFileSym = component.createFileSymbol(symName, None)
     srcFileSym.setSourcePath("driver/software/" + secSName + srcFile)
     srcFileSym.setOutputName(srcFile.rsplit("/", 1)[-1])
-    srcFileSym.setDestPath("IEEE_802154_PHY/" + secDName + "")
-    srcFileSym.setProjectPath("config/" + configName + "/IEEE_802154_PHY/"+ secDName + "")
+    srcFileSym.setDestPath("driver/IEEE_802154_PHY/" + secDName + "")
+    srcFileSym.setProjectPath("config/" + configName + "/driver/IEEE_802154_PHY/"+ secDName + "")
     srcFileSym.setType("SOURCE")
     srcFileSym.setEnabled(isEnabled)
 
@@ -526,7 +530,7 @@ def setIncPath(component, configName, incPathEntry):
     callback     = incPathEntry[1][1]
     dependencies = incPathEntry[1][2]
     incPathSym = component.createSettingSymbol("IEEE802154PHY_INC_PATH" + incPath.replace(".", "_").replace("/", "_").upper(), None)
-    incPathSym.setValue("../src/config/" + configName + incPath + ";")
+    incPathSym.setValue("../src/config/" + configName + "/driver/" + incPath + ";")
     incPathSym.setCategory("C32")
     incPathSym.setKey("extra-include-directories")
     incPathSym.setAppend(True, ";")
@@ -534,7 +538,7 @@ def setIncPath(component, configName, incPathEntry):
     incPathSym.setDependencies(callback, dependencies)
     
     incPathSymCpp = component.createSettingSymbol("IEEE802154PHY_INC_PATH_CPP" + incPath.replace(".", "_").replace("/", "_").upper(), None)
-    incPathSymCpp.setValue("../src/config/" + configName + incPath + ";")
+    incPathSymCpp.setValue("../src/config/" + configName + "/driver/" + incPath + ";")
     incPathSymCpp.setCategory("C32CPP")
     incPathSymCpp.setKey("extra-include-directories")
     incPathSymCpp.setAppend(True, ";")
