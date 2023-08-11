@@ -80,8 +80,11 @@ __attribute__((weak)) void PHY_RxFrameCallback(PHY_FrameInfo_t *rxFrame)
 
 __attribute__((weak)) bool PHY_IsFramePendingFromNextLayer(PHY_Addr_t *addr, uint8_t* addrMode )
 {
-    bool isFramePening = false;
-    return isFramePening;
+    bool isFramePending = true;
+	
+	(void)addr;
+	(void)addrMode;
+    return isFramePending;
 }
 
 /* EOF */
