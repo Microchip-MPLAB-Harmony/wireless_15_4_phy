@@ -6,7 +6,7 @@
 
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE11" /><meta name="copyright" content="(C) Copyright 2023" />
 <meta name="DC.rights.owner" content="(C) Copyright 2023" />
-<meta name="DC.type" content="topic" />
+<meta name="generator" content="DITA-OT" /><meta name="DC.type" content="topic" />
 <meta name="DC.title" content="PHY_TxFrame Function" />
 <meta name="DC.relation" scheme="URI" content="GUID-A14A49DA-BAC9-496D-A6E4-FDEA10D23D15.html" />
 <meta name="DC.format" content="XHTML" />
@@ -18,7 +18,7 @@
 <meta name="Microsoft.Help.TocOrder" content="0" />
 <meta name="Microsoft.Help.Locale" content="en-US" />
 <meta name="Microsoft.Help.TopicLocale" content="en-US" />
-<meta name="Microsoft.Help.DisplayVersion" content="MPLAB Harmony Wireless IEEE 802.15.4 PHY API Reference Manual Reference 1 09/2022" />
+<meta name="Microsoft.Help.DisplayVersion" content="MPLAB Harmony Wireless IEEE 802.15.4 PHY API Reference Manual Reference 2 09/2023" />
 <script language="javascript">
        
        if (window.parent.location.protocol != 'file:') {
@@ -244,54 +244,54 @@ frame to the PHY to be transmitted by the transceiver.</p>
 </div>
 </div>
 <div class="topic nested1" aria-labelledby="ariaid-title6" id="parameters"><h2 class="title topictitle2" id="ariaid-title6" style="">Parameters</h2><div class="body">
-<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" class="table" frame="border" border="1" rules="all"><col style="width:" /><col style="width:" /><col style="width:" /><thead class="thead" style="text-align:left;"><tr class="row"><th class="entry cellrowborder" style="text-align:left;vertical-align:middle;" id="d14298e53"><span>Param</span></th>
-<th class="entry cellrowborder" style="text-align:left;vertical-align:middle;" id="d14298e55"><span>Description</span></th>
-<th class="entry cellrowborder" style="text-align:left;vertical-align:middle;" id="d14298e57"><span>Comments</span></th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" class="table" frame="border" border="1" rules="all"><col style="width:" /><col style="width:" /><col style="width:" /><thead class="thead" style="text-align:left;"><tr class="row"><th class="entry cellrowborder" style="text-align:left;vertical-align:middle;" id="d15270e53"><span>Param</span></th>
+<th class="entry cellrowborder" style="text-align:left;vertical-align:middle;" id="d15270e55"><span>Description</span></th>
+<th class="entry cellrowborder" style="text-align:left;vertical-align:middle;" id="d15270e57"><span>Comments</span></th>
 </tr>
 </thead>
-<tbody class="tbody"><tr class="row"><td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d14298e53 "><span>txFrame</span></td>
-<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d14298e55 "><span>Pointer to the PHY_FrameInfo_t structure or to frame array to be transmitted</span></td>
+<tbody class="tbody"><tr class="row"><td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d15270e53 "><span>txFrame</span></td>
+<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d15270e55 "><span>Pointer to the PHY_FrameInfo_t structure or to frame array to be transmitted</span></td>
 </tr>
-<tr class="row"><td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d14298e53 "><span> </span></td>
-<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d14298e55 "><span>txFrame-&gt;mpdu</span></td>
-<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d14298e57 "><span>Pointer to the PHY Payload. mpdu<span class="xref"></span> should hold the length of the payload(N) + 1 (for length field length)</span></td>
+<tr class="row"><td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d15270e53 "><span> </span></td>
+<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d15270e55 "><span>txFrame-&gt;mpdu</span></td>
+<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d15270e57 "><span>Pointer to the PHY Payload. mpdu<span class="xref"></span> should hold the length of the payload(N) + 1 (for length field length)</span></td>
 </tr>
-<tr class="row"><td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d14298e53 "><span> </span></td>
-<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d14298e55 "><span>txFrame-&gt;mpdu<span class="xref"></span></span></td>
-<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d14298e57 "><span>Hold the phyPayload</span></td>
+<tr class="row"><td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d15270e53 "><span> </span></td>
+<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d15270e55 "><span>txFrame-&gt;mpdu<span class="xref"></span></span></td>
+<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d15270e57 "><span>Hold the phyPayload</span></td>
 </tr>
-<tr class="row"><td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d14298e53 "><span>csmaMode</span></td>
-<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d14298e55 "><span>Indicates mode of csma-ca to be performed for this frame</span></td>
+<tr class="row"><td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d15270e53 "><span>csmaMode</span></td>
+<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d15270e55 "><span>Indicates mode of csma-ca to be performed for this frame</span></td>
 </tr>
-<tr class="row"><td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d14298e53 "><span> </span></td>
-<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d14298e55 "><span>NO_CSMA_NO_IFS</span></td>
-<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d14298e57 "><span>Immediate Tx and SIFS(Short InterFrameSpacing) between subsequent frames</span></td>
+<tr class="row"><td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d15270e53 "><span> </span></td>
+<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d15270e55 "><span>NO_CSMA_NO_IFS</span></td>
+<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d15270e57 "><span>Immediate Tx and SIFS(Short InterFrameSpacing) between subsequent frames</span></td>
 </tr>
-<tr class="row"><td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d14298e53 "><span> </span></td>
-<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d14298e55 "><span>NO_CSMA_WITH_IFS</span></td>
-<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d14298e57 "><span>Immediate Tx and LIFS (Long InterFrameSpacing) between subsequent frames</span></td>
+<tr class="row"><td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d15270e53 "><span> </span></td>
+<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d15270e55 "><span>NO_CSMA_WITH_IFS</span></td>
+<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d15270e57 "><span>Immediate Tx and LIFS (Long InterFrameSpacing) between subsequent frames</span></td>
 </tr>
-<tr class="row"><td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d14298e53 "><span> </span></td>
-<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d14298e55 "><span>CSMA_UNSLOTTED</span></td>
-<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d14298e57 "><span>Hardware CSMA will be performed before packet transmission with number of retries configured</span></td>
+<tr class="row"><td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d15270e53 "><span> </span></td>
+<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d15270e55 "><span>CSMA_UNSLOTTED</span></td>
+<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d15270e57 "><span>Hardware CSMA will be performed before packet transmission with number of retries configured</span></td>
 </tr>
-<tr class="row"><td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d14298e53 "><span> </span></td>
-<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d14298e55 "><span>CSMA_SLOTTED</span></td>
-<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d14298e57 "><span>Hardware CSMA will be performed</span></td>
+<tr class="row"><td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d15270e53 "><span> </span></td>
+<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d15270e55 "><span>CSMA_SLOTTED</span></td>
+<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d15270e57 "><span>Hardware CSMA will be performed</span></td>
 </tr>
-<tr class="row"><td class="entry cellrowborder" colspan="2" style="text-align:left;vertical-align:middle;" headers="d14298e53 d14298e55 "><span> </span></td>
-<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d14298e57 "><span>Beacon Enabled network - Currently not supported by PHY</span></td>
+<tr class="row"><td class="entry cellrowborder" colspan="2" style="text-align:left;vertical-align:middle;" headers="d15270e53 d15270e55 "><span> </span></td>
+<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d15270e57 "><span>Beacon Enabled network - Currently not supported by PHY</span></td>
 </tr>
-<tr class="row"><td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d14298e53 "><span>performFrameRetry</span></td>
-<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d14298e55 "><span>Indicates whether to retries are to be performed for this frame</span></td>
+<tr class="row"><td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d15270e53 "><span>performFrameRetry</span></td>
+<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d15270e55 "><span>Indicates whether to retries are to be performed for this frame</span></td>
 </tr>
-<tr class="row"><td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d14298e53 "><span> </span></td>
-<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d14298e55 "><span>true</span></td>
-<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d14298e57 "><span>SW retry will be performed for macMaxFrameRetries value</span></td>
+<tr class="row"><td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d15270e53 "><span> </span></td>
+<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d15270e55 "><span>true</span></td>
+<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d15270e57 "><span>SW retry will be performed for macMaxFrameRetries value</span></td>
 </tr>
-<tr class="row"><td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d14298e53 "><span> </span></td>
-<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d14298e55 "><span>false</span></td>
-<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d14298e57 "><span>SW retry is disabled</span></td>
+<tr class="row"><td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d15270e53 "><span> </span></td>
+<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d15270e55 "><span>false</span></td>
+<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d15270e57 "><span>SW retry is disabled</span></td>
 </tr>
 </tbody>
 </table>

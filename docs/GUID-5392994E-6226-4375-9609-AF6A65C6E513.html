@@ -6,7 +6,7 @@
 
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE11" /><meta name="copyright" content="(C) Copyright 2023" />
 <meta name="DC.rights.owner" content="(C) Copyright 2023" />
-<meta name="DC.type" content="topic" />
+<meta name="generator" content="DITA-OT" /><meta name="DC.type" content="topic" />
 <meta name="DC.title" content="PHY_EdStart Function" />
 <meta name="DC.relation" scheme="URI" content="GUID-A14A49DA-BAC9-496D-A6E4-FDEA10D23D15.html" />
 <meta name="DC.format" content="XHTML" />
@@ -18,7 +18,7 @@
 <meta name="Microsoft.Help.TocOrder" content="0" />
 <meta name="Microsoft.Help.Locale" content="en-US" />
 <meta name="Microsoft.Help.TopicLocale" content="en-US" />
-<meta name="Microsoft.Help.DisplayVersion" content="MPLAB Harmony Wireless IEEE 802.15.4 PHY API Reference Manual Reference 1 09/2022" />
+<meta name="Microsoft.Help.DisplayVersion" content="MPLAB Harmony Wireless IEEE 802.15.4 PHY API Reference Manual Reference 2 09/2023" />
 <script language="javascript">
        
        if (window.parent.location.protocol != 'file:') {
@@ -240,22 +240,22 @@ upper layer. Actual ED result of Energy level on current channel will be
 indicated by PHY_EdEndCallback(eneryLevel).
 Scan duration formula:</p>
 </div>
-<div class="topic nested2" aria-labelledby="ariaid-title5" id="abasesuperframeduration-x-2sd--1-symbols"><h3 class="title topictitle3" id="ariaid-title5" style="">aBaseSuperframeDuration x (2^SD + 1) symbols</h3><div class="body"><pre class="pre codeblock"><code id="d12197e40" content="where SD - scanDuration parameter (0 - 14)&#xD;">where SD - scanDuration parameter (0 - 14)&#xD;</code></pre></div>
+<div class="topic nested2" aria-labelledby="ariaid-title5" id="abasesuperframeduration-x-2sd--1-symbols"><h3 class="title topictitle3" id="ariaid-title5" style="">aBaseSuperframeDuration x (2^SD + 1) symbols</h3><div class="body"><pre class="pre codeblock"><code id="d12617e40" content="where SD - scanDuration parameter (0 - 14)&#xD;">where SD - scanDuration parameter (0 - 14)&#xD;</code></pre></div>
 </div>
 </div>
 <div class="topic nested1" aria-labelledby="ariaid-title6" id="precondition"><h2 class="title topictitle2" id="ariaid-title6" style="">Precondition</h2><div class="body"><p class="p">PHY_Init() should have been called before calling this function</p>
 </div>
 </div>
 <div class="topic nested1" aria-labelledby="ariaid-title7" id="parameters"><h2 class="title topictitle2" id="ariaid-title7" style="">Parameters</h2><div class="body">
-<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" class="table" frame="border" border="1" rules="all"><col style="width:" /><col style="width:" /><thead class="thead" style="text-align:left;"><tr class="row"><th class="entry cellrowborder" style="text-align:left;vertical-align:middle;" id="d12197e58"><span>Param</span></th>
-<th class="entry cellrowborder" style="text-align:left;vertical-align:middle;" id="d12197e60"><span>Description</span></th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" class="table" frame="border" border="1" rules="all"><col style="width:" /><col style="width:" /><thead class="thead" style="text-align:left;"><tr class="row"><th class="entry cellrowborder" style="text-align:left;vertical-align:middle;" id="d12617e58"><span>Param</span></th>
+<th class="entry cellrowborder" style="text-align:left;vertical-align:middle;" id="d12617e60"><span>Description</span></th>
 </tr>
 </thead>
-<tbody class="tbody"><tr class="row"><td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d12197e58 "><span>scanDuration</span></td>
-<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d12197e60 "><span>Specifies the ED scan duration in symbols</span></td>
+<tbody class="tbody"><tr class="row"><td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d12617e58 "><span>scanDuration</span></td>
+<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d12617e60 "><span>Specifies the ED scan duration in symbols</span></td>
 </tr>
-<tr class="row"><td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d12197e58 "><span> </span></td>
-<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d12197e60 "><span>Range - (0 to 14)</span></td>
+<tr class="row"><td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d12617e58 "><span> </span></td>
+<td class="entry cellrowborder" style="text-align:left;vertical-align:middle;" headers="d12617e60 "><span>Range - (0 to 14)</span></td>
 </tr>
 </tbody>
 </table>
