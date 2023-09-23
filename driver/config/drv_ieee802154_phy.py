@@ -41,7 +41,7 @@ deviceName = Variables.get("__PROCESSOR")
 
 
 def instantiateComponent(ieee802154phy):
-    print("IEEE 802.15.4 PHY Standlone library driver component")
+    print("IEEE 802.15.4 PHY Standalone library driver component")
     configName = Variables.get("__CONFIGURATION_NAME")
     print configName
     # === Activate required components automatically
@@ -68,18 +68,15 @@ def instantiateComponent(ieee802154phy):
     # === Interfaces
 
     # === PHY RTOS Configuration
-    global phyRtosConfig
     phyRtosConfig = ieee802154phy.createMenuSymbol("PHY_RTOS_CONFIG", None)
     phyRtosConfig.setLabel("PHY RTOS Configuration")
     phyRtosConfig.setVisible(True)
 
-    global createPhyRtosTask
     # === Create PHY RTOS Task
     createPhyRtosTask = ieee802154phy.createBooleanSymbol('CREATE_PHY_RTOS_TASK', phyRtosConfig)
     createPhyRtosTask.setLabel('Create PHY RTOS Task')
     createPhyRtosTask.setDefaultValue(True)
     
-    global createPhySemaphore
     # === Create PHY Semaphore
     createPhySemaphore = ieee802154phy.createBooleanSymbol('CREATE_PHY_SEMAPHORE', phyRtosConfig)
     createPhySemaphore.setLabel('Create PHY Semaphore')
@@ -341,7 +338,7 @@ def finalizeComponent(ieee802154phy):
         appPowerRegion.setDependencies(powerRegionCheck, ["ETSI_REGION", "FCC_REGION", "JAPAN_REGION", "KOREA_REGION", "CHINA_REGION", "TAIWAN_REGION"])
       
     except Exception as e:
-        print("Exception for getting Finalizd Dev_Support", e)
+        print("Exception for getting TX power region from Dev_Support library(wireless_pic32cxbz_wbz)", e)
 #end finalizeComponent
 
 #
