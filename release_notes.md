@@ -3,6 +3,14 @@
 
 # Microchip PIC32CX-BZ2 Device Standalone IEEE 802.15.4 Physical Layer Release Notes
 
+## Release v1.1.1
+
+### Bug fixes
+
+- Fix of dependency version string in package.yml
+
+__________________
+
 ## Release v1.1.0
 
 ### New Features
