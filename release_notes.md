@@ -18,13 +18,13 @@
 - None
 
 ## Development Tools
--	MPLAB X v6.20
--	MPLAB® XC32 C/C++ Compiler v4.35
--	MPLAB® X IDE plug-ins: MPLAB® Code Configurator (MCC) v5.5.0 and above
--	Device Pack: PIC32CX-BZ2-DFP (1.4.241)
+-   MPLAB X v6.20
+-   MPLAB® XC32 C/C++ Compiler v4.35
+-   MPLAB® X IDE plug-ins: MPLAB® Code Configurator (MCC) v5.5.0 and above
+-   Device Pack: PIC32CX-BZ2-DFP (1.4.241)
 
 ## Notes
--	None
+- None
 
 __________________
 
