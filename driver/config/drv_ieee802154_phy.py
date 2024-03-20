@@ -1,6 +1,6 @@
 # coding: utf-8
 ##############################################################################
-# Copyright (C) 2023 Microchip Technology Inc. and its subsidiaries.
+# Copyright (C) 2024 Microchip Technology Inc. and its subsidiaries.
 #
 # Subject to your compliance with these terms, you may use Microchip software
 # and any derivatives exclusively with Microchip products. It is your
@@ -35,6 +35,16 @@ pic32cx_bz2_family = {'PIC32CX1012BZ25048',
                       'WBZ451',
                       'WBZ450',
                       }
+                      
+TXPowerFamily1  = { 'PIC32CX1012BZ25048',
+                    'WBZ451',
+                    }
+                    
+TXPowerFamily2 = { 'PIC32CX1012BZ25032',
+                   'PIC32CX1012BZ24032',
+                   'WBZ450',
+                   }
+
 
 global deviceName
 deviceName = Variables.get("__PROCESSOR")
@@ -46,13 +56,14 @@ def instantiateComponent(ieee802154phy):
     print configName
     # === Activate required components automatically
     global requiredComponents
-    requiredComponents = [
-        "HarmonyCore",
-        "sys_time",
-        "pic32cx_bz2_devsupport",
-        "RTOS",
-        "trng"
-    ]
+    if (deviceName in pic32cx_bz2_family):
+          requiredComponents = [
+              "HarmonyCore",
+              "sys_time",
+              "pic32cx_bz2_devsupport",
+              "RTOS",
+              "trng"
+          ]
     
     conditionAlwaysInclude = [True, None, []]
     
@@ -82,12 +93,29 @@ def instantiateComponent(ieee802154phy):
     createPhySemaphore.setLabel('Create PHY Semaphore')
     createPhySemaphore.setVisible(False)
     createPhySemaphore.setDefaultValue(True)
+
+    # === PHY RTOS Priority Configuration
+    global phyRtosTaskPriority
+    phyRtosTaskPriority = ieee802154phy.createIntegerSymbol('PHY_TASK_PRIORITY', phyRtosConfig)
+    phyRtosTaskPriority.setLabel('PHY RTOS Task Priority')
+    phyRtosTaskPriority.setMin(1)
+    phyRtosTaskPriority.setMax(5)
+    phyRtosTaskPriority.setDefaultValue(1)
     
     # Custom Antenna Gain Enabled
     customAntennaSpecified = ieee802154phy.createBooleanSymbol('USE_CUSTOM_ANT_GAIN', None)
     customAntennaSpecified.setVisible(False)
     customAntennaSpecified.setReadOnly(True)
     customAntennaSpecified.setValue(False)
+
+    # PIC32CX_BZ2 
+    global BZ2Symbol
+    BZ2Symbol = ieee802154phy.createBooleanSymbol("PIC32CXBZ2", None)
+    BZ2Symbol.setDefaultValue(False)
+    BZ2Symbol.setVisible(False)
+
+    if (deviceName in pic32cx_bz2_family):
+        BZ2Symbol.setDefaultValue(True)
 
     # Custom Antenna Gain
     global customAntennaGain
@@ -199,9 +227,6 @@ def instantiateComponent(ieee802154phy):
         importIncFile(ieee802154phy, configName, incFileEntry)
 
     # === Source files
-    srcPal = [
-        ["pal/src/pal.c", conditionAlwaysInclude]
-    ]
     srcResources = [
         ["resources/buffer/src/bmm.c", conditionAlwaysInclude],
         ["resources/queue/src/qmm.c", conditionAlwaysInclude]
@@ -214,8 +239,6 @@ def instantiateComponent(ieee802154phy):
     ]
 
     # === Import the source files
-    for srcFileEntry in srcPal:
-        importSrcFile(ieee802154phy, configName, srcFileEntry)
     for srcFileEntry in srcResources:
         importSrcFile(ieee802154phy, configName, srcFileEntry)
     for srcFileEntry in srcPhy:
@@ -266,6 +289,15 @@ def instantiateComponent(ieee802154phy):
     phyApiHeader.setType("HEADER")
     phyApiHeader.setOverwrite(True)
     phyApiHeader.setMarkup(True)
+    
+    palSource = ieee802154phy.createFileSymbol("PAL_SOURCE", None)
+    palSource.setSourcePath("/driver/templates/pal.c.ftl")
+    palSource.setOutputName("pal.c")
+    palSource.setDestPath("driver/IEEE_802154_PHY/pal/src")
+    palSource.setProjectPath("config/" + configName + "/driver/IEEE_802154_PHY/pal/src")
+    palSource.setType("SOURCE")
+    palSource.setOverwrite(True)
+    palSource.setMarkup(True)
 
     phyDefinitionsH = ieee802154phy.createFileSymbol('IEEE802154PHY_DEFINITIONS_H', None)
     phyDefinitionsH.setType('STRING')
@@ -316,8 +348,9 @@ def instantiateComponent(ieee802154phy):
     # === Library
     libIeee802154Phy = ieee802154phy.createLibrarySymbol("IEEE802154PHY_LIB_FILE", None)
     libIeee802154Phy.setDestPath("/driver/lib")
-    libIeee802154Phy.setSourcePath("/driver/software/phy/pic32cx_bz/lib/lib-ieee802154_phy_pic32cxbz-v1.1.0.a")
-    libIeee802154Phy.setOutputName("lib-ieee802154_phy_pic32cxbz-v1.1.0.a")
+    if (deviceName in pic32cx_bz2_family):
+          libIeee802154Phy.setSourcePath("/driver/software/phy/pic32cx_bz/lib/lib-ieee802154_phy_pic32cxbz-v1.2.0.a")
+          libIeee802154Phy.setOutputName("lib-ieee802154_phy_pic32cxbz-v1.2.0.a")
 #end instantiateComponent
 
 def finalizeComponent(ieee802154phy):
@@ -349,15 +382,15 @@ def powerRegionCheck(symbol, event):
     if (customAntennaRegion1.getValue() == True):  #ETSI
         symbol.setVisible(True)
         appPowerRegion.setMin(-14)
-        if((deviceName == "PIC32CX1012BZ25048") or (deviceName == 'WBZ451')):
+        if(deviceName in TXPowerFamily1):
             ETSISetMax = 11
     elif (customAntennaRegion1.getValue() == False):
         ETSISetMax = 15
         
-    if (customAntennaRegion2.getValue() == True):   #FCC or Taiwan # China #IC 
+    if (customAntennaRegion2.getValue() == True):   #FCC
         symbol.setVisible(True)
         appPowerRegion.setMin(-14)
-        if((deviceName == "PIC32CX1012BZ25048") or (deviceName == 'WBZ451')):
+        if(deviceName in TXPowerFamily1):
             FCCSetMax = 15
     elif (customAntennaRegion2.getValue() == False): 
         FCCSetMax = 15
@@ -365,7 +398,7 @@ def powerRegionCheck(symbol, event):
     if (customAntennaRegion3.getValue() == True):   # Japan
         symbol.setVisible(True)
         appPowerRegion.setMin(-14)
-        if((deviceName == "PIC32CX1012BZ25048") or (deviceName == 'WBZ451')):
+        if(deviceName in TXPowerFamily1):
             JapanSetMax = 12
     elif (customAntennaRegion3.getValue() == False): 
         JapanSetMax = 15
@@ -373,7 +406,7 @@ def powerRegionCheck(symbol, event):
     if (customAntennaRegion4.getValue() == True):  # Korea 
         symbol.setVisible(True)
         appPowerRegion.setMin(-14)
-        if((deviceName == "PIC32CX1012BZ25048") or (deviceName == 'WBZ451')):
+        if(deviceName in TXPowerFamily1):
             KoreaSetMax = 8
     elif (customAntennaRegion4.getValue() == False):
         KoreaSetMax = 15
@@ -381,7 +414,7 @@ def powerRegionCheck(symbol, event):
     if (customAntennaRegion5.getValue() == True):  # CHINA 
         symbol.setVisible(True)
         appPowerRegion.setMin(-14)
-        if((deviceName == "PIC32CX1012BZ25048") or (deviceName == 'WBZ451')):
+        if(deviceName in TXPowerFamily1):
             ChinaSetMax = 15
     elif (customAntennaRegion5.getValue() == False):
         ChinaSetMax = 15
@@ -389,12 +422,12 @@ def powerRegionCheck(symbol, event):
     if (customAntennaRegion6.getValue() == True):  # TAIWAN
         symbol.setVisible(True)
         appPowerRegion.setMin(-14)
-        if((deviceName == "PIC32CX1012BZ25048") or (deviceName == 'WBZ451')):
+        if(deviceName in TXPowerFamily1):
             TaiwanSetMax = 15
     elif (customAntennaRegion6.getValue() == False):
         TaiwanSetMax = 15
         
-    if(deviceName == 'WBZ450'):
+    if(deviceName in TXPowerFamily2):
         appPowerRegion.setMin(-14)
         appPowerRegion.setMax(11)
     else:
@@ -544,12 +577,14 @@ def setIncPath(component, configName, incPathEntry):
 #end setIncPath
 
 def onAttachmentConnected(source, target):
-    remoteComponent = Database.getComponentByID("trng")
-    if (remoteComponent):
-          print('Printing TRNG remoteComponent Value')
-          remoteComponent.getSymbolByID("trngEnableInterrupt").setReadOnly(True)
-          remoteComponent.getSymbolByID("trngEnableEvent").setReadOnly(True)
-          remoteComponent.getSymbolByID("TRNG_STANDBY").setReadOnly(True)  
+    if (deviceName in pic32cx_bz2_family):
+         remoteComponent = Database.getComponentByID("trng")
+         if (remoteComponent):
+               print('Printing TRNG remoteComponent Value')
+               remoteComponent.getSymbolByID("trngEnableInterrupt").setReadOnly(True)
+               remoteComponent.getSymbolByID("trngEnableEvent").setReadOnly(True)
+               remoteComponent.getSymbolByID("TRNG_STANDBY").setReadOnly(True)  
 
 def destroyComponent(ieee802154phy):
-    Database.deactivateComponents(requiredComponents)
+    for component in requiredComponents:
+         Database.deactivateComponents([component])

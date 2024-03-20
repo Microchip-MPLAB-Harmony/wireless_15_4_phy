@@ -1,6 +1,6 @@
 # coding: utf-8
 ##############################################################################
-# Copyright (C) 2023 Microchip Technology Inc. and its subsidiaries.
+# Copyright (C) 2024 Microchip Technology Inc. and its subsidiaries.
 #
 # Subject to your compliance with these terms, you may use Microchip software
 # and any derivatives exclusively with Microchip products. It is your
@@ -36,7 +36,7 @@ phyIntegerBmmLargeBuffers = ieee802154phy.createIntegerSymbol("PHY_INTEGER_BMMLA
 phyIntegerBmmLargeBuffers.setLabel("Large Buffers")
 phyIntegerBmmLargeBuffers.setMin(3)
 phyIntegerBmmLargeBuffers.setMax(50)
-phyIntegerBmmLargeBuffers.setDefaultValue(3)
+phyIntegerBmmLargeBuffers.setDefaultValue(5)
 
 global phyCommentBmmLargeBuffers
 phyCommentBmmLargeBuffers = ieee802154phy.createCommentSymbol("PHY_COMMENT_BMMLARGEBUFFERS", phyIntegerBmmLargeBuffers)

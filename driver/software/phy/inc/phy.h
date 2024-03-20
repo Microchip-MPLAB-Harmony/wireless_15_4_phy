@@ -16,7 +16,7 @@
 
 // DOM-IGNORE-BEGIN
 /*******************************************************************************
-* Copyright (C) 2023 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) 2024 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -380,9 +380,9 @@ typedef union
     Seting this attribute enables the device as PAN Coordinator 
    Description:
     if only source addressing fields are included in a data or MAC command frame, 
-	the frame shall be accepted only if the device is the PAN coordinator and 
-	the source PAN identifier matches macPANId, for details refer to 
-	IEEE 802.15.4-2006, Section 7.5.6.2 (third-level filter rule six
+    the frame shall be accepted only if the device is the PAN coordinator and 
+    the source PAN identifier matches macPANId, for details refer to 
+    IEEE 802.15.4-2006, Section 7.5.6.2 (third-level filter rule six
    Remarks:
     None 
  */
@@ -426,7 +426,7 @@ typedef union
    Summary:
     This macro holds the stack Major number 
    Description:
-	None
+    None
    Remarks:
     None 
  */
@@ -438,18 +438,18 @@ typedef union
    Summary:
     This macro holds the stack Minor number 
    Description:
-	None
+    None
    Remarks:
     None 
  */
-#define MINOR_NUM                 "1"
+#define MINOR_NUM                 "2"
 
 /* Patch Number
  
    Summary:
     This macro holds the stack patch number 
    Description:
-	None
+    None
    Remarks:
     None 
  */
@@ -461,7 +461,7 @@ typedef union
    Summary:
     This macro holds the PHY SW version as a String 
    Description:
-	None
+    None
    Remarks:
     None 
  */
@@ -487,9 +487,9 @@ typedef union
 
 
 Example:
-  802.15.4-PHY v1.1.0 is represented as 0x01140000
+  802.15.4-PHY v1.2.0 is represented as 0x01240000
 
-|0000       |0001        | 0000        | 01        | 0000           | 00000000000000|
+|0000       |0001        | 0010        | 01        | 0000           | 00000000000000|
 |-----------|------------|-------------|-----------|----------------|---------------|
 |Reserved   | Stack Major| Stack Minor | Qualifier | Build Iteration| Reserved      |
 */
@@ -500,11 +500,11 @@ Example:
    Summary:
     This macro holds PHY Software Version Information in 32-bit bitfield
    Description:
-	None
+    None
    Remarks:
     None 
 */
-#define PHY_VERSION_VALUE      (0x01140000)
+#define PHY_VERSION_VALUE      (0x01240000)
 
 // *****************************************************************************
 // *****************************************************************************
@@ -690,7 +690,7 @@ PHY_Retval_t PHY_Reset(bool setDefaultPib);
     txFrame     - Pointer to the PHY_FrameInfo_t structure or
                   to frame array to be transmitted
                 txFrame->mpdu - Pointer to the PHY Payload. mpdu[0] should hold 
-						the length of the payload(N) + 1 (for length field length)
+                        the length of the payload(N) + 1 (for length field length)
                 txFrame->mpdu[1-N] - Hold the phyPayload
   
     csmaMode    - Indicates mode of csma-ca to be performed for this frame
@@ -773,7 +773,7 @@ PHY_Retval_t PHY_TxFrame(PHY_FrameInfo_t *txFrame, PHY_CSMAMode_t csmaMode,
     frame       - Pointer to the PHY_FrameInfo_t structure or
                   to frame array to be transmitted
                 txFrame->mpdu - Pointer to the PHY Payload. mpdu[0] should hold 
-						the length of the payload(N) + 1 (for length field length)
+                        the length of the payload(N) + 1 (for length field length)
                 txFrame->mpdu[1-N] - Hold the phyPayload     
 
   Returns:
@@ -1135,9 +1135,9 @@ void PHY_RxFrameCallback(PHY_FrameInfo_t *rxFrame);
     bool trxSleepStatus = false;
  
     if (PHY_SUCCESS == PHY_TrxSleep(sleepMode))
-	{
-		trxSleepStatus = true;
-	}  
+    {
+        trxSleepStatus = true;
+    }
     </code>
 
   Remarks:
@@ -1177,9 +1177,9 @@ PHY_Retval_t PHY_TrxSleep(PHY_SleepMode_t mode);
     bool trxSleepStatus = false;
 
     if (PHY_SUCCESS == PHY_TrxSleep(sleepMode))
-	{
-		trxSleepStatus = true;
-	}
+    {
+       trxSleepStatus = true;
+    }
 
     if (PHY_SUCCESS == PHY_TrxWakeup())
     {
@@ -1506,7 +1506,7 @@ PHY_Retval_t PHY_ConfigTxPwr(bool type, int8_t pwrValue);
     bool antDiv = ANTENNA_DIVERSITY_DISABLE;
     uint8_t antennaSel =  ANTENNA_CTRL_1;
 
-	PHY_ConfigAntennaDiversity(antDiv, antennaSel);
+    PHY_ConfigAntennaDiversity(antDiv, antennaSel);
     
     PHY_GetTrxConfig(ANT_DIV, &antDiv); 
     PHY_GetTrxConfig(ANT_SELECT, &antennaSel);    
@@ -1549,7 +1549,7 @@ PHY_Retval_t  PHY_ConfigAntennaDiversity(bool divCtrl, uint8_t antCtrl);
     <code>
     uint8_t pdtLevel =  0x03;
  
-	PHY_ConfigRxSensitivity(pdtLevel);
+    PHY_ConfigRxSensitivity(pdtLevel);
     PHY_GetTrxConfig(RX_SENS, &pdtLevel); 
      
     </code>
@@ -1588,7 +1588,7 @@ PHY_Retval_t PHY_ConfigRxSensitivity(uint8_t pdtLevel);
     <code>
     bool promCtrl =  true;
  
-	PHY_ConfigRxPromiscuousMode(promCtrl);
+    PHY_ConfigRxPromiscuousMode(promCtrl);
     
     PHY_GetTrxConfig(AACK_PROMSCS_MODE, &promCtrl); 
      
@@ -1839,7 +1839,7 @@ PHY_TrxStatus_t PHY_GetTrxStatus(void);
     <code>
     int8_t trxBaseRSSI;
  
-	trxBaseRSSI = PHY_GetRSSIBaseVal();
+    trxBaseRSSI = PHY_GetRSSIBaseVal();
     
     </code>
 
@@ -1871,7 +1871,7 @@ int8_t PHY_GetRSSIBaseVal(void);
   Example:
     <code>
     uint32_t phySwVersion;
-	phySwVersion = PHY_GetSWVersion();
+    phySwVersion = PHY_GetSWVersion();
     
     </code>
 
@@ -1907,7 +1907,7 @@ uint32_t PHY_GetSWVersion(void);
     uint8_t pwrRegIndex = 0x04;
     int8_t pwrDbm;
  
-	PHY_ConvertTxPwrRegValToDbm(pwrRegIndex, &pwrDbm);
+    PHY_ConvertTxPwrRegValToDbm(pwrRegIndex, &pwrDbm);
     
     </code>
 
@@ -1919,16 +1919,16 @@ PHY_Retval_t PHY_ConvertTxPwrRegValToDbm(uint8_t regValue, int8_t *dbmValue);
 // *****************************************************************************
 /*
   Function:
-	bool PHY_IsFramePendingFromNextLayer(PHY_Addr_t *addr, uint8_t *addrMode)
+    bool PHY_IsFramePendingFromNextLayer(PHY_Addr_t *addr, uint8_t *addrMode)
 
   Summary:
     Function to check whether Any frame is pending from higher layer upon 
-	reception of Datarequest command frame (Ex: MAC/APP)
+    reception of Datarequest command frame (Ex: MAC/APP)
 
   Description:
     Function to check whether Any frame is pending from higher layer upon 
-	reception of Datarequest command frame (Ex: MAC/APP)
-	so that the automatic acknowledgement frame will have proper FramePending bit status
+    reception of Datarequest command frame (Ex: MAC/APP)
+    so that the automatic acknowledgement frame will have proper FramePending bit status
  
   Precondition:
     PHY_Init() should have been called before calling this function.
@@ -1939,24 +1939,25 @@ PHY_Retval_t PHY_ConvertTxPwrRegValToDbm(uint8_t regValue, int8_t *dbmValue);
 
   Returns:
     bool - true - If Frame is pending for the RFD 
-		 - false - Otherwise
+         - false - Otherwise
 
   Example:
     <code>
-    	bool PHY_IsFramePendingFromNextLayer(PHY_Addr_t *addr, uint8_t *addrMode)
-		{
-			bool isFramePending = true;
-			return isFramePending;
-		}  
+        bool PHY_IsFramePendingFromNextLayer(PHY_Addr_t *addr, uint8_t *addrMode)
+        {
+            bool isFramePending = true;
+            return isFramePending;
+        }  
     </code>
 
   Remarks:
-    This function is invloked by phy layer on the reception of Datarequest frame in ISR context.
-	The higher layer has to implement this function approprietely to set the framepending bit in Acknoewledgement frame.
-	This function is weak by default with FramePending bit set to true. 
+    This function is invloked by phy layer on thereception of Datarequest frame in ISR context.
+    The higher layer has to implement this function approprietely to set the framepending bit in Acknoewledgement frame.
+    This function is weak by default with FramePending bit set to true. 
 */
 
 bool PHY_IsFramePendingFromNextLayer(PHY_Addr_t *addr, uint8_t *addrMode);
+
 
 //DOM-IGNORE-BEGIN
 #ifdef __cplusplus

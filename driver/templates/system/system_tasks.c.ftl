@@ -9,7 +9,7 @@
                 "PHY_Tasks",
                 1024,
                 NULL,
-                1,
+                PHY_RTOS_TASK_PRIORITY,
                 &xPHY_Tasks);
 </#if>
 </#if>

@@ -3,6 +3,31 @@
 
 # Microchip PIC32CX-BZ2 Device Standalone IEEE 802.15.4 Physical Layer Release Notes
 
+## Release v1.2.0
+
+### New Features
+- Adding Support for Software CSMA and basic transciver modes operations.
+- Enhancements to Tx power handling algorithm.
+
+
+### Bug fixes
+- Fix for BLE is failing to initialize if PHY_TrxSleep is called before
+- Fix for load Calibration value for wireless_15_4_phy
+
+### Known Issues
+- None
+
+## Development Tools
+-	MPLAB X v6.20
+-	MPLAB® XC32 C/C++ Compiler v4.35
+-	MPLAB® X IDE plug-ins: MPLAB® Code Configurator (MCC) v5.5.0 and above
+-	Device Pack: PIC32CX-BZ2-DFP (1.4.241)
+
+## Notes
+-	None
+
+__________________
+
 ## Release v1.1.1
 
 ### Bug fixes
