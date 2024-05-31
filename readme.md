@@ -20,14 +20,14 @@ reference information.
 - [Release Notes](./release_notes.md)
 - [MPLAB® Harmony License](mplab_harmony_license.md)
 - [MPLAB® Harmony 3 Standalone IEEE 802.15.4 Physical Layer Wiki](https://github.com/Microchip-MPLAB-Harmony/wireless_15_4_phy/wiki)
-- [MPLAB® Harmony 3 Standalone IEEE 802.15.4 Physical Layer API Help](./docs/MPLAB_Harmony_Wireless_15_4_PHY_APIhelp.chm)
+- [MPLAB® Harmony 3 Standalone IEEE 802.15.4 Physical Layer API Help](https://microchip-mplab-harmony.github.io/wireless_15_4_phy)
 
 # Contents Summary
 
 | Folder     | Description                                                       |
 | -----------| ------------------------------------------------------------------|
 | config     | Standalone IEEE 802.15.4 Physical Layer module configuration file |
-| docs| [Standalone IEEE 802.15.4 Physical Layer library API documentation](https://onlinedocs.microchip.com/oxy/GUID-064E0446-1800-4952-AC2C-15F8AFAB1DA2-en-US-2/index.html)|
+| docs       | [Standalone IEEE 802.15.4 Physical Layer library API documentation](https://onlinedocs.microchip.com/oxy/GUID-064E0446-1800-4952-AC2C-15F8AFAB1DA2-en-US-3/index.html) |
 | drivers    | phy layer library and dependent files for pic32cxbz2 products     |
 
 
