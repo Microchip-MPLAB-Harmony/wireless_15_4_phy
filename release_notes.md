@@ -6,7 +6,7 @@
 ## Release v1.2.0
 
 ### New Features
-- Adding Support for Software CSMA and basic transciver modes operations.
+- Adding Support for Software CSMA and basic transceiver modes operations.
 - Enhancements to Tx power handling algorithm.
 
 
