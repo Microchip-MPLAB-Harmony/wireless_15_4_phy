@@ -384,7 +384,7 @@ static void palTimerCallback(uintptr_t paramCb)
 
 PAL_Status_t PAL_GetRandomNumber(uint8_t *rnOutput, uint16_t rnLength)
 {
-<#if PIC32CXBZ2 == true>
+<#if PIC32CXBZ2 == true || PIC32CXBZ2_HPA == true>
     uint32_t random_num;
     uint32_t remBytes;
     uint8_t *end = rnOutput;
@@ -457,7 +457,11 @@ int8_t PAL_GetTrxTransmitPowerMax(void)
 
 bool PAL_GetDeviceType(void)
 {
+<#if PIC32CXBZ2_HPA == true>
+    bool isHpaEnabled = true;
+<#else> 
     bool isHpaEnabled = false;
+</#if>
     
     return isHpaEnabled;
 
@@ -470,5 +474,16 @@ bool PAL_GetDeviceType(void)
 
 void PAL_HpaSetCps(bool bypass)
 {
+<#if PIC32CXBZ2_HPA == true>
+    if(bypass)
+    {
+        GPIOB_REGS->GPIO_LATSET = (1U<<1U);
+    }
+    else
+    {
+        GPIOB_REGS->GPIO_LATCLR = (1U<<1U);
+    }
+<#else>
     (void)bypass;
+</#if>
 }

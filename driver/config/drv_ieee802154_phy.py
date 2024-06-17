@@ -34,17 +34,17 @@ pic32cx_bz2_family = {'PIC32CX1012BZ25048',
                       'PIC32CX1012BZ24032',
                       'WBZ451',
                       'WBZ450',
+                      'WBZ451H',
                       }
                       
-TXPowerFamily1  = { 'PIC32CX1012BZ25048',
-                    'WBZ451',
-                    }
-                    
-TXPowerFamily2 = { 'PIC32CX1012BZ25032',
-                   'PIC32CX1012BZ24032',
-                   'WBZ450',
-                   }
-
+pic32cx_bz2_hpa_family = {
+                      'WBZ451H',
+                      }
+                      
+global customTxMaxFHSSVal1
+global customGainValue1
+customTxMaxFHSSVal1 = 14
+customGainValue1 = 2
 
 global deviceName
 deviceName = Variables.get("__PROCESSOR")
@@ -60,7 +60,6 @@ def instantiateComponent(ieee802154phy):
           requiredComponents = [
               "HarmonyCore",
               "sys_time",
-              "pic32cx_bz2_devsupport",
               "RTOS",
               "trng"
           ]
@@ -113,9 +112,16 @@ def instantiateComponent(ieee802154phy):
     BZ2Symbol = ieee802154phy.createBooleanSymbol("PIC32CXBZ2", None)
     BZ2Symbol.setDefaultValue(False)
     BZ2Symbol.setVisible(False)
+    
+    global BZ2HPASymbol
+    BZ2HPASymbol = ieee802154phy.createBooleanSymbol("PIC32CXBZ2_HPA", None)
+    BZ2HPASymbol.setDefaultValue(False)
+    BZ2HPASymbol.setVisible(False)
 
     if (deviceName in pic32cx_bz2_family):
         BZ2Symbol.setDefaultValue(True)
+    if (deviceName in pic32cx_bz2_hpa_family):
+        BZ2HPASymbol.setDefaultValue(True)
 
     # Custom Antenna Gain
     global customAntennaGain
@@ -124,44 +130,19 @@ def instantiateComponent(ieee802154phy):
     customAntennaGain.setReadOnly(True)
     if(deviceName == 'WBZ450'):
         customAntennaGain.setValue(5)
+    elif(deviceName == 'WBZ451H'):
+        customAntennaGain.setValue(4)
     else:
         customAntennaGain.setValue(3)
-    
-    global  customAntennaRegion1
-    customAntennaRegion1 = ieee802154phy.createBooleanSymbol('ETSI_REGION', None)
-    customAntennaRegion1.setVisible(False)
-    customAntennaRegion1.setReadOnly(True)
-    customAntennaRegion1.setValue(True)
-    
-    global  customAntennaRegion2
-    customAntennaRegion2 = ieee802154phy.createBooleanSymbol('FCC_REGION', None)
-    customAntennaRegion2.setVisible(False)
-    customAntennaRegion2.setReadOnly(True)
-    customAntennaRegion2.setValue(False)
-
-    global  customAntennaRegion3
-    customAntennaRegion3 = ieee802154phy.createBooleanSymbol('JAPAN_REGION', None)
-    customAntennaRegion3.setVisible(False)
-    customAntennaRegion3.setReadOnly(True)
-    customAntennaRegion3.setValue(False)
-    
-    global  customAntennaRegion4
-    customAntennaRegion4 = ieee802154phy.createBooleanSymbol('KOREA_REGION', None)
-    customAntennaRegion4.setVisible(False)
-    customAntennaRegion4.setReadOnly(True)
-    customAntennaRegion4.setValue(False)
-    
-    global  customAntennaRegion5
-    customAntennaRegion5 = ieee802154phy.createBooleanSymbol('CHINA_REGION', None)
-    customAntennaRegion5.setVisible(False)
-    customAntennaRegion5.setReadOnly(True)
-    customAntennaRegion5.setValue(False)
-    
-    global  customAntennaRegion6
-    customAntennaRegion6 = ieee802154phy.createBooleanSymbol('TAIWAN_REGION', None)
-    customAntennaRegion6.setVisible(False)
-    customAntennaRegion6.setReadOnly(True)
-    customAntennaRegion6.setValue(False)
+        
+    customAntennaGain.setDependencies(powerRegionCheck, ["CUSTOM_ANT_GAIN"])
+        
+    # Custom tx power max
+    global customTxMaxFHSSVal
+    customTxMaxFHSSVal = ieee802154phy.createIntegerSymbol('TX_PWR_MAX_NON_FHSS', None)
+    customTxMaxFHSSVal.setVisible(False)
+    customTxMaxFHSSVal.setReadOnly(True)
+    customTxMaxFHSSVal.setValue(customTxMaxFHSSVal1)
     
     global phyTxPwrConfig
     phyTxPwrConfig = ieee802154phy.createMenuSymbol("PHY_TX_POWER_CONFIG", None)
@@ -182,12 +163,16 @@ def instantiateComponent(ieee802154phy):
         appPowerRegion.setMax(6)
     elif (deviceName == "PIC32CX1012BZ24032"):
         appPowerRegion.setDefaultValue(3)
-        appPowerRegion.setMin(-11)
+        appPowerRegion.setMin(-16)
         appPowerRegion.setMax(6)
     elif(deviceName == "WBZ451"):
         appPowerRegion.setDefaultValue(3)
         appPowerRegion.setMin(-11)
         appPowerRegion.setMax(15)
+    elif(deviceName == "WBZ451H"):
+        appPowerRegion.setDefaultValue(3)
+        appPowerRegion.setMin(-26)
+        appPowerRegion.setMax(20)
     elif(deviceName == "WBZ450"):
         appPowerRegion.setDefaultValue(3)
         appPowerRegion.setMin(-11)
@@ -195,7 +180,7 @@ def instantiateComponent(ieee802154phy):
     else:
         appPowerRegion.setDefaultValue(5)
      
-    appPowerRegion.setDependencies(powerRegionCheck, ["ETSI_REGION", "FCC_REGION", "JAPAN_REGION", "KOREA_REGION", "CHINA_REGION","TAIWAN_REGION"])
+    appPowerRegion.setDependencies(powerRegionCheck, ["TX_PWR_MAX_NON_FHSS"])
     appPowerRegion.setDefaultValue(appPowerRegion.getMax())
     
     # === Radio menu
@@ -354,86 +339,51 @@ def instantiateComponent(ieee802154phy):
 #end instantiateComponent
 
 def finalizeComponent(ieee802154phy):
-    try:
-        if (deviceName in pic32cx_bz2_family):    
-            ETSImValue=Database.getSymbolValue("pic32cx_bz2_devsupport", "ETSI_REGION")
-            FCCmValue=Database.getSymbolValue("pic32cx_bz2_devsupport", "FCC_REGION")
-            JapanmValue=Database.getSymbolValue("pic32cx_bz2_devsupport", "JAPAN_REGION")
-            KoreamValue=Database.getSymbolValue("pic32cx_bz2_devsupport", "KOREA_REGION")
-            ChinamValue=Database.getSymbolValue("pic32cx_bz2_devsupport", "CHINA_REGION")
-            TaiwanmValue=Database.getSymbolValue("pic32cx_bz2_devsupport", "TAIWAN_REGION")
-        customAntennaRegion1.setValue(ETSImValue)
-        customAntennaRegion2.setValue(FCCmValue)
-        customAntennaRegion3.setValue(JapanmValue)
-        customAntennaRegion4.setValue(KoreamValue)
-        customAntennaRegion5.setValue(ChinamValue) 
-        customAntennaRegion6.setValue(TaiwanmValue)      
-        appPowerRegion.setDependencies(powerRegionCheck, ["ETSI_REGION", "FCC_REGION", "JAPAN_REGION", "KOREA_REGION", "CHINA_REGION", "TAIWAN_REGION"])
+    ###########################################################################
+    ## Auto Activate and Dependent components
+    ###########################################################################
+    if (deviceName in pic32cx_bz2_family):
+      activeComponents = Database.getActiveComponentIDs()
       
-    except Exception as e:
-        print("Exception for getting TX power region from Dev_Support library(wireless_pic32cxbz_wbz)", e)
+      requiredComponents = ["pic32cx_bz2_devsupport"]
+      for r in requiredComponents:
+          if r in activeComponents:
+              print("require component '{}' - de-activating it".format(r))
+              res = Database.deactivateComponents([r])
+
+      activeComponents = Database.getActiveComponentIDs()
+      
+      requiredComponents = ["pic32cx_bz2_devsupport"]
+      for r in requiredComponents:
+          if r not in activeComponents:
+              print("require component '{}' - activating it".format(r))
+              res = Database.activateComponents([r])
+      
+    print("Finalized Componenet Deactivation / activation Process - completed **********************")
+    
 #end finalizeComponent
 
 #
 # Dependency functions
 #
 def powerRegionCheck(symbol, event):
-    symbol.setVisible(True)
-    if (customAntennaRegion1.getValue() == True):  #ETSI
-        symbol.setVisible(True)
-        appPowerRegion.setMin(-14)
-        if(deviceName in TXPowerFamily1):
-            ETSISetMax = 11
-    elif (customAntennaRegion1.getValue() == False):
-        ETSISetMax = 15
-        
-    if (customAntennaRegion2.getValue() == True):   #FCC
-        symbol.setVisible(True)
-        appPowerRegion.setMin(-14)
-        if(deviceName in TXPowerFamily1):
-            FCCSetMax = 15
-    elif (customAntennaRegion2.getValue() == False): 
-        FCCSetMax = 15
-        
-    if (customAntennaRegion3.getValue() == True):   # Japan
-        symbol.setVisible(True)
-        appPowerRegion.setMin(-14)
-        if(deviceName in TXPowerFamily1):
-            JapanSetMax = 12
-    elif (customAntennaRegion3.getValue() == False): 
-        JapanSetMax = 15
-    
-    if (customAntennaRegion4.getValue() == True):  # Korea 
-        symbol.setVisible(True)
-        appPowerRegion.setMin(-14)
-        if(deviceName in TXPowerFamily1):
-            KoreaSetMax = 8
-    elif (customAntennaRegion4.getValue() == False):
-        KoreaSetMax = 15
-    
-    if (customAntennaRegion5.getValue() == True):  # CHINA 
-        symbol.setVisible(True)
-        appPowerRegion.setMin(-14)
-        if(deviceName in TXPowerFamily1):
-            ChinaSetMax = 15
-    elif (customAntennaRegion5.getValue() == False):
-        ChinaSetMax = 15
 
-    if (customAntennaRegion6.getValue() == True):  # TAIWAN
-        symbol.setVisible(True)
-        appPowerRegion.setMin(-14)
-        if(deviceName in TXPowerFamily1):
-            TaiwanSetMax = 15
-    elif (customAntennaRegion6.getValue() == False):
-        TaiwanSetMax = 15
-        
-    if(deviceName in TXPowerFamily2):
-        appPowerRegion.setMin(-14)
-        appPowerRegion.setMax(11)
-    else:
-        RegMax = 0
-        RegMax = min([ETSISetMax, FCCSetMax, JapanSetMax, KoreaSetMax, ChinaSetMax, TaiwanSetMax])
-        appPowerRegion.setMax(RegMax)
+    # symbol.setVisible(True)
+
+    minBoundaries = 0
+    if(deviceName == "WBZ451"):
+        minBoundaries  = -14
+    elif(deviceName == "WBZ450"):
+        minBoundaries  = -16
+    elif(deviceName in pic32cx_bz2_hpa_family):
+        minBoundaries  = -26
+    
+    customGainValue1 = customAntennaGain.getValue()
+    TxMinPwr =  minBoundaries + customGainValue1
+    appPowerRegion.setMin(TxMinPwr)
+    customTxMaxFHSSVal2 = customTxMaxFHSSVal.getValue()
+    appPowerRegion.setMax(customTxMaxFHSSVal2)
+    
 
 #end powerRegionCheck
 
@@ -447,14 +397,8 @@ def handleMessage(messageID, args):
         component = Database.getComponentByID(args['target'])
         if (component):
             customGainEnabled = component.getSymbolByID('USE_CUSTOM_ANT_GAIN')
-            customGainValue = component.getSymbolByID('CUSTOM_ANT_GAIN')
-            customRegion1 = component.getSymbolByID('ETSI_REGION')
-            customRegion2 = component.getSymbolByID('FCC_REGION')
-            customRegion3 = component.getSymbolByID('JAPAN_REGION')
-            customRegion4 = component.getSymbolByID('KOREA_REGION')
-            customRegion5 = component.getSymbolByID('CHINA_REGION')
-            customRegion6 = component.getSymbolByID('TAIWAN_REGION')
-            
+            customAntennaGain = component.getSymbolByID('CUSTOM_ANT_GAIN')
+            customTxMaxFHSSVal = component.getSymbolByID('TX_PWR_MAX_NON_FHSS')
             
             Log.writeInfoMessage('{:<17}: Handling - target={}'.format('drv_ieee802154_phy.py', args['target']))
             for arg in args:
@@ -462,19 +406,9 @@ def handleMessage(messageID, args):
                 if('CUSTOM_ANT_ENABLE' == arg):
                     customGainEnabled.setValue(args[arg])
                 if('CUSTOM_ANT_GAIN' == arg):
-                    customGainValue.setValue(args[arg])
-                if('ETSI_REGION' == arg):
-                    customRegion1.setValue(args[arg])
-                if('FCC_REGION' == arg):
-                    customRegion2.setValue(args[arg])
-                if('JAPAN_REGION' == arg):
-                    customRegion3.setValue(args[arg])
-                if('KOREA_REGION' == arg):
-                    customRegion4.setValue(args[arg])
-                if('CHINA_REGION' == arg):
-                    customRegion5.setValue(args[arg])
-                if('TAIWAN_REGION' == arg):
-                    customRegion6.setValue(args[arg])                
+                    customAntennaGain.setValue(args[arg])
+                if('TX_PWR_MAX_NON_FHSS' == arg):
+                    customTxMaxFHSSVal.setValue(args[arg])
 
 #end handleMessage       
 
