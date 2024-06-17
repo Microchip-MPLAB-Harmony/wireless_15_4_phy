@@ -241,7 +241,7 @@ def instantiateComponent(ieee802154phy):
 
     # === Compiler macros
     preprocessorCompiler = ieee802154phy.createSettingSymbol("IEEE802154PHY_XC32_PREPRECESSOR", None)
-    preprocessorCompiler.setValue("ENABLE_LARGE_BUFFER;ENABLE_QUEUE_CAPACITY")
+    preprocessorCompiler.setValue("ENABLE_LARGE_BUFFER;ENABLE_QUEUE_CAPACITY;configCHECK_HANDLER_INSTALLATION=0")
     preprocessorCompiler.setCategory("C32")
     preprocessorCompiler.setKey("preprocessor-macros")
     preprocessorCompiler.setAppend(True, ";")
