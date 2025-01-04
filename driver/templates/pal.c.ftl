@@ -14,7 +14,7 @@
 
 // DOM-IGNORE-BEGIN
 /*******************************************************************************
-* Copyright (C) 2024 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) 2025 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -47,6 +47,10 @@
 #include "pal.h"
 #include "system/time/sys_time.h"
 #include "phy.h"
+<#if PHY_PTA_ENABLE == true>
+#include "pal_pta_interface.h"
+#include "pal_pta_api.h"
+</#if>
 
 /* ************************************************************************** */
 /* ************************************************************************** */
@@ -74,7 +78,10 @@ typedef struct pal_timers_tag
 /* Section: Macros                                                  */
 /* ************************************************************************** */
 /* ************************************************************************** */
-
+<#if PIC32CXBZ3 == true>
+/*The max chunk size is defined by the sample code of TRNG */
+#define APP_TRNG_MAX_CHUNK_SZ 32
+</#if>
 /* ************************************************************************** */
 /* ************************************************************************** */
 /* Section: Prototypes                                                   */
@@ -116,7 +123,12 @@ static PAL_Status_t PAL_TimerInit(void);
 PAL_Status_t PAL_Init(void)
 {
     PAL_Status_t status = PAL_SUCCESS;
-        
+
+<#if PHY_PTA_ENABLE == true>
+    PAL_PTA_InitInterface();
+    PAL_PTA_Init(NULL);
+    PAL_PTA_Enable(true);
+</#if>    
     status = PAL_TimerInit();  
    
     return status;
@@ -384,7 +396,7 @@ static void palTimerCallback(uintptr_t paramCb)
 
 PAL_Status_t PAL_GetRandomNumber(uint8_t *rnOutput, uint16_t rnLength)
 {
-<#if PIC32CXBZ2 == true || PIC32CXBZ2_HPA == true>
+    <#if PIC32CXBZ2 == true || PIC32CXBZ2_HPA == true>
     uint32_t random_num;
     uint32_t remBytes;
     uint8_t *end = rnOutput;
@@ -400,8 +412,45 @@ PAL_Status_t PAL_GetRandomNumber(uint8_t *rnOutput, uint16_t rnLength)
         random_num = TRNG_ReadData();
         (void)memcpy((uint8_t *)rnOutput, (uint8_t *)&random_num, remBytes);
     }
-</#if>
+    </#if>
+    <#if PIC32CXBZ3 == true>
+    int length = rnLength;
+    int ret;
+    char rndBytes[64];
+    struct sx_trng ctx;
+    int chunkSz;
+    int i;
+    
+    SX_CLK_ENABLE();
 
+    ret = SX_TRNG_INIT(&ctx, NULL);
+    if (ret != SX_OK)
+    {
+        return PAL_FAILURE;
+    }
+
+    ret = 1;
+    i = 0;
+    while (i < length)
+    {
+        chunkSz = length > APP_TRNG_MAX_CHUNK_SZ ? APP_TRNG_MAX_CHUNK_SZ : length;
+        ret = SX_TRNG_GET(&ctx, rndBytes, chunkSz);
+        if (ret == SX_ERR_HW_PROCESSING)
+        {
+            continue;
+        }
+        if (ret)
+        {
+            return PAL_SUCCESS;
+        }
+
+        memcpy(rnOutput, rndBytes, chunkSz);
+        rnOutput += chunkSz;
+        i += chunkSz;
+    }
+
+    SX_CLK_DISABLE();
+    </#if>
     return PAL_SUCCESS;
 }
 
@@ -457,11 +506,11 @@ int8_t PAL_GetTrxTransmitPowerMax(void)
 
 bool PAL_GetDeviceType(void)
 {
-<#if PIC32CXBZ2_HPA == true>
+    <#if PIC32CXBZ2_HPA == true>
     bool isHpaEnabled = true;
-<#else> 
+    <#else> 
     bool isHpaEnabled = false;
-</#if>
+    </#if>
     
     return isHpaEnabled;
 
@@ -474,7 +523,7 @@ bool PAL_GetDeviceType(void)
 
 void PAL_HpaSetCps(bool bypass)
 {
-<#if PIC32CXBZ2_HPA == true>
+    <#if PIC32CXBZ2_HPA == true>
     if(bypass)
     {
         GPIOB_REGS->GPIO_LATSET = (1U<<1U);
@@ -483,7 +532,7 @@ void PAL_HpaSetCps(bool bypass)
     {
         GPIOB_REGS->GPIO_LATCLR = (1U<<1U);
     }
-<#else>
+    <#else>
     (void)bypass;
-</#if>
+    </#if>
 }

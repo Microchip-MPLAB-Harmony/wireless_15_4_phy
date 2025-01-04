@@ -7,7 +7,7 @@
     /* Create FreeRTOS task for IEEE_802154_PHY */
      (void)xTaskCreate((TaskFunction_t) _PHY_Tasks,
                 "PHY_Tasks",
-                1024,
+                512,
                 NULL,
                 PHY_RTOS_TASK_PRIORITY,
                 &xPHY_Tasks);

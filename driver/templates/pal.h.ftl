@@ -14,7 +14,7 @@
 
 // DOM-IGNORE-BEGIN
 /*******************************************************************************
-* Copyright (C) 2024 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) 2025 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -169,6 +169,8 @@ typedef uint8_t TimerId_t;
 	PAL_TIMER_INVALID_ID 	- Timer ID given is not valid or out of range
 	PAL_TIMER_INVALID_TIMEOUT - Timer=out given is not valid
 	PAL_FAILURE 			- Failure status for the request
+    PAL_PTA_DISABLED        - PAL PTA Disabled
+	PAL_PTA_DEBUG_DISABLED  - PAL PTA Debug Info Disabled
 	
    Remarks:
     None
@@ -181,6 +183,8 @@ typedef enum pal_status_tag {
 	PAL_TMR_INVALID_TIMEOUT     = 0x13, /**< Requested Timeout is out of
 	                                     * range or too short */
     PAL_FAILURE                 = 0x14,
+    PAL_PTA_DISABLED		    = 0x15,
+	PAL_PTA_DEBUG_DISABLED      = 0x16,
 } PAL_Status_t;
 
 
@@ -806,6 +810,9 @@ bool PAL_GetDeviceType(void);
 */
 
 void PAL_HpaSetCps(bool bypass);
+
+
+bool PAL_GetWLANActivePinState(void);
 
 /* ! @} */
 #ifdef __cplusplus

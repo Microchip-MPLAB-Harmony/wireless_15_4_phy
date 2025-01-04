@@ -1,6 +1,6 @@
 # coding: utf-8
 ##############################################################################
-# Copyright (C) 2024 Microchip Technology Inc. and its subsidiaries.
+# Copyright (C) 2025 Microchip Technology Inc. and its subsidiaries.
 #
 # Subject to your compliance with these terms, you may use Microchip software
 # and any derivatives exclusively with Microchip products. It is your
@@ -40,7 +40,12 @@ pic32cx_bz2_family = {'PIC32CX1012BZ25048',
 pic32cx_bz2_hpa_family = {
                       'WBZ451H'
                       }
-                      
+pic32cx_bz3_family = {'PIC32CX5109BZ31048',
+                      'PIC32CX5109BZ31032',
+                      'WBZ351',
+                      'WBZ350'
+                      }
+
 global customTxMaxFHSSVal1
 global customGainValue1
 customTxMaxFHSSVal1 = 14
@@ -49,20 +54,19 @@ customGainValue1 = 2
 global deviceName
 deviceName = Variables.get("__PROCESSOR")
 
-
 def instantiateComponent(ieee802154phy):
     print("IEEE 802.15.4 PHY Standalone library driver component")
     configName = Variables.get("__CONFIGURATION_NAME")
     print configName
     # === Activate required components automatically
     global requiredComponents
-    if (deviceName in pic32cx_bz2_family):
-          requiredComponents = [
+    requiredComponents = [
               "HarmonyCore",
               "sys_time",
-              "RTOS",
-              "trng"
+              "RTOS"
           ]
+    if (deviceName in pic32cx_bz2_family):
+          requiredComponents.extend(["trng"])
     
     conditionAlwaysInclude = [True, None, []]
     
@@ -117,12 +121,19 @@ def instantiateComponent(ieee802154phy):
     BZ2HPASymbol = ieee802154phy.createBooleanSymbol("PIC32CXBZ2_HPA", None)
     BZ2HPASymbol.setDefaultValue(False)
     BZ2HPASymbol.setVisible(False)
+    
+    global BZ3Symbol
+    BZ3Symbol = ieee802154phy.createBooleanSymbol("PIC32CXBZ3", None)
+    BZ3Symbol.setDefaultValue(False)
+    BZ3Symbol.setVisible(False)
 
     if (deviceName in pic32cx_bz2_family):
         BZ2Symbol.setDefaultValue(True)
     if (deviceName in pic32cx_bz2_hpa_family):
         BZ2HPASymbol.setDefaultValue(True)
-
+    if (deviceName in pic32cx_bz3_family):
+        BZ3Symbol.setDefaultValue(True)
+        
     # Custom Antenna Gain
     global customAntennaGain
     customAntennaGain = ieee802154phy.createIntegerSymbol('CUSTOM_ANT_GAIN', None)
@@ -157,6 +168,10 @@ def instantiateComponent(ieee802154phy):
         appPowerRegion.setDefaultValue(3)
         appPowerRegion.setMin(-11)
         appPowerRegion.setMax(15)
+    elif (deviceName == "PIC32CX5109BZ31048"):
+        appPowerRegion.setDefaultValue(3)
+        appPowerRegion.setMin(-11)
+        appPowerRegion.setMax(15)        
     elif(deviceName == "PIC32CX1012BZ25032"):
         appPowerRegion.setDefaultValue(3)
         appPowerRegion.setMin(-11)
@@ -165,10 +180,18 @@ def instantiateComponent(ieee802154phy):
         appPowerRegion.setDefaultValue(3)
         appPowerRegion.setMin(-16)
         appPowerRegion.setMax(6)
-    elif(deviceName == "WBZ451"):
+    elif(deviceName == "WBZ451") or (deviceName == "WBZ351"):
         appPowerRegion.setDefaultValue(3)
         appPowerRegion.setMin(-11)
         appPowerRegion.setMax(15)
+    elif(deviceName == "WBZ350"):
+        appPowerRegion.setDefaultValue(3)
+        appPowerRegion.setMin(-13)
+        appPowerRegion.setMax(6)
+    elif(deviceName == "PIC32CX5109BZ31032"):
+        appPowerRegion.setDefaultValue(3)
+        appPowerRegion.setMin(-13)
+        appPowerRegion.setMax(6)
     elif(deviceName == "WBZ451H"):
         appPowerRegion.setDefaultValue(3)
         appPowerRegion.setMin(-26)
@@ -186,11 +209,14 @@ def instantiateComponent(ieee802154phy):
     # === Radio menu
     execfile(Module.getPath() + "/driver/config/drv_ieee802154_phy_bmm.py")
     
+    # === PTA menu
+    execfile(Module.getPath() + "/driver/config/drv_ieee802154_phy_pta.py")
+    
     # === Header Files
     
-    includePal = [
-        ["pal/inc/pal.h", conditionAlwaysInclude],
-    ]
+    # includePal = [
+        # ["pal/inc/pal.h", conditionAlwaysInclude],
+    # ]
     includeResources = [
         ["resources/buffer/inc/bmm.h", conditionAlwaysInclude],
         ["resources/queue/inc/qmm.h", conditionAlwaysInclude],
@@ -204,8 +230,8 @@ def instantiateComponent(ieee802154phy):
 
 
     # === Import the header files
-    for incFileEntry in includePal:
-        importIncFile(ieee802154phy, configName, incFileEntry)
+    # for incFileEntry in includePal:
+        # importIncFile(ieee802154phy, configName, incFileEntry)
     for incFileEntry in includeResources:
         importIncFile(ieee802154phy, configName, incFileEntry)
     for incFileEntry in includePhy:
@@ -238,6 +264,7 @@ def instantiateComponent(ieee802154phy):
     ]
     for incPathEntry in includePathsPhy:
         setIncPath(ieee802154phy, configName, incPathEntry)
+        
 
     # === Compiler macros
     preprocessorCompiler = ieee802154phy.createSettingSymbol("IEEE802154PHY_XC32_PREPRECESSOR", None)
@@ -283,7 +310,18 @@ def instantiateComponent(ieee802154phy):
     palSource.setType("SOURCE")
     palSource.setOverwrite(True)
     palSource.setMarkup(True)
-
+    palSource.setEnabled(True)
+    
+    palHeader = ieee802154phy.createFileSymbol("PAL_HEADER", None)
+    palHeader.setSourcePath("/driver/templates/pal.h.ftl")
+    palHeader.setOutputName("pal.h")
+    palHeader.setDestPath("driver/IEEE_802154_PHY/pal/inc")
+    palHeader.setProjectPath("config/" + configName + "/driver/IEEE_802154_PHY/pal/inc")
+    palHeader.setType("HEADER")
+    palHeader.setOverwrite(True)
+    palHeader.setMarkup(True)
+    palHeader.setEnabled(True)
+    
     phyDefinitionsH = ieee802154phy.createFileSymbol('IEEE802154PHY_DEFINITIONS_H', None)
     phyDefinitionsH.setType('STRING')
     phyDefinitionsH.setOutputName('core.LIST_SYSTEM_DEFINITIONS_H_INCLUDES')
@@ -292,7 +330,7 @@ def instantiateComponent(ieee802154phy):
     
     phyInitC = ieee802154phy.createFileSymbol('IEEE802154PHY_INITIALIZATION_C', None)
     phyInitC.setType('STRING')
-    phyInitC.setOutputName('core.LIST_SYSTEM_INIT_C_INITIALIZE_MIDDLEWARE')
+    phyInitC.setOutputName('core.LIST_SYSTEM_INIT_C_INITIALIZE_SYSTEM_SERVICES')
     phyInitC.setSourcePath('driver/templates/system/system_initialize_middleware.c.ftl')
     phyInitC.setMarkup(True)
     
@@ -334,8 +372,11 @@ def instantiateComponent(ieee802154phy):
     libIeee802154Phy = ieee802154phy.createLibrarySymbol("IEEE802154PHY_LIB_FILE", None)
     libIeee802154Phy.setDestPath("/driver/lib")
     if (deviceName in pic32cx_bz2_family):
-          libIeee802154Phy.setSourcePath("/driver/software/phy/pic32cx_bz/lib/lib-ieee802154_phy_pic32cxbz-v1.2.0.a")
-          libIeee802154Phy.setOutputName("lib-ieee802154_phy_pic32cxbz-v1.2.0.a")
+          libIeee802154Phy.setSourcePath("/driver/software/phy/lib/lib-ieee802154_phy_pic32cxbz2.a")
+          libIeee802154Phy.setOutputName("lib-ieee802154_phy_pic32cxbz2.a")
+    elif (deviceName in pic32cx_bz3_family):
+          libIeee802154Phy.setSourcePath("/driver/software/phy/lib/lib-ieee802154_phy_pic32cxbz3.a")
+          libIeee802154Phy.setOutputName("lib-ieee802154_phy_pic32cxbz3.a")
 #end instantiateComponent
 
 def finalizeComponent(ieee802154phy):
@@ -358,6 +399,20 @@ def finalizeComponent(ieee802154phy):
           if r not in activeComponents:
               print("require component '{}' - activating it".format(r))
               res = Database.activateComponents([r])
+              
+    if (deviceName in pic32cx_bz3_family):
+      activeComponents = Database.getActiveComponentIDs()
+      requiredComponents = ["pic32cx_bz3_devsupport"]
+      for r in requiredComponents:
+          if r in activeComponents:
+              print("require component '{}' - deactivating it".format(r))
+              res = Database.deactivateComponents([r])
+      activeComponents = Database.getActiveComponentIDs()
+      requiredComponents = ["pic32cx_bz3_devsupport"]
+      for r in requiredComponents:
+          if r not in activeComponents:
+             print("require component '{}' - activating it".format(r))
+             res = Database.activateComponents([r])
       
     print("Finalized Componenet Deactivation / activation Process - completed **********************")
     
@@ -409,6 +464,9 @@ def handleMessage(messageID, args):
                     customAntennaGain.setValue(args[arg])
                 if('TX_PWR_MAX_NON_FHSS' == arg):
                     customTxMaxFHSSVal.setValue(args[arg])
+                    
+    elif(messageID == "PTA_SUPPORT_ENABLE"):
+        handlePTA_Support(args)
 
 #end handleMessage       
 
@@ -511,13 +569,24 @@ def setIncPath(component, configName, incPathEntry):
 #end setIncPath
 
 def onAttachmentConnected(source, target):
+    remoteComponent = target["component"]
+    remoteID = remoteComponent.getID()
+    connectID = source["id"]
     if (deviceName in pic32cx_bz2_family):
-         remoteComponent = Database.getComponentByID("trng")
-         if (remoteComponent):
-               print('Printing TRNG remoteComponent Value')
-               remoteComponent.getSymbolByID("trngEnableInterrupt").setReadOnly(True)
-               remoteComponent.getSymbolByID("trngEnableEvent").setReadOnly(True)
-               remoteComponent.getSymbolByID("TRNG_STANDBY").setReadOnly(True)  
+        trngComponent = Database.getComponentByID("trng")
+        if (trngComponent):
+            print('Printing TRNG remoteComponent Value')
+            trngComponent.getSymbolByID("trngEnableInterrupt").setReadOnly(True)
+            trngComponent.getSymbolByID("trngEnableEvent").setReadOnly(True)
+            trngComponent.getSymbolByID("TRNG_STANDBY").setReadOnly(True)
+     
+    # if (connectID == "DeviceSupportDependency"):
+        # if (deviceName in pic32cx_bz2_family):
+            # devsupport_component = "pic32cx_bz2_devsupport"
+        # elif (deviceName in pic32cx_bz3_family):
+            # devsupport_component = "pic32cx_bz3_devsupport"
+        # Database.setSymbolValue(devsupport_component,"PTA_ENABLE",True)
+            
 
 def destroyComponent(ieee802154phy):
     for component in requiredComponents:

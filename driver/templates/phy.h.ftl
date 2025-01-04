@@ -16,7 +16,7 @@
 
 // DOM-IGNORE-BEGIN
 /*******************************************************************************
-* Copyright (C) 2024 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) 2025 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -334,6 +334,65 @@ typedef union
   uint8_t     val[8];
 } PHY_Addr_t;
 
+// ****************************************************************************
+typedef uint8_t (*PTA_REQ_FUNC_PTR)(uint8_t);
+
+typedef struct phy_pta_req_ptrs
+{
+	PTA_REQ_FUNC_PTR pta_req_tx_set;
+	PTA_REQ_FUNC_PTR pta_req_rx_set;
+	PTA_REQ_FUNC_PTR pta_req_ed_set;
+}PHY_PtaReq_t;
+
+/* PTA Prioirty level Config*/
+ typedef enum tx_prio_level
+{
+    TX_PRIO_ALWAYS        = 1,
+    TX_PRIO_PENULTIMATE   = 2,
+    TX_PRIO_NEVER         = 3
+}PHY_TxPrioLevel_t;
+
+typedef enum rx_prio_level
+{
+    RX_PRIO_ALWAYS          = 1,
+    RX_PRIO_PREAMBLE_DETECT = 2,
+    RX_PRIO_ADDR_MATCH      = 3,
+	RX_PRIO_NEVER	        = 4
+}PHY_RxPrioLevel_t;
+
+typedef struct pta_tx_config
+{
+    PHY_TxPrioLevel_t cca_backoff_prio;
+    PHY_TxPrioLevel_t mac_retry_prio;
+    
+}PHY_PtaTxConfig_t;
+
+typedef struct pta_rx_config
+{
+    PHY_RxPrioLevel_t prio;
+}PHY_PtaRxConfig_t;
+
+typedef struct pta_ed_config
+{
+    bool enable;
+}PHY_PtaEdConfig_t;
+
+typedef struct pta_debug_config
+{
+    bool enable;
+}PHY_PtaDebugConfig_t;
+
+
+typedef struct phy_pta_config
+{
+    uint8_t            ptaenable;
+    PHY_PtaTxConfig_t    tx;
+    PHY_PtaRxConfig_t    rx;
+    PHY_PtaEdConfig_t    ed;
+    PHY_PtaDebugConfig_t debug;
+}PHY_PtaConfig_t;
+
+
 // *****************************************************************************
 // *****************************************************************************
 // Section: Macros
@@ -442,7 +501,7 @@ typedef union
    Remarks:
     None 
  */
-#define MINOR_NUM                 "3"
+#define MINOR_NUM                 "4"
 
 /* Patch Number
  
@@ -489,7 +548,7 @@ typedef union
 Example:
   802.15.4-PHY v1.3.0 is represented as 0x01340000
 
-|0000       |0001        | 0011        | 01        | 0000           | 00000000000000|
+|0000       |0001        | 0100        | 01        | 0000           | 00000000000000|
 |-----------|------------|-------------|-----------|----------------|---------------|
 |Reserved   | Stack Major| Stack Minor | Qualifier | Build Iteration| Reserved      |
 */
@@ -504,7 +563,7 @@ Example:
    Remarks:
     None 
 */
-#define PHY_VERSION_VALUE      (0x01340000)
+#define PHY_VERSION_VALUE      (0x01440000)
 
 // *****************************************************************************
 // *****************************************************************************
@@ -1957,6 +2016,87 @@ PHY_Retval_t PHY_ConvertTxPwrRegValToDbm(uint8_t regValue, int8_t *dbmValue);
 */
 
 bool PHY_IsFramePendingFromNextLayer(PHY_Addr_t *addr, uint8_t *addrMode);
+
+// *****************************************************************************
+/*
+  Function:
+    void* PHY_RegisterPtaIrqHandler(void)
+
+  Summary:
+    To invoke the PHY to register the PTA IRQ Handler
+
+  Description:
+    This function is used to request the PHY to register the PTA IRQ Handler
+ 
+  Precondition:
+    None
+
+  Parameters:
+    None  
+
+  Returns:
+    Function pointer to the PHY PTA Handler.
+
+  Example:
+    <code>
+    void* phyIrqHandler;
+ 
+    phyIrqHandler = PHY_RegisterPtaIrqHandler();
+    
+    </code>
+
+  Remarks:
+    None 
+*/
+void* PHY_RegisterPtaIrqHandler(void);
+
+// *****************************************************************************
+/*
+  Function:
+    void PHY_NotifyUpdatedPTAStatus(PHY_PtaReq_t *req,PHY_PtaConfig_t *Pta_config)
+
+  Summary:
+    To notify and register the PTA req pointers based on the PTA enabled/disabled.
+
+  Description:
+    This function is used to notify and register the PTA req pointers based on the PTA enabled/disabled
+ 
+  Precondition:
+    None
+
+  Parameters:
+    pta_req_tx_set - Pointer to PTA req function while TX. 
+	pta_req_rx_set - Pointer to PTA req function while RX.	
+	pta_req_ed_set - Pointer to PTA req function while ED.
+
+  Returns:
+    None
+
+  Example:
+    <code>
+    PHY_PtaReq_t req;
+	PHY_PtaConfig_t  gs_pta_config;
+	
+	gs_pta_config.ptaenable = true;
+    gs_pta_config.tx.cca_backoff_prio = TX_PRIO_NEVER;
+    gs_pta_config.tx.mac_retry_prio = TX_PRIO_NEVER;
+    gs_pta_config.rx.prio = RX_PRIO_ALWAYS;
+    gs_pta_config.ed.enable = false;
+    gs_pta_config.debug.enable = true; 
+	
+	req.pta_req_tx_set = NULL;
+	req.pta_req_rx_set = NULL;
+	req.pta_req_ed_set = NULL;
+	
+	PHY_NotifyUpdatedPTAStatus(&req,&gs_pta_config);
+
+    </code>
+
+  Remarks:
+    None 
+*/
+void PHY_NotifyUpdatedPTAStatus(PHY_PtaReq_t *req,PHY_PtaConfig_t *Pta_config);
+
 
 //DOM-IGNORE-BEGIN
 #ifdef __cplusplus
