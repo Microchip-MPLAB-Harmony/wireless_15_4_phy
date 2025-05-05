@@ -78,7 +78,7 @@ typedef struct pal_timers_tag
 /* Section: Macros                                                  */
 /* ************************************************************************** */
 /* ************************************************************************** */
-<#if PIC32CXBZ3 == true>
+<#if PIC32CXBZ3 == true  || PIC32CXBZ6 == true>
 /*The max chunk size is defined by the sample code of TRNG */
 #define APP_TRNG_MAX_CHUNK_SZ 32
 </#if>
@@ -450,6 +450,44 @@ PAL_Status_t PAL_GetRandomNumber(uint8_t *rnOutput, uint16_t rnLength)
     }
 
     SX_CLK_DISABLE();
+    </#if>
+    <#if PIC32CXBZ6 == true>
+    int length = rnLength;
+    int ret;
+    char rndBytes[64];
+    struct crm_trng ctx;
+    int chunkSz;
+    int i;
+    
+    CRYPTO_CLK_ENABLE();
+
+    ret = CRM_TRNG_INIT(&ctx, NULL);
+    if (ret != CRM_OK)
+    {
+        return PAL_FAILURE;
+    }
+
+    ret = 1;
+    i = 0;
+    while (i < length)
+    {
+        chunkSz = length > APP_TRNG_MAX_CHUNK_SZ ? APP_TRNG_MAX_CHUNK_SZ : length;
+        ret = CRM_TRNG_GET(&ctx, rndBytes, chunkSz);
+        if (ret == CRM_ERR_HW_PROCESSING)
+        {
+            continue;
+        }
+        if (ret)
+        {
+            return PAL_SUCCESS;
+        }
+
+        memcpy(rnOutput, rndBytes, chunkSz);
+        rnOutput += chunkSz;
+        i += chunkSz;
+    }
+
+    CRYPTO_CLK_DISABLE();
     </#if>
     return PAL_SUCCESS;
 }

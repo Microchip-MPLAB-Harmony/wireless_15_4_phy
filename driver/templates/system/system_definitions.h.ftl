@@ -4,3 +4,7 @@
 #include "driver/security/sxsymcrypt/trng_api.h"
 #include "driver/security/sxsymcrypt/statuscodes.h"
 </#if>
+<#if PIC32CXBZ6 == true>
+#include "driver/security/cryptosym/trng_api.h"
+#include "driver/security/cryptosym/statuscodes.h"
+</#if>

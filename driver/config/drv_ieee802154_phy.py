@@ -45,6 +45,16 @@ pic32cx_bz3_family = {'PIC32CX5109BZ31048',
                       'WBZ351',
                       'WBZ350'
                       }
+pic32cx_bz6_family = {'PIC32CX2051BZ62132',
+                      'PIC32CX2051BZ62064',
+                      'PIC32CX2051BZ66048',
+                      'WBZ653',
+                      'WBZ652',
+                      'WBZ651',
+                      'PIC32WM_BZ6204',
+                      'PIC32WM_BZ6203',
+                      'PIC32WM_BZ6602'
+                      }
 
 global customTxMaxFHSSVal1
 global customGainValue1
@@ -126,6 +136,11 @@ def instantiateComponent(ieee802154phy):
     BZ3Symbol = ieee802154phy.createBooleanSymbol("PIC32CXBZ3", None)
     BZ3Symbol.setDefaultValue(False)
     BZ3Symbol.setVisible(False)
+    
+    global BZ6Symbol
+    BZ6Symbol = ieee802154phy.createBooleanSymbol("PIC32CXBZ6", None)
+    BZ6Symbol.setDefaultValue(False)
+    BZ6Symbol.setVisible(False)
 
     if (deviceName in pic32cx_bz2_family):
         BZ2Symbol.setDefaultValue(True)
@@ -133,6 +148,8 @@ def instantiateComponent(ieee802154phy):
         BZ2HPASymbol.setDefaultValue(True)
     if (deviceName in pic32cx_bz3_family):
         BZ3Symbol.setDefaultValue(True)
+    if (deviceName in pic32cx_bz6_family):
+        BZ6Symbol.setDefaultValue(True)
         
     # Custom Antenna Gain
     global customAntennaGain
@@ -200,6 +217,10 @@ def instantiateComponent(ieee802154phy):
         appPowerRegion.setDefaultValue(3)
         appPowerRegion.setMin(-11)
         appPowerRegion.setMax(6)
+    elif(deviceName == "PIC32CX2051BZ62132") or (deviceName == "WBZ653") or (deviceName == "PIC32WM_BZ6204"):
+        appPowerRegion.setDefaultValue(3)
+        appPowerRegion.setMin(-11)
+        appPowerRegion.setMax(15)
     else:
         appPowerRegion.setDefaultValue(5)
      
@@ -377,6 +398,9 @@ def instantiateComponent(ieee802154phy):
     elif (deviceName in pic32cx_bz3_family):
           libIeee802154Phy.setSourcePath("/driver/software/phy/lib/lib-ieee802154_phy_pic32cxbz3.a")
           libIeee802154Phy.setOutputName("lib-ieee802154_phy_pic32cxbz3.a")
+    elif (deviceName in pic32cx_bz6_family):
+          libIeee802154Phy.setSourcePath("/driver/software/phy/lib/lib-ieee802154_phy_pic32cxbz6.a")
+          libIeee802154Phy.setOutputName("lib-ieee802154_phy_pic32cxbz6.a")
 #end instantiateComponent
 
 def finalizeComponent(ieee802154phy):
@@ -409,6 +433,20 @@ def finalizeComponent(ieee802154phy):
               res = Database.deactivateComponents([r])
       activeComponents = Database.getActiveComponentIDs()
       requiredComponents = ["pic32cx_bz3_devsupport"]
+      for r in requiredComponents:
+          if r not in activeComponents:
+             print("require component '{}' - activating it".format(r))
+             res = Database.activateComponents([r])
+
+    if (deviceName in pic32cx_bz6_family):
+      activeComponents = Database.getActiveComponentIDs()
+      requiredComponents = ["pic32cx_bz6_devsupport"]
+      for r in requiredComponents:
+          if r in activeComponents:
+              print("require component '{}' - deactivating it".format(r))
+              res = Database.deactivateComponents([r])
+      activeComponents = Database.getActiveComponentIDs()
+      requiredComponents = ["pic32cx_bz6_devsupport"]
       for r in requiredComponents:
           if r not in activeComponents:
              print("require component '{}' - activating it".format(r))
