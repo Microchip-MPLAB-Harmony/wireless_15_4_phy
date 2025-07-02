@@ -78,7 +78,7 @@ typedef struct pal_timers_tag
 /* Section: Macros                                                  */
 /* ************************************************************************** */
 /* ************************************************************************** */
-<#if PIC32CXBZ3 == true  || PIC32CXBZ6 == true>
+<#if PIC32CXBZ3 == true  || PIC32CXBZ6 == true || PIC32CXBZ36 == true>
 /*The max chunk size is defined by the sample code of TRNG */
 #define APP_TRNG_MAX_CHUNK_SZ 32
 </#if>
@@ -413,7 +413,7 @@ PAL_Status_t PAL_GetRandomNumber(uint8_t *rnOutput, uint16_t rnLength)
         (void)memcpy((uint8_t *)rnOutput, (uint8_t *)&random_num, remBytes);
     }
     </#if>
-    <#if PIC32CXBZ3 == true>
+    <#if PIC32CXBZ3 == true || PIC32CXBZ36 == true>
     int length = rnLength;
     int ret;
     char rndBytes[64];

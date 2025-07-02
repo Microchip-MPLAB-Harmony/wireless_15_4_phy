@@ -63,8 +63,10 @@ def ptaConfigurationCallback(symbol,event):
     
     if (deviceName in pic32cx_bz2_family):
         devSupportLib = "pic32cx_bz2_devsupport"
-    elif (deviceName in pic32cx_bz3_family):
+    elif ((deviceName in pic32cx_bz3_family) or (deviceName in pic32cx_bz36_family)):
         devSupportLib = "pic32cx_bz3_devsupport"
+    elif ((deviceName in pic32cx_bz6_family):
+        devSupportLib = "pic32cx_bz6_devsupport"
     
     if symbolID == "PHY_PTA_ENABLE":
         if value == True:
@@ -154,8 +156,10 @@ phyEnablePta.setVisible(False)
 phyEnablePta.setDefaultValue(False)
 if (deviceName in pic32cx_bz2_family):
     phyEnablePta.setDependencies(ptaConfigurationCallback,["pic32cx_bz2_devsupport.BLE_PTA_SUPPORTED"]) #BLESTACK_LOADED
-elif (deviceName in pic32cx_bz3_family):
+elif ((deviceName in pic32cx_bz3_family) or (deviceName in pic32cx_bz36_family)):
     phyEnablePta.setDependencies(ptaConfigurationCallback,["pic32cx_bz3_devsupport.BLE_PTA_SUPPORTED"])
+elif (deviceName in pic32cx_bz6_family):
+    phyEnablePta.setDependencies(ptaConfigurationCallback,["pic32cx_bz6_devsupport.BLE_PTA_SUPPORTED"])
     
 global phyPtaInterface
 phyPtaInterface = ieee802154phy.createKeyValueSetSymbol("PHY_PTA_INTERFACE",phyMenupta)
