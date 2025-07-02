@@ -65,7 +65,7 @@ def ptaConfigurationCallback(symbol,event):
         devSupportLib = "pic32cx_bz2_devsupport"
     elif ((deviceName in pic32cx_bz3_family) or (deviceName in pic32cx_bz36_family)):
         devSupportLib = "pic32cx_bz3_devsupport"
-    elif ((deviceName in pic32cx_bz6_family):
+    elif (deviceName in pic32cx_bz6_family):
         devSupportLib = "pic32cx_bz6_devsupport"
     
     if symbolID == "PHY_PTA_ENABLE":
