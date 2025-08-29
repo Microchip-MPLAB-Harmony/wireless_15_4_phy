@@ -9,4 +9,4 @@ package:
   dependencies:
     - name: "wireless_pic32cxbz_wbz"
       type: "package"
-      version: "bz3_15_4_Ret_Size" 
+      version: "v1.6.0" 

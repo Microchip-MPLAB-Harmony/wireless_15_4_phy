@@ -11,8 +11,8 @@ MPLAB® Harmony 3 is an extension of the MPLAB® ecosystem for creating embedded
 - [Microchip MPLAB® Harmony](https://www.microchip.com/mplab/mplab-harmony)
 - [Microchip MPLAB® Harmony Pages](https://microchip-mplab-harmony.github.io/)
 
-This repository contains the MPLAB® Harmony 3 Standalone IEEE 802.15.4 Physical Layer for PIC32CX-BZ2 platform devices. 
-PHY layer module provides interface to access the 802.15.4(zigbee) subsystem of PIC32CX-BZ2 devices through which user can enables 
+This repository contains the MPLAB® Harmony 3 Standalone IEEE 802.15.4 Physical Layer for PIC32CX-BZ platform devices. 
+PHY layer module provides interface to access the 802.15.4(zigbee) subsystem of PIC32CX-BZ devices through which user can enables 
 various functionaities of the transceiver. Refer to
 the following links for release notes, training materials, and interface
 reference information.
@@ -20,7 +20,7 @@ reference information.
 - [Release Notes](./release_notes.md)
 - [MPLAB® Harmony License](mplab_harmony_license.md)
 - [MPLAB® Harmony 3 Standalone IEEE 802.15.4 Physical Layer Wiki](https://github.com/Microchip-MPLAB-Harmony/wireless_15_4_phy/wiki)
-- [MPLAB® Harmony 3 Standalone IEEE 802.15.4 Physical Layer API Help](https://microchip-mplab-harmony.github.io/wireless_15_4_phy)
+- [MPLAB® Harmony 3 Standalone IEEE 802.15.4 Physical Layer API Help](https://onlinedocs.microchip.com/oxy/GUID-064E0446-1800-4952-AC2C-15F8AFAB1DA2-en-US-3/index.html)
 
 # Contents Summary
 
@@ -28,7 +28,7 @@ reference information.
 | -----------| ------------------------------------------------------------------|
 | config     | Standalone IEEE 802.15.4 Physical Layer module configuration file |
 | docs       | [Standalone IEEE 802.15.4 Physical Layer library API documentation](https://onlinedocs.microchip.com/oxy/GUID-064E0446-1800-4952-AC2C-15F8AFAB1DA2-en-US-3/index.html) |
-| driver     | phy layer library and dependent files for pic32cxbz2 products     |
+| driver     | phy layer library and dependent files for pic32cxbz products     |
 
 
 ____
