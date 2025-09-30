@@ -18,7 +18,7 @@ the following links for release notes, training materials, and interface
 reference information.
 
 - [Release Notes](./release_notes.md)
-- [MPLAB® Harmony License](mplab_harmony_license.md)
+- [License](License.md)
 - [MPLAB® Harmony 3 Standalone IEEE 802.15.4 Physical Layer Wiki](https://github.com/Microchip-MPLAB-Harmony/wireless_15_4_phy/wiki)
 - [MPLAB® Harmony 3 Standalone IEEE 802.15.4 Physical Layer API Help](https://onlinedocs.microchip.com/oxy/GUID-064E0446-1800-4952-AC2C-15F8AFAB1DA2-en-US-4/index.html)
 
@@ -30,10 +30,17 @@ reference information.
 | docs       | [Standalone IEEE 802.15.4 Physical Layer library API documentation](https://onlinedocs.microchip.com/oxy/GUID-064E0446-1800-4952-AC2C-15F8AFAB1DA2-en-US-4/index.html) |
 | driver     | phy layer library and dependent files for pic32cxbz products     |
 
+## Documentation
 
+Click [here](https://onlinedocs.microchip.com/g/GUID-064E0446-1800-4952-AC2C-15F8AFAB1DA2) to view the online documentation of wireless_15_4_phy repository.
+
+To view the documentation offline, follow these steps:
+ - Download the publication as a zip file from [here](https://onlinedocs.microchip.com/download/GUID-064E0446-1800-4952-AC2C-15F8AFAB1DA2?type=webhelp).
+ - Extract the zip file into a folder.
+ - Navigate to the folder and open **index.html** in a web browser of your choice.
 ____
 
-[![License](https://img.shields.io/badge/license-Harmony%20license-orange.svg)](https://github.com/Microchip-MPLAB-Harmony/wireless_15_4_phy/blob/master/mplab_harmony_license.md)
+[![License](https://img.shields.io/badge/license-Harmony%20license-orange.svg)](https://github.com/Microchip-MPLAB-Harmony/wireless_15_4_phy/blob/master/License.md)
 [![Latest release](https://img.shields.io/github/release/Microchip-MPLAB-Harmony/wireless_15_4_phy.svg)](https://github.com/Microchip-MPLAB-Harmony/wireless_15_4_phy/releases/latest)
 [![Latest release date](https://img.shields.io/github/release-date/Microchip-MPLAB-Harmony/wireless_15_4_phy.svg)](https://github.com/Microchip-MPLAB-Harmony/wireless_15_4_phy/releases/latest)
 [![Commit activity](https://img.shields.io/github/commit-activity/y/Microchip-MPLAB-Harmony/wireless_15_4_phy.svg)](https://github.com/Microchip-MPLAB-Harmony/wireless_15_4_phy/graphs/commit-activity)
